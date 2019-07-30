@@ -69,6 +69,20 @@ object Implicits {
   /** Provides extension methods to `java.time.YearMonth` */
   implicit class YearMonthType(val month: YearMonth) extends AnyVal {
     /**
+     * Gets month with specified number of months added.
+     *
+     * @param months number of months
+     */
+    def +(months: Long): YearMonth = month.plusMonths(months)
+
+    /**
+     * Gets month with specified number of months subtracted.
+     *
+     * @param months number of months
+     */
+    def -(months: Long): YearMonth = month.minusMonths(months)
+
+    /**
      * Compares to other month and returns the lesser value.
      *
      * @param other other month
@@ -101,6 +115,20 @@ object Implicits {
   implicit class LocalDateType(val date: LocalDate) extends AnyVal {
     /** Get `YearMonth` part of date. */
     def toYearMonth: YearMonth = YearMonth.of(date.getYear, date.getMonth)
+
+    /**
+     * Gets date with specified number of days added.
+     *
+     * @param days number of days
+     */
+    def +(days: Long): LocalDate = date.plusDays(days)
+
+    /**
+     * Gets date with specified number of days subtracted.
+     *
+     * @param days number of days
+     */
+    def -(days: Long): LocalDate = date.minusDays(days)
 
     /**
      * Compares to other date and returns the lesser value.

@@ -29,6 +29,26 @@ class LocalDateTypeSpec extends FlatSpec {
     assert(date.toYearMonth == YearMonth.parse("2019-07"))
   }
 
+  it should "have days added" in {
+    assert(date + 1 == LocalDate.parse("2019-07-12"))
+    assert(date + 2 == LocalDate.parse("2019-07-13"))
+    assert(date + 31 == LocalDate.parse("2019-08-11"))
+
+    assert(date + -1 == LocalDate.parse("2019-07-10"))
+    assert(date + -2 == LocalDate.parse("2019-07-09"))
+    assert(date + -11 == LocalDate.parse("2019-06-30"))
+  }
+
+  it should "have days subtracted" in {
+    assert(date - 1 == LocalDate.parse("2019-07-10"))
+    assert(date - 2 == LocalDate.parse("2019-07-09"))
+    assert(date - 11 == LocalDate.parse("2019-06-30"))
+
+    assert(date - -1 == LocalDate.parse("2019-07-12"))
+    assert(date - -2 == LocalDate.parse("2019-07-13"))
+    assert(date - -31 == LocalDate.parse("2019-08-11"))
+  }
+
   it should "be compared to other" in {
     import Ordered.orderingToOrdered
     val other1 = LocalDate.parse("2019-06-05")

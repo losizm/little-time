@@ -46,6 +46,26 @@ class YearMonthTypeSpec extends FlatSpec {
     assert(other2 == month)
   }
 
+  it should "have days added" in {
+    assert(month + 1 == YearMonth.parse("2019-08"))
+    assert(month + 2 == YearMonth.parse("2019-09"))
+    assert(month + 12 == YearMonth.parse("2020-07"))
+
+    assert(month + -1 == YearMonth.parse("2019-06"))
+    assert(month + -2 == YearMonth.parse("2019-05"))
+    assert(month + -12 == YearMonth.parse("2018-07"))
+  }
+
+  it should "have days subtracted" in {
+    assert(month - 1 == YearMonth.parse("2019-06"))
+    assert(month - 2 == YearMonth.parse("2019-05"))
+    assert(month - 12 == YearMonth.parse("2018-07"))
+
+    assert(month - -1 == YearMonth.parse("2019-08"))
+    assert(month - -2 == YearMonth.parse("2019-09"))
+    assert(month - -12 == YearMonth.parse("2020-07"))
+  }
+
   it should "be greater than other" in {
     val other = YearMonth.parse("2019-06")
     assert(month.max(other) == month)
