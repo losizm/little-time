@@ -19,6 +19,7 @@ import java.time._
 import java.time.temporal.ChronoUnit
 
 import DayOfWeek._
+import TimePrecision._
 
 /** Provides extension methods to `java.time`. */
 object Implicits {
@@ -235,25 +236,94 @@ object Implicits {
     def max(other: LocalTime): LocalTime =
       localTimeOrdering.max(time, other)
 
+    /** Gets time truncated to day. */
+    def atStartOfDay: LocalTime = startOfDay
+
+    /**
+     * Gets time adjusted to end of day.
+     *
+     * @param precision time precision
+     */
+    def atEndOfDay(implicit precision: TimePrecision): LocalTime =
+      precision.limit
+
     /** Gets time truncated to hour. */
     def atStartOfHour: LocalTime =
       time.truncatedTo(ChronoUnit.HOURS)
+
+    /**
+     * Gets time adjusted to end of hour.
+     *
+     * @param precision time precision
+     */
+    def atEndOfHour(implicit precision: TimePrecision): LocalTime =
+      precision match {
+        case Minutes     => LocalTime.of(time.getHour, 59)
+        case Seconds     => LocalTime.of(time.getHour, 59, 59)
+        case FSeconds(_) => LocalTime.of(time.getHour, 59, 59, precision.limit.getNano)
+        case _           => throw new DateTimeException(s"Precision unit too large: $precision")
+      }
 
     /** Gets time truncated to minute. */
     def atStartOfMinute: LocalTime =
       time.truncatedTo(ChronoUnit.MINUTES)
 
+    /**
+     * Gets time adjusted to end of minute.
+     *
+     * @param precision time precision
+     */
+    def atEndOfMinute(implicit precision: TimePrecision): LocalTime =
+      precision match {
+        case Seconds     => LocalTime.of(time.getHour, time.getMinute, 59)
+        case FSeconds(_) => LocalTime.of(time.getHour, time.getMinute, 59, precision.limit.getNano)
+        case _           => throw new DateTimeException(s"Precision unit too large: $precision")
+      }
+
     /** Gets time truncated to second. */
     def atStartOfSecond: LocalTime =
       time.truncatedTo(ChronoUnit.SECONDS)
 
+    /**
+     * Gets time adjusted to end of second.
+     *
+     * @param precision time precision
+     */
+    def atEndOfSecond(implicit precision: TimePrecision): LocalTime =
+      (precision > Seconds) match {
+        case true  => LocalTime.of(time.getHour, time.getMinute, time.getSecond, precision.limit.getNano)
+        case false => throw new DateTimeException(s"Precision unit too large: $precision")
+      }
+
     /** Gets time truncated to millisecond. */
-    def atStartOfMillisecond: LocalTime =
+    def atStartOfMillis: LocalTime =
       time.truncatedTo(ChronoUnit.MILLIS)
 
+    /**
+     * Gets time adjusted to end of millisecond.
+     *
+     * @param precision time precision
+     */
+    def atEndOfMillis(implicit precision: TimePrecision): LocalTime =
+      (precision > Milliseconds) match {
+        case true  => LocalTime.of(time.getHour, time.getMinute, time.getSecond, precision.limit.getNano)
+        case false => throw new DateTimeException(s"Precision unit too large: $precision")
+      }
+
     /** Gets time truncated to microsecond. */
-    def atStartOfMicrosecond: LocalTime =
+    def atStartOfMicros: LocalTime =
       time.truncatedTo(ChronoUnit.MICROS)
+
+    /**
+     * Gets time adjusted to end of microsecond.
+     *
+     * @param precision time precision
+     */
+    def atEndOfMicros(implicit precision: TimePrecision): LocalTime =
+      (precision > Microseconds) match {
+        case true  => LocalTime.of(time.getHour, time.getMinute, time.getSecond, precision.limit.getNano)
+        case false => throw new DateTimeException(s"Precision unit too large: $precision")
+      }
   }
 
   /** Provides extension methods to `java.time.LocalDateTime` */
@@ -281,9 +351,25 @@ object Implicits {
     def atStartOfYear: LocalDateTime =
       LocalDateTime.of(dateTime.toLocalDate.atStartOfYear, startOfDay)
 
+    /**
+     * Gets date-time adjusted to last day of year.
+     *
+     * @param precision time precision
+     */
+    def atEndOfYear(precision: TimePrecision): LocalDateTime =
+      LocalDateTime.of(dateTime.toLocalDate.atEndOfYear, precision.limit)
+
     /** Gets date-time adjusted to first day of month. */
     def atStartOfMonth: LocalDateTime =
       LocalDateTime.of(dateTime.toLocalDate.atStartOfMonth, startOfDay)
+
+    /**
+     * Gets date-time adjusted to last day of month.
+     *
+     * @param precision time precision
+     */
+    def atEndOfMonth(implicit precision: TimePrecision): LocalDateTime =
+      LocalDateTime.of(dateTime.toLocalDate.atEndOfMonth, precision.limit)
 
     /**
      * Gets date-time adjusted to first day of week.
@@ -300,29 +386,93 @@ object Implicits {
     def atStartOfWeek(firstDay: DayOfWeek): LocalDateTime =
       LocalDateTime.of(dateTime.toLocalDate.atStartOfWeek(firstDay), startOfDay)
 
+    /**
+     * Gets date-time adjusted to last day of week.
+     *
+     * @note Saturday is last day of week.
+     */
+    def atEndOfWeek(implicit precision: TimePrecision): LocalDateTime = atEndOfWeek(SATURDAY)
+
+    /**
+     * Gets date-time adjusted to specified last day of week.
+     *
+     * @param lastDay last day of week
+     * @param precision time precision
+     */
+    def atEndOfWeek(lastDay: DayOfWeek)(implicit precision: TimePrecision): LocalDateTime =
+      LocalDateTime.of(dateTime.toLocalDate.atEndOfWeek(lastDay), precision.limit)
+
     /** Gets date-time truncated to day. */
     def atStartOfDay: LocalDateTime =
       dateTime.truncatedTo(ChronoUnit.DAYS)
+
+    /**
+     * Gets date-time adjusted to end of day.
+     *
+     * @param precision time precision
+     */
+    def atEndOfDay(implicit precision: TimePrecision): LocalDateTime =
+      LocalDateTime.of(dateTime.toLocalDate, dateTime.toLocalTime.atEndOfDay)
 
     /** Gets date-time truncated to hour. */
     def atStartOfHour: LocalDateTime =
       dateTime.truncatedTo(ChronoUnit.HOURS)
 
+    /**
+     * Gets date-time adjusted to end of hour.
+     *
+     * @param precision time precision
+     */
+    def atEndOfHour(implicit precision: TimePrecision): LocalDateTime =
+      LocalDateTime.of(dateTime.toLocalDate, dateTime.toLocalTime.atEndOfHour)
+
     /** Gets date-time truncated to minute. */
     def atStartOfMinute: LocalDateTime =
       dateTime.truncatedTo(ChronoUnit.MINUTES)
+
+    /**
+     * Gets date-time adjusted to end of minute.
+     *
+     * @param precision time precision
+     */
+    def atEndOfMinute(implicit precision: TimePrecision): LocalDateTime =
+      LocalDateTime.of(dateTime.toLocalDate, dateTime.toLocalTime.atEndOfMinute)
 
     /** Gets date-time truncated to second. */
     def atStartOfSecond: LocalDateTime =
       dateTime.truncatedTo(ChronoUnit.SECONDS)
 
+    /**
+     * Gets date-time adjusted to end of second.
+     *
+     * @param precision time precision
+     */
+    def atEndOfSecond(implicit precision: TimePrecision): LocalDateTime =
+      LocalDateTime.of(dateTime.toLocalDate, dateTime.toLocalTime.atEndOfSecond)
+
     /** Gets date-time truncated to millisecond. */
-    def atStartOfMillisecond: LocalDateTime =
+    def atStartOfMillis: LocalDateTime =
       dateTime.truncatedTo(ChronoUnit.MILLIS)
 
+    /**
+     * Gets date-time adjusted to end of millisecond.
+     *
+     * @param precision time precision
+     */
+    def atEndOfMillis(implicit precision: TimePrecision): LocalDateTime =
+      LocalDateTime.of(dateTime.toLocalDate, dateTime.toLocalTime.atEndOfMillis)
+
     /** Gets date-time truncated to microsecond. */
-    def atStartOfMicrosecond: LocalDateTime =
+    def atStartOfMicros: LocalDateTime =
       dateTime.truncatedTo(ChronoUnit.MICROS)
+
+    /**
+     * Gets date-time adjusted to end of microsecond.
+     *
+     * @param precision time precision
+     */
+    def atEndOfMicros(implicit precision: TimePrecision): LocalDateTime =
+      LocalDateTime.of(dateTime.toLocalDate, dateTime.toLocalTime.atEndOfMicros)
   }
 }
 

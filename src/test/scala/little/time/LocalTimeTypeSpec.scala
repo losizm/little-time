@@ -20,6 +20,7 @@ import java.time.LocalTime
 import org.scalatest.FlatSpec
 
 import Implicits._
+import TimePrecision._
 
 class LocalTimeTypeSpec extends FlatSpec {
   private val time = LocalTime.parse("12:38:45.123456789")
@@ -59,11 +60,11 @@ class LocalTimeTypeSpec extends FlatSpec {
   }
 
   it should "be truncated to microsecond" in {
-    assert(time.atStartOfMicrosecond == LocalTime.parse("12:38:45.123456"))
+    assert(time.atStartOfMicros == LocalTime.parse("12:38:45.123456"))
   }
 
   it should "be truncated to millisecond" in {
-    assert(time.atStartOfMillisecond == LocalTime.parse("12:38:45.123"))
+    assert(time.atStartOfMillis == LocalTime.parse("12:38:45.123"))
   }
 
   it should "be truncated to second" in {
@@ -76,6 +77,78 @@ class LocalTimeTypeSpec extends FlatSpec {
 
   it should "be truncated to hour" in {
     assert(time.atStartOfHour == LocalTime.parse("12:00"))
+  }
+
+  it should "be truncated to day" in {
+    assert(time.atStartOfDay == LocalTime.parse("00:00"))
+  }
+
+  it should "be adjusted to end microsecond" in {
+    assert(time.atEndOfMicros(FSeconds(9)) == LocalTime.parse("12:38:45.999999999"))
+    assert(time.atEndOfMicros(FSeconds(8)) == LocalTime.parse("12:38:45.99999999"))
+    assert(time.atEndOfMicros(FSeconds(7)) == LocalTime.parse("12:38:45.9999999"))
+  }
+
+  it should "be adjusted to end millisecond" in {
+    assert(time.atEndOfMillis(FSeconds(9)) == LocalTime.parse("12:38:45.999999999"))
+    assert(time.atEndOfMillis(FSeconds(8)) == LocalTime.parse("12:38:45.99999999"))
+    assert(time.atEndOfMillis(FSeconds(7)) == LocalTime.parse("12:38:45.9999999"))
+    assert(time.atEndOfMillis(FSeconds(6)) == LocalTime.parse("12:38:45.999999"))
+    assert(time.atEndOfMillis(FSeconds(5)) == LocalTime.parse("12:38:45.99999"))
+    assert(time.atEndOfMillis(FSeconds(4)) == LocalTime.parse("12:38:45.9999"))
+  }
+
+  it should "be adjusted to end second" in {
+    assert(time.atEndOfSecond(FSeconds(9)) == LocalTime.parse("12:38:45.999999999"))
+    assert(time.atEndOfSecond(FSeconds(8)) == LocalTime.parse("12:38:45.99999999"))
+    assert(time.atEndOfSecond(FSeconds(7)) == LocalTime.parse("12:38:45.9999999"))
+    assert(time.atEndOfSecond(FSeconds(6)) == LocalTime.parse("12:38:45.999999"))
+    assert(time.atEndOfSecond(FSeconds(5)) == LocalTime.parse("12:38:45.99999"))
+    assert(time.atEndOfSecond(FSeconds(4)) == LocalTime.parse("12:38:45.9999"))
+    assert(time.atEndOfSecond(FSeconds(3)) == LocalTime.parse("12:38:45.999"))
+    assert(time.atEndOfSecond(FSeconds(2)) == LocalTime.parse("12:38:45.99"))
+    assert(time.atEndOfSecond(FSeconds(1)) == LocalTime.parse("12:38:45.9"))
+  }
+
+  it should "be adjusted to end minute" in {
+    assert(time.atEndOfMinute(FSeconds(9)) == LocalTime.parse("12:38:59.999999999"))
+    assert(time.atEndOfMinute(FSeconds(8)) == LocalTime.parse("12:38:59.99999999"))
+    assert(time.atEndOfMinute(FSeconds(7)) == LocalTime.parse("12:38:59.9999999"))
+    assert(time.atEndOfMinute(FSeconds(6)) == LocalTime.parse("12:38:59.999999"))
+    assert(time.atEndOfMinute(FSeconds(5)) == LocalTime.parse("12:38:59.99999"))
+    assert(time.atEndOfMinute(FSeconds(4)) == LocalTime.parse("12:38:59.9999"))
+    assert(time.atEndOfMinute(FSeconds(3)) == LocalTime.parse("12:38:59.999"))
+    assert(time.atEndOfMinute(FSeconds(2)) == LocalTime.parse("12:38:59.99"))
+    assert(time.atEndOfMinute(FSeconds(1)) == LocalTime.parse("12:38:59.9"))
+    assert(time.atEndOfMinute(Seconds)     == LocalTime.parse("12:38:59"))
+  }
+
+  it should "be adjusted to end hour" in {
+    assert(time.atEndOfHour(FSeconds(9)) == LocalTime.parse("12:59:59.999999999"))
+    assert(time.atEndOfHour(FSeconds(8)) == LocalTime.parse("12:59:59.99999999"))
+    assert(time.atEndOfHour(FSeconds(7)) == LocalTime.parse("12:59:59.9999999"))
+    assert(time.atEndOfHour(FSeconds(6)) == LocalTime.parse("12:59:59.999999"))
+    assert(time.atEndOfHour(FSeconds(5)) == LocalTime.parse("12:59:59.99999"))
+    assert(time.atEndOfHour(FSeconds(4)) == LocalTime.parse("12:59:59.9999"))
+    assert(time.atEndOfHour(FSeconds(3)) == LocalTime.parse("12:59:59.999"))
+    assert(time.atEndOfHour(FSeconds(2)) == LocalTime.parse("12:59:59.99"))
+    assert(time.atEndOfHour(FSeconds(1)) == LocalTime.parse("12:59:59.9"))
+    assert(time.atEndOfHour(Seconds)     == LocalTime.parse("12:59:59"))
+    assert(time.atEndOfHour(Minutes)     == LocalTime.parse("12:59"))
+  }
+
+  it should "be adjusted to end day" in {
+    assert(time.atEndOfDay(FSeconds(8)) == LocalTime.parse("23:59:59.99999999"))
+    assert(time.atEndOfDay(FSeconds(7)) == LocalTime.parse("23:59:59.9999999"))
+    assert(time.atEndOfDay(FSeconds(6)) == LocalTime.parse("23:59:59.999999"))
+    assert(time.atEndOfDay(FSeconds(5)) == LocalTime.parse("23:59:59.99999"))
+    assert(time.atEndOfDay(FSeconds(4)) == LocalTime.parse("23:59:59.9999"))
+    assert(time.atEndOfDay(FSeconds(3)) == LocalTime.parse("23:59:59.999"))
+    assert(time.atEndOfDay(FSeconds(2)) == LocalTime.parse("23:59:59.99"))
+    assert(time.atEndOfDay(FSeconds(1)) == LocalTime.parse("23:59:59.9"))
+    assert(time.atEndOfDay(Seconds)     == LocalTime.parse("23:59:59"))
+    assert(time.atEndOfDay(Minutes)     == LocalTime.parse("23:59"))
+    assert(time.atEndOfDay(Hours)       == LocalTime.parse("23:00"))
   }
 }
 

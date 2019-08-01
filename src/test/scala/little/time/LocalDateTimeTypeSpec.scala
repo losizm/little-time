@@ -21,6 +21,7 @@ import org.scalatest.FlatSpec
 
 import DayOfWeek._
 import Implicits._
+import TimePrecision._
 
 class LocalDateTimeTypeSpec extends FlatSpec {
   private val dateTime = LocalDateTime.parse("2019-07-11T12:38:45.123456789")
@@ -64,11 +65,11 @@ class LocalDateTimeTypeSpec extends FlatSpec {
   }
 
   it should "be truncated to microsecond" in {
-    assert(dateTime.atStartOfMicrosecond == LocalDateTime.parse("2019-07-11T12:38:45.123456"))
+    assert(dateTime.atStartOfMicros == LocalDateTime.parse("2019-07-11T12:38:45.123456"))
   }
 
   it should "be truncated to millisecond" in {
-    assert(dateTime.atStartOfMillisecond == LocalDateTime.parse("2019-07-11T12:38:45.123"))
+    assert(dateTime.atStartOfMillis == LocalDateTime.parse("2019-07-11T12:38:45.123"))
   }
 
   it should "be truncated to second" in {
@@ -104,6 +105,136 @@ class LocalDateTimeTypeSpec extends FlatSpec {
 
   it should "be set to start of year" in {
     assert(dateTime.atStartOfYear == LocalDateTime.parse("2019-01-01T00:00"))
+  }
+
+  it should "be adjusted to end microsecond" in {
+    assert(dateTime.atEndOfMicros(FSeconds(9)) == LocalDateTime.parse("2019-07-11T12:38:45.999999999"))
+    assert(dateTime.atEndOfMicros(FSeconds(8)) == LocalDateTime.parse("2019-07-11T12:38:45.99999999"))
+    assert(dateTime.atEndOfMicros(FSeconds(7)) == LocalDateTime.parse("2019-07-11T12:38:45.9999999"))
+  }
+
+  it should "be adjusted to end millisecond" in {
+    assert(dateTime.atEndOfMillis(FSeconds(9)) == LocalDateTime.parse("2019-07-11T12:38:45.999999999"))
+    assert(dateTime.atEndOfMillis(FSeconds(8)) == LocalDateTime.parse("2019-07-11T12:38:45.99999999"))
+    assert(dateTime.atEndOfMillis(FSeconds(7)) == LocalDateTime.parse("2019-07-11T12:38:45.9999999"))
+    assert(dateTime.atEndOfMillis(FSeconds(6)) == LocalDateTime.parse("2019-07-11T12:38:45.999999"))
+    assert(dateTime.atEndOfMillis(FSeconds(5)) == LocalDateTime.parse("2019-07-11T12:38:45.99999"))
+    assert(dateTime.atEndOfMillis(FSeconds(4)) == LocalDateTime.parse("2019-07-11T12:38:45.9999"))
+  }
+
+  it should "be adjusted to end second" in {
+    assert(dateTime.atEndOfSecond(FSeconds(9)) == LocalDateTime.parse("2019-07-11T12:38:45.999999999"))
+    assert(dateTime.atEndOfSecond(FSeconds(8)) == LocalDateTime.parse("2019-07-11T12:38:45.99999999"))
+    assert(dateTime.atEndOfSecond(FSeconds(7)) == LocalDateTime.parse("2019-07-11T12:38:45.9999999"))
+    assert(dateTime.atEndOfSecond(FSeconds(6)) == LocalDateTime.parse("2019-07-11T12:38:45.999999"))
+    assert(dateTime.atEndOfSecond(FSeconds(5)) == LocalDateTime.parse("2019-07-11T12:38:45.99999"))
+    assert(dateTime.atEndOfSecond(FSeconds(4)) == LocalDateTime.parse("2019-07-11T12:38:45.9999"))
+    assert(dateTime.atEndOfSecond(FSeconds(3)) == LocalDateTime.parse("2019-07-11T12:38:45.999"))
+    assert(dateTime.atEndOfSecond(FSeconds(2)) == LocalDateTime.parse("2019-07-11T12:38:45.99"))
+    assert(dateTime.atEndOfSecond(FSeconds(1)) == LocalDateTime.parse("2019-07-11T12:38:45.9"))
+  }
+
+  it should "be adjusted to end minute" in {
+    assert(dateTime.atEndOfMinute(FSeconds(9)) == LocalDateTime.parse("2019-07-11T12:38:59.999999999"))
+    assert(dateTime.atEndOfMinute(FSeconds(8)) == LocalDateTime.parse("2019-07-11T12:38:59.99999999"))
+    assert(dateTime.atEndOfMinute(FSeconds(7)) == LocalDateTime.parse("2019-07-11T12:38:59.9999999"))
+    assert(dateTime.atEndOfMinute(FSeconds(6)) == LocalDateTime.parse("2019-07-11T12:38:59.999999"))
+    assert(dateTime.atEndOfMinute(FSeconds(5)) == LocalDateTime.parse("2019-07-11T12:38:59.99999"))
+    assert(dateTime.atEndOfMinute(FSeconds(4)) == LocalDateTime.parse("2019-07-11T12:38:59.9999"))
+    assert(dateTime.atEndOfMinute(FSeconds(3)) == LocalDateTime.parse("2019-07-11T12:38:59.999"))
+    assert(dateTime.atEndOfMinute(FSeconds(2)) == LocalDateTime.parse("2019-07-11T12:38:59.99"))
+    assert(dateTime.atEndOfMinute(FSeconds(1)) == LocalDateTime.parse("2019-07-11T12:38:59.9"))
+    assert(dateTime.atEndOfMinute(Seconds)     == LocalDateTime.parse("2019-07-11T12:38:59"))
+  }
+
+  it should "be adjusted to end hour" in {
+    assert(dateTime.atEndOfHour(FSeconds(9)) == LocalDateTime.parse("2019-07-11T12:59:59.999999999"))
+    assert(dateTime.atEndOfHour(FSeconds(8)) == LocalDateTime.parse("2019-07-11T12:59:59.99999999"))
+    assert(dateTime.atEndOfHour(FSeconds(7)) == LocalDateTime.parse("2019-07-11T12:59:59.9999999"))
+    assert(dateTime.atEndOfHour(FSeconds(6)) == LocalDateTime.parse("2019-07-11T12:59:59.999999"))
+    assert(dateTime.atEndOfHour(FSeconds(5)) == LocalDateTime.parse("2019-07-11T12:59:59.99999"))
+    assert(dateTime.atEndOfHour(FSeconds(4)) == LocalDateTime.parse("2019-07-11T12:59:59.9999"))
+    assert(dateTime.atEndOfHour(FSeconds(3)) == LocalDateTime.parse("2019-07-11T12:59:59.999"))
+    assert(dateTime.atEndOfHour(FSeconds(2)) == LocalDateTime.parse("2019-07-11T12:59:59.99"))
+    assert(dateTime.atEndOfHour(FSeconds(1)) == LocalDateTime.parse("2019-07-11T12:59:59.9"))
+    assert(dateTime.atEndOfHour(Seconds)     == LocalDateTime.parse("2019-07-11T12:59:59"))
+    assert(dateTime.atEndOfHour(Minutes)     == LocalDateTime.parse("2019-07-11T12:59"))
+  }
+
+  it should "be adjusted to end day" in {
+    assert(dateTime.atEndOfDay(FSeconds(9)) == LocalDateTime.parse("2019-07-11T23:59:59.999999999"))
+    assert(dateTime.atEndOfDay(FSeconds(8)) == LocalDateTime.parse("2019-07-11T23:59:59.99999999"))
+    assert(dateTime.atEndOfDay(FSeconds(7)) == LocalDateTime.parse("2019-07-11T23:59:59.9999999"))
+    assert(dateTime.atEndOfDay(FSeconds(6)) == LocalDateTime.parse("2019-07-11T23:59:59.999999"))
+    assert(dateTime.atEndOfDay(FSeconds(5)) == LocalDateTime.parse("2019-07-11T23:59:59.99999"))
+    assert(dateTime.atEndOfDay(FSeconds(4)) == LocalDateTime.parse("2019-07-11T23:59:59.9999"))
+    assert(dateTime.atEndOfDay(FSeconds(3)) == LocalDateTime.parse("2019-07-11T23:59:59.999"))
+    assert(dateTime.atEndOfDay(FSeconds(2)) == LocalDateTime.parse("2019-07-11T23:59:59.99"))
+    assert(dateTime.atEndOfDay(FSeconds(1)) == LocalDateTime.parse("2019-07-11T23:59:59.9"))
+    assert(dateTime.atEndOfDay(Seconds)     == LocalDateTime.parse("2019-07-11T23:59:59"))
+    assert(dateTime.atEndOfDay(Minutes)     == LocalDateTime.parse("2019-07-11T23:59"))
+    assert(dateTime.atEndOfDay(Hours)       == LocalDateTime.parse("2019-07-11T23:00"))
+  }
+
+  it should "be adjusted to end week" in {
+    assert(dateTime.atEndOfWeek(FSeconds(9)) == LocalDateTime.parse("2019-07-13T23:59:59.999999999"))
+    assert(dateTime.atEndOfWeek(FSeconds(8)) == LocalDateTime.parse("2019-07-13T23:59:59.99999999"))
+    assert(dateTime.atEndOfWeek(FSeconds(7)) == LocalDateTime.parse("2019-07-13T23:59:59.9999999"))
+    assert(dateTime.atEndOfWeek(FSeconds(6)) == LocalDateTime.parse("2019-07-13T23:59:59.999999"))
+    assert(dateTime.atEndOfWeek(FSeconds(5)) == LocalDateTime.parse("2019-07-13T23:59:59.99999"))
+    assert(dateTime.atEndOfWeek(FSeconds(4)) == LocalDateTime.parse("2019-07-13T23:59:59.9999"))
+    assert(dateTime.atEndOfWeek(FSeconds(3)) == LocalDateTime.parse("2019-07-13T23:59:59.999"))
+    assert(dateTime.atEndOfWeek(FSeconds(2)) == LocalDateTime.parse("2019-07-13T23:59:59.99"))
+    assert(dateTime.atEndOfWeek(FSeconds(1)) == LocalDateTime.parse("2019-07-13T23:59:59.9"))
+    assert(dateTime.atEndOfWeek(Seconds)     == LocalDateTime.parse("2019-07-13T23:59:59"))
+    assert(dateTime.atEndOfWeek(Minutes)     == LocalDateTime.parse("2019-07-13T23:59"))
+    assert(dateTime.atEndOfWeek(Hours)       == LocalDateTime.parse("2019-07-13T23:00"))
+
+    Seq(SUNDAY -> 14, MONDAY -> 15, TUESDAY -> 16, WEDNESDAY -> 17, THURSDAY -> 11, FRIDAY -> 12, SATURDAY -> 13).foreach {
+      case (dayOfWeek, dayOfMonth) =>
+        assert(dateTime.atEndOfWeek(dayOfWeek)(FSeconds(9)) == LocalDateTime.parse(s"2019-07-${dayOfMonth}T23:59:59.999999999"))
+        assert(dateTime.atEndOfWeek(dayOfWeek)(FSeconds(8)) == LocalDateTime.parse(s"2019-07-${dayOfMonth}T23:59:59.99999999"))
+        assert(dateTime.atEndOfWeek(dayOfWeek)(FSeconds(7)) == LocalDateTime.parse(s"2019-07-${dayOfMonth}T23:59:59.9999999"))
+        assert(dateTime.atEndOfWeek(dayOfWeek)(FSeconds(6)) == LocalDateTime.parse(s"2019-07-${dayOfMonth}T23:59:59.999999"))
+        assert(dateTime.atEndOfWeek(dayOfWeek)(FSeconds(5)) == LocalDateTime.parse(s"2019-07-${dayOfMonth}T23:59:59.99999"))
+        assert(dateTime.atEndOfWeek(dayOfWeek)(FSeconds(4)) == LocalDateTime.parse(s"2019-07-${dayOfMonth}T23:59:59.9999"))
+        assert(dateTime.atEndOfWeek(dayOfWeek)(FSeconds(3)) == LocalDateTime.parse(s"2019-07-${dayOfMonth}T23:59:59.999"))
+        assert(dateTime.atEndOfWeek(dayOfWeek)(FSeconds(2)) == LocalDateTime.parse(s"2019-07-${dayOfMonth}T23:59:59.99"))
+        assert(dateTime.atEndOfWeek(dayOfWeek)(FSeconds(1)) == LocalDateTime.parse(s"2019-07-${dayOfMonth}T23:59:59.9"))
+        assert(dateTime.atEndOfWeek(dayOfWeek)(Seconds)     == LocalDateTime.parse(s"2019-07-${dayOfMonth}T23:59:59"))
+        assert(dateTime.atEndOfWeek(dayOfWeek)(Minutes)     == LocalDateTime.parse(s"2019-07-${dayOfMonth}T23:59"))
+        assert(dateTime.atEndOfWeek(dayOfWeek)(Hours)       == LocalDateTime.parse(s"2019-07-${dayOfMonth}T23:00"))
+    }
+  }
+
+  it should "be adjusted to end month" in {
+    assert(dateTime.atEndOfMonth(FSeconds(9)) == LocalDateTime.parse("2019-07-31T23:59:59.999999999"))
+    assert(dateTime.atEndOfMonth(FSeconds(8)) == LocalDateTime.parse("2019-07-31T23:59:59.99999999"))
+    assert(dateTime.atEndOfMonth(FSeconds(7)) == LocalDateTime.parse("2019-07-31T23:59:59.9999999"))
+    assert(dateTime.atEndOfMonth(FSeconds(6)) == LocalDateTime.parse("2019-07-31T23:59:59.999999"))
+    assert(dateTime.atEndOfMonth(FSeconds(5)) == LocalDateTime.parse("2019-07-31T23:59:59.99999"))
+    assert(dateTime.atEndOfMonth(FSeconds(4)) == LocalDateTime.parse("2019-07-31T23:59:59.9999"))
+    assert(dateTime.atEndOfMonth(FSeconds(3)) == LocalDateTime.parse("2019-07-31T23:59:59.999"))
+    assert(dateTime.atEndOfMonth(FSeconds(2)) == LocalDateTime.parse("2019-07-31T23:59:59.99"))
+    assert(dateTime.atEndOfMonth(FSeconds(1)) == LocalDateTime.parse("2019-07-31T23:59:59.9"))
+    assert(dateTime.atEndOfMonth(Seconds)     == LocalDateTime.parse("2019-07-31T23:59:59"))
+    assert(dateTime.atEndOfMonth(Minutes)     == LocalDateTime.parse("2019-07-31T23:59"))
+    assert(dateTime.atEndOfMonth(Hours)       == LocalDateTime.parse("2019-07-31T23:00"))
+  }
+
+  it should "be adjusted to end year" in {
+    assert(dateTime.atEndOfYear(FSeconds(9)) == LocalDateTime.parse("2019-12-31T23:59:59.999999999"))
+    assert(dateTime.atEndOfYear(FSeconds(8)) == LocalDateTime.parse("2019-12-31T23:59:59.99999999"))
+    assert(dateTime.atEndOfYear(FSeconds(7)) == LocalDateTime.parse("2019-12-31T23:59:59.9999999"))
+    assert(dateTime.atEndOfYear(FSeconds(6)) == LocalDateTime.parse("2019-12-31T23:59:59.999999"))
+    assert(dateTime.atEndOfYear(FSeconds(5)) == LocalDateTime.parse("2019-12-31T23:59:59.99999"))
+    assert(dateTime.atEndOfYear(FSeconds(4)) == LocalDateTime.parse("2019-12-31T23:59:59.9999"))
+    assert(dateTime.atEndOfYear(FSeconds(3)) == LocalDateTime.parse("2019-12-31T23:59:59.999"))
+    assert(dateTime.atEndOfYear(FSeconds(2)) == LocalDateTime.parse("2019-12-31T23:59:59.99"))
+    assert(dateTime.atEndOfYear(FSeconds(1)) == LocalDateTime.parse("2019-12-31T23:59:59.9"))
+    assert(dateTime.atEndOfYear(Seconds)     == LocalDateTime.parse("2019-12-31T23:59:59"))
+    assert(dateTime.atEndOfYear(Minutes)     == LocalDateTime.parse("2019-12-31T23:59"))
+    assert(dateTime.atEndOfYear(Hours)       == LocalDateTime.parse("2019-12-31T23:00"))
   }
 }
 
