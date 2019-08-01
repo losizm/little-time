@@ -98,5 +98,13 @@ class YearMonthTypeSpec extends FlatSpec {
     assert(!iter.hasNext)
     assertThrows[NoSuchElementException](iter.next())
   }
+
+  it should "be set to start of year" in {
+    assert(month.atStartOfYear == YearMonth.parse("2019-01"))
+  }
+
+  it should "be set to end of year" in {
+    assert(month.atEndOfYear == YearMonth.parse("2019-12"))
+  }
 }
 

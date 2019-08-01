@@ -99,6 +99,12 @@ object Implicits {
     def max(other: YearMonth): YearMonth =
       yearMonthOrdering.max(month, other)
 
+    /** Gets month adjusted to first month of year. */
+    def atStartOfYear: YearMonth = month.withMonth(1)
+
+    /** Gets month adjusted to last month of year. */
+    def atEndOfYear: YearMonth = month.withMonth(12)
+
     /**
      * Creates iterator forward to end month.
      *
