@@ -264,10 +264,10 @@ object Implicits {
      */
     def atEndOfHour(implicit precision: TimePrecision): LocalTime =
       precision match {
-        case Minutes     => LocalTime.of(time.getHour, 59)
-        case Seconds     => LocalTime.of(time.getHour, 59, 59)
-        case FSeconds(_) => LocalTime.of(time.getHour, 59, 59, precision.limit.getNano)
-        case _           => throw new DateTimeException(s"Precision unit too large: $precision")
+        case Minutes              => LocalTime.of(time.getHour, 59)
+        case Seconds              => LocalTime.of(time.getHour, 59, 59)
+        case FractionalSeconds(_) => LocalTime.of(time.getHour, 59, 59, precision.limit.getNano)
+        case _                    => throw new DateTimeException(s"Precision unit too large: $precision")
       }
 
     /** Gets time truncated to minute. */
@@ -281,9 +281,9 @@ object Implicits {
      */
     def atEndOfMinute(implicit precision: TimePrecision): LocalTime =
       precision match {
-        case Seconds     => LocalTime.of(time.getHour, time.getMinute, 59)
-        case FSeconds(_) => LocalTime.of(time.getHour, time.getMinute, 59, precision.limit.getNano)
-        case _           => throw new DateTimeException(s"Precision unit too large: $precision")
+        case Seconds              => LocalTime.of(time.getHour, time.getMinute, 59)
+        case FractionalSeconds(_) => LocalTime.of(time.getHour, time.getMinute, 59, precision.limit.getNano)
+        case _                    => throw new DateTimeException(s"Precision unit too large: $precision")
       }
 
     /** Gets time truncated to second. */

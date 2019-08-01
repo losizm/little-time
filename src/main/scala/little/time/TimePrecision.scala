@@ -49,7 +49,7 @@ object TimePrecision {
   }
 
   /** Indicates time precision of fractional seconds. */
-  trait FSeconds extends TimePrecision {
+  trait FractionalSeconds extends TimePrecision {
     /** Number of digits in fractional seconds. */
     def scale: Int
 
@@ -57,7 +57,7 @@ object TimePrecision {
   }
 
   /** Factory for time precision of fractional seconds. */ 
-  object FSeconds {
+  object FractionalSeconds {
     /**
      * Gets time precision with applied scale of fractional seconds.
      *
@@ -65,16 +65,16 @@ object TimePrecision {
      *
      * @throws IllegalArgumentException if `scale < 1` or `scale > 9`
      */
-    def apply(scale: Int): FSeconds =
+    def apply(scale: Int): FractionalSeconds =
       scale match {
-        case 1 => FSeconds1
-        case 2 => FSeconds2
+        case 1 => FractionalSeconds1
+        case 2 => FractionalSeconds2
         case 3 => Milliseconds
-        case 4 => FSeconds4
-        case 5 => FSeconds5
+        case 4 => FractionalSeconds4
+        case 5 => FractionalSeconds5
         case 6 => Microseconds
-        case 7 => FSeconds7
-        case 8 => FSeconds8
+        case 7 => FractionalSeconds7
+        case 8 => FractionalSeconds8
         case 9 => Nanoseconds
         case _ => throw new IllegalArgumentException(s"Invalid scale: $scale")
       }
@@ -84,7 +84,7 @@ object TimePrecision {
      *
      * @param seconds
      */
-    def unapply(fsecs: FSeconds): Option[Int] =
+    def unapply(fsecs: FractionalSeconds): Option[Int] =
       if (fsecs == null ) None
       else Some(fsecs.scale)
   }
@@ -94,27 +94,27 @@ object TimePrecision {
    *
    * @note Scale is 3.
    */
-  case object Milliseconds extends FSeconds { val scale: Int = 3 }
+  case object Milliseconds extends FractionalSeconds { val scale: Int = 3 }
 
   /**
    * Indicates time precision of microseconds.
    *
    * @note Scale is 6.
    */
-  case object Microseconds extends FSeconds { val scale: Int = 6 }
+  case object Microseconds extends FractionalSeconds { val scale: Int = 6 }
 
   /**
    * Indicates time precision of nanoseconds.
    *
    * @note Scale is 9.
    */
-  case object Nanoseconds extends FSeconds { val scale: Int = 9 }
+  case object Nanoseconds extends FractionalSeconds { val scale: Int = 9 }
 
-  private case object FSeconds1 extends FSeconds { val scale: Int = 1 }
-  private case object FSeconds2 extends FSeconds { val scale: Int = 2 }
-  private case object FSeconds4 extends FSeconds { val scale: Int = 4 }
-  private case object FSeconds5 extends FSeconds { val scale: Int = 5 }
-  private case object FSeconds7 extends FSeconds { val scale: Int = 7 }
-  private case object FSeconds8 extends FSeconds { val scale: Int = 8 }
+  private case object FractionalSeconds1 extends FractionalSeconds { val scale: Int = 1 }
+  private case object FractionalSeconds2 extends FractionalSeconds { val scale: Int = 2 }
+  private case object FractionalSeconds4 extends FractionalSeconds { val scale: Int = 4 }
+  private case object FractionalSeconds5 extends FractionalSeconds { val scale: Int = 5 }
+  private case object FractionalSeconds7 extends FractionalSeconds { val scale: Int = 7 }
+  private case object FractionalSeconds8 extends FractionalSeconds { val scale: Int = 8 }
 }
 
