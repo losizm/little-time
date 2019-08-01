@@ -30,15 +30,15 @@ class TimePrecisionSpec extends FlatSpec {
     assert { Microseconds.limit == LocalTime.parse("23:59:59.999999") }
     assert { Nanoseconds.limit  == LocalTime.parse("23:59:59.999999999") }
 
-    assert { FSeconds(1).limit == LocalTime.parse("23:59:59.9") }
-    assert { FSeconds(2).limit == LocalTime.parse("23:59:59.99") }
-    assert { FSeconds(3).limit == LocalTime.parse("23:59:59.999") }
-    assert { FSeconds(4).limit == LocalTime.parse("23:59:59.9999") }
-    assert { FSeconds(5).limit == LocalTime.parse("23:59:59.99999") }
-    assert { FSeconds(6).limit == LocalTime.parse("23:59:59.999999") }
-    assert { FSeconds(7).limit == LocalTime.parse("23:59:59.9999999") }
-    assert { FSeconds(8).limit == LocalTime.parse("23:59:59.99999999") }
-    assert { FSeconds(9).limit == LocalTime.parse("23:59:59.999999999") }
+    assert { FractionalSeconds(1).limit == LocalTime.parse("23:59:59.9") }
+    assert { FractionalSeconds(2).limit == LocalTime.parse("23:59:59.99") }
+    assert { FractionalSeconds(3).limit == LocalTime.parse("23:59:59.999") }
+    assert { FractionalSeconds(4).limit == LocalTime.parse("23:59:59.9999") }
+    assert { FractionalSeconds(5).limit == LocalTime.parse("23:59:59.99999") }
+    assert { FractionalSeconds(6).limit == LocalTime.parse("23:59:59.999999") }
+    assert { FractionalSeconds(7).limit == LocalTime.parse("23:59:59.9999999") }
+    assert { FractionalSeconds(8).limit == LocalTime.parse("23:59:59.99999999") }
+    assert { FractionalSeconds(9).limit == LocalTime.parse("23:59:59.999999999") }
   }
 
   it should "be compared" in {
@@ -54,54 +54,54 @@ class TimePrecisionSpec extends FlatSpec {
     assert { Seconds > Minutes }
     assert { Minutes > Hours }
 
-    assert { FSeconds(1) < FSeconds(2) }
-    assert { FSeconds(2) < FSeconds(3) }
-    assert { FSeconds(3) < FSeconds(4) }
-    assert { FSeconds(4) < FSeconds(5) }
-    assert { FSeconds(5) < FSeconds(6) }
-    assert { FSeconds(6) < FSeconds(7) }
-    assert { FSeconds(7) < FSeconds(8) }
-    assert { FSeconds(8) < FSeconds(9) }
+    assert { FractionalSeconds(1) < FractionalSeconds(2) }
+    assert { FractionalSeconds(2) < FractionalSeconds(3) }
+    assert { FractionalSeconds(3) < FractionalSeconds(4) }
+    assert { FractionalSeconds(4) < FractionalSeconds(5) }
+    assert { FractionalSeconds(5) < FractionalSeconds(6) }
+    assert { FractionalSeconds(6) < FractionalSeconds(7) }
+    assert { FractionalSeconds(7) < FractionalSeconds(8) }
+    assert { FractionalSeconds(8) < FractionalSeconds(9) }
 
-    assert { FSeconds(9) > FSeconds(8) }
-    assert { FSeconds(8) > FSeconds(7) }
-    assert { FSeconds(7) > FSeconds(6) }
-    assert { FSeconds(6) > FSeconds(5) }
-    assert { FSeconds(5) > FSeconds(4) }
-    assert { FSeconds(4) > FSeconds(3) }
-    assert { FSeconds(3) > FSeconds(2) }
-    assert { FSeconds(2) > FSeconds(1) }
+    assert { FractionalSeconds(9) > FractionalSeconds(8) }
+    assert { FractionalSeconds(8) > FractionalSeconds(7) }
+    assert { FractionalSeconds(7) > FractionalSeconds(6) }
+    assert { FractionalSeconds(6) > FractionalSeconds(5) }
+    assert { FractionalSeconds(5) > FractionalSeconds(4) }
+    assert { FractionalSeconds(4) > FractionalSeconds(3) }
+    assert { FractionalSeconds(3) > FractionalSeconds(2) }
+    assert { FractionalSeconds(2) > FractionalSeconds(1) }
 
-    assert { Milliseconds == FSeconds(3) }
-    assert { Microseconds == FSeconds(6) }
-    assert { Nanoseconds == FSeconds(9) }
+    assert { Milliseconds == FractionalSeconds(3) }
+    assert { Microseconds == FractionalSeconds(6) }
+    assert { Nanoseconds == FractionalSeconds(9) }
 
-    assert { (1 to 9).forall(Hours        < FSeconds(_)) }
-    assert { (1 to 9).forall(Minutes      < FSeconds(_)) }
-    assert { (1 to 9).forall(Seconds      < FSeconds(_)) }
-    assert { (4 to 9).forall(Milliseconds < FSeconds(_)) }
-    assert { (7 to 9).forall(Microseconds < FSeconds(_)) }
+    assert { (1 to 9).forall(Hours        < FractionalSeconds(_)) }
+    assert { (1 to 9).forall(Minutes      < FractionalSeconds(_)) }
+    assert { (1 to 9).forall(Seconds      < FractionalSeconds(_)) }
+    assert { (4 to 9).forall(Milliseconds < FractionalSeconds(_)) }
+    assert { (7 to 9).forall(Microseconds < FractionalSeconds(_)) }
 
-    assert { (1 to 9).forall(FSeconds(_) > Hours) }
-    assert { (1 to 9).forall(FSeconds(_) > Minutes) }
-    assert { (1 to 9).forall(FSeconds(_) > Seconds) }
-    assert { (4 to 9).forall(FSeconds(_) > Milliseconds) }
-    assert { (7 to 9).forall(FSeconds(_) > Microseconds) }
+    assert { (1 to 9).forall(FractionalSeconds(_) > Hours) }
+    assert { (1 to 9).forall(FractionalSeconds(_) > Minutes) }
+    assert { (1 to 9).forall(FractionalSeconds(_) > Seconds) }
+    assert { (4 to 9).forall(FractionalSeconds(_) > Milliseconds) }
+    assert { (7 to 9).forall(FractionalSeconds(_) > Microseconds) }
   }
 
-  "FSeconds" should "have scale" in {
+  "FractionalSeconds" should "have scale" in {
     assert { Milliseconds.scale == 3 }
     assert { Microseconds.scale == 6 }
     assert { Nanoseconds.scale == 9 }
 
-    assert { (1 to 9).forall(scale => FSeconds(scale).scale == scale) }
+    assert { (1 to 9).forall(scale => FractionalSeconds(scale).scale == scale) }
   }
 
   it should "throw IllegalArgumentException for scale out of range" in {
-    assertThrows[IllegalArgumentException] { FSeconds(-1) }
-    assertThrows[IllegalArgumentException] { FSeconds(0) }
-    assertThrows[IllegalArgumentException] { FSeconds(10) }
-    assertThrows[IllegalArgumentException] { FSeconds(11) }
+    assertThrows[IllegalArgumentException] { FractionalSeconds(-1) }
+    assertThrows[IllegalArgumentException] { FractionalSeconds(0) }
+    assertThrows[IllegalArgumentException] { FractionalSeconds(10) }
+    assertThrows[IllegalArgumentException] { FractionalSeconds(11) }
   }
 }
 
