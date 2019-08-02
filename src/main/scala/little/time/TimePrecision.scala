@@ -80,7 +80,7 @@ object TimePrecision {
       }
 
     /**
-     * Destructures seconds to its scale value.
+     * Destructures fractional seconds to its scale value.
      *
      * @param seconds
      */
