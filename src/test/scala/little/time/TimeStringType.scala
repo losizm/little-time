@@ -1,0 +1,51 @@
+/*
+ * Copyright 2019 Carlos Conyers
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package little.time
+
+import java.time.{ LocalDate, LocalDateTime, LocalTime, YearMonth }
+
+import org.scalatest.FlatSpec
+
+import Implicits.TimeStringType
+
+class TimeStringTypeSpec extends FlatSpec {
+  "String" should "be converted to YearMonth" in {
+    assert("2019-07".toYearMonth == YearMonth.parse("2019-07"))
+  }
+
+  it should "be converted to LocalDate" in {
+    assert("2019-07-11".toLocalDate == LocalDate.parse("2019-07-11"))
+  }
+
+  it should "be converted to LocalTime" in {
+    assert("12:38".toLocalTime == LocalTime.parse("12:38"))
+    assert("12:38:45".toLocalTime == LocalTime.parse("12:38:45"))
+    assert("12:38:45.1".toLocalTime == LocalTime.parse("12:38:45.1"))
+    assert("12:38:45.123".toLocalTime == LocalTime.parse("12:38:45.123"))
+    assert("12:38:45.123456".toLocalTime == LocalTime.parse("12:38:45.123456"))
+    assert("12:38:45.123456789".toLocalTime == LocalTime.parse("12:38:45.123456789"))
+  }
+
+  it should "be converted to LocalDateTime" in {
+    assert("2019-07-11T12:38".toLocalDateTime == LocalDateTime.parse("2019-07-11T12:38"))
+    assert("2019-07-11T12:38:45".toLocalDateTime == LocalDateTime.parse("2019-07-11T12:38:45"))
+    assert("2019-07-11T12:38:45.1".toLocalDateTime == LocalDateTime.parse("2019-07-11T12:38:45.1"))
+    assert("2019-07-11T12:38:45.123".toLocalDateTime == LocalDateTime.parse("2019-07-11T12:38:45.123"))
+    assert("2019-07-11T12:38:45.123456".toLocalDateTime == LocalDateTime.parse("2019-07-11T12:38:45.123456"))
+    assert("2019-07-11T12:38:45.123456789".toLocalDateTime == LocalDateTime.parse("2019-07-11T12:38:45.123456789"))
+  }
+}
+

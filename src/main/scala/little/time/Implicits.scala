@@ -480,5 +480,20 @@ object Implicits {
     def atEndOfMicros(implicit precision: TimePrecision): LocalDateTime =
       LocalDateTime.of(dateTime.toLocalDate, dateTime.toLocalTime.atEndOfMicros)
   }
+
+  /** Provides time-related extension methods to `java.lang.String`. */
+  implicit class TimeStringType(val string: String) extends AnyVal {
+    /** Converts formatted string to `YearMonth`. */
+    def toYearMonth: YearMonth = YearMonth.parse(string)
+
+    /** Converts formatted string to `LocalDate`. */
+    def toLocalDate: LocalDate = LocalDate.parse(string)
+
+    /** Converts formatted string to `LocalTime`. */
+    def toLocalTime: LocalTime = LocalTime.parse(string)
+
+    /** Converts formatted string to `LocalDateTime`. */
+    def toLocalDateTime: LocalDateTime = LocalDateTime.parse(string)
+  }
 }
 
