@@ -362,7 +362,7 @@ object Implicits {
      *
      * @param precision time precision
      */
-    def atEndOfYear(precision: TimePrecision): LocalDateTime =
+    def atEndOfYear(implicit precision: TimePrecision): LocalDateTime =
       LocalDateTime.of(dateTime.toLocalDate.atEndOfYear, precision.limit)
 
     /** Gets date-time adjusted to first day of month. */
