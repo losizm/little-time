@@ -55,6 +55,9 @@ object Implicits {
       }
   }
 
+  /** Provides ordering for `java.time.Duration`. */
+  implicit val durationOrdering: Ordering[Duration] = (a, b) => a.compareTo(b)
+
   /** Provides ordering for `java.time.YearMonth`. */
   implicit val yearMonthOrdering: Ordering[YearMonth] = (a, b) => a.compareTo(b)
 
@@ -66,6 +69,62 @@ object Implicits {
 
   /** Provides ordering for `java.time.LocalDateTime`. */
   implicit val localDateTimeOrdering: Ordering[LocalDateTime] = (a, b) => a.compareTo(b)
+
+  /** Provides extension methods to `java.time.Duration` */
+  implicit class DurationType(val duration: Duration) extends AnyVal {
+    /** Get negated duration. */
+    def unary_- : Duration = duration.negated()
+
+    /**
+     * Gets duration with specified amount added.
+     *
+     * @param amount duration to add
+     */
+    def +(amount: Duration): Duration = duration.plus(amount)
+
+    /**
+     * Gets duration with specified amount subtracted.
+     *
+     * @param amount duration to subtract
+     */
+    def -(amount: Duration): Duration = duration.minus(amount)
+
+    /**
+     * Compares to other duration and returns the lesser value.
+     *
+     * @param other other duration
+     */
+    def min(other: Duration): Duration =
+      durationOrdering.min(duration, other)
+
+    /**
+     * Compares to other duration and returns the greater value.
+     *
+     * @param other other duration
+     */
+    def max(other: Duration): Duration =
+      durationOrdering.max(duration, other)
+  }
+
+  /** Provides extension methods to `java.time.Period` */
+  implicit class PeriodType(val period: Period) extends AnyVal {
+    /** Get negated period. */
+    def unary_- : Period = period.negated()
+
+    /**
+     * Gets period with specified amount added.
+     *
+     * @param amount period to add
+     */
+    def +(amount: Period): Period = period.plus(amount)
+
+    /**
+     * Gets period with specified amount subtracted.
+     *
+     * @param amount period to subtract
+     */
+    def -(amount: Period): Period = period.minus(amount)
+  }
 
   /** Provides extension methods to `java.time.YearMonth` */
   implicit class YearMonthType(val month: YearMonth) extends AnyVal {
