@@ -15,7 +15,7 @@
  */
 package little.time
 
-import java.time.YearMonth
+import java.time.{ Period, YearMonth }
 
 import org.scalatest.FlatSpec
 
@@ -28,7 +28,7 @@ class YearMonthTypeSpec extends FlatSpec {
     import Ordered.orderingToOrdered
     val other1 = YearMonth.parse("2019-06")
     val other2 = YearMonth.parse("2019-07")
-    
+
     assert(month > other1)
     assert(month >= other1)
     assert(month != other1)
@@ -36,7 +36,7 @@ class YearMonthTypeSpec extends FlatSpec {
     assert(other1 < month)
     assert(other1 <= month)
     assert(other1 != month)
-    
+
     assert(month >= other2)
     assert(month <= other2)
     assert(month == other2)
@@ -46,7 +46,7 @@ class YearMonthTypeSpec extends FlatSpec {
     assert(other2 == month)
   }
 
-  it should "have days added" in {
+  it should "have months added" in {
     assert(month + 1 == YearMonth.parse("2019-08"))
     assert(month + 2 == YearMonth.parse("2019-09"))
     assert(month + 12 == YearMonth.parse("2020-07"))
@@ -56,7 +56,7 @@ class YearMonthTypeSpec extends FlatSpec {
     assert(month + -12 == YearMonth.parse("2018-07"))
   }
 
-  it should "have days subtracted" in {
+  it should "have months subtracted" in {
     assert(month - 1 == YearMonth.parse("2019-06"))
     assert(month - 2 == YearMonth.parse("2019-05"))
     assert(month - 12 == YearMonth.parse("2018-07"))
@@ -64,6 +64,30 @@ class YearMonthTypeSpec extends FlatSpec {
     assert(month - -1 == YearMonth.parse("2019-08"))
     assert(month - -2 == YearMonth.parse("2019-09"))
     assert(month - -12 == YearMonth.parse("2020-07"))
+  }
+
+  it should "have period added" in {
+    assert(month + Period.ofMonths(1) == YearMonth.parse("2019-08"))
+    assert(month + Period.ofMonths(2) == YearMonth.parse("2019-09"))
+    assert(month + Period.ofMonths(12) == YearMonth.parse("2020-07"))
+    assert(month + Period.ofYears(2) == YearMonth.parse("2021-07"))
+
+    assert(month + Period.ofMonths(-1) == YearMonth.parse("2019-06"))
+    assert(month + Period.ofMonths(-2) == YearMonth.parse("2019-05"))
+    assert(month + Period.ofMonths(-12) == YearMonth.parse("2018-07"))
+    assert(month + Period.ofYears(-2) == YearMonth.parse("2017-07"))
+  }
+
+  it should "have period subtracted" in {
+    assert(month - Period.ofMonths(1) == YearMonth.parse("2019-06"))
+    assert(month - Period.ofMonths(2) == YearMonth.parse("2019-05"))
+    assert(month - Period.ofMonths(12) == YearMonth.parse("2018-07"))
+    assert(month - Period.ofYears(2) == YearMonth.parse("2017-07"))
+
+    assert(month - Period.ofMonths(-1) == YearMonth.parse("2019-08"))
+    assert(month - Period.ofMonths(-2) == YearMonth.parse("2019-09"))
+    assert(month - Period.ofMonths(-12) == YearMonth.parse("2020-07"))
+    assert(month - Period.ofYears(-2) == YearMonth.parse("2021-07"))
   }
 
   it should "be greater than other" in {
@@ -81,7 +105,7 @@ class YearMonthTypeSpec extends FlatSpec {
   it should "create iterator to end month (inclusive)" in {
     val end = YearMonth.parse("2019-09")
     val iter = month.to(end, true)
-    
+
     assert(iter.next() == month)
     assert(iter.next() == YearMonth.parse("2019-08"))
     assert(iter.next() == end)
@@ -92,7 +116,7 @@ class YearMonthTypeSpec extends FlatSpec {
   it should "create iterator to end month (exclusive)" in {
     val end = YearMonth.parse("2019-09")
     val iter = month.to(end, false)
-    
+
     assert(iter.next() == month)
     assert(iter.next() == YearMonth.parse("2019-08"))
     assert(!iter.hasNext)

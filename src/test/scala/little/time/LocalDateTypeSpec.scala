@@ -15,7 +15,7 @@
  */
 package little.time
 
-import java.time.{ DayOfWeek, LocalDate, YearMonth }
+import java.time.{ DayOfWeek, LocalDate, Period, YearMonth }
 
 import org.scalatest.FlatSpec
 
@@ -49,11 +49,43 @@ class LocalDateTypeSpec extends FlatSpec {
     assert(date - -31 == LocalDate.parse("2019-08-11"))
   }
 
+  it should "have period added" in {
+    assert(date + Period.ofDays(1) == LocalDate.parse("2019-07-12"))
+    assert(date + Period.ofDays(2) == LocalDate.parse("2019-07-13"))
+    assert(date + Period.ofDays(31) == LocalDate.parse("2019-08-11"))
+    assert(date + Period.ofMonths(5) == LocalDate.parse("2019-12-11"))
+    assert(date + Period.ofWeeks(2) == LocalDate.parse("2019-07-25"))
+    assert(date + Period.of(6, 3, 7) == LocalDate.parse("2025-10-18"))
+
+    assert(date + Period.ofDays(-1) == LocalDate.parse("2019-07-10"))
+    assert(date + Period.ofDays(-2) == LocalDate.parse("2019-07-09"))
+    assert(date + Period.ofDays(-11) == LocalDate.parse("2019-06-30"))
+    assert(date + Period.ofMonths(-5) == LocalDate.parse("2019-02-11"))
+    assert(date + Period.ofWeeks(-2) == LocalDate.parse("2019-06-27"))
+    assert(date + Period.of(-6, -3, -7) == LocalDate.parse("2013-04-04"))
+  }
+
+  it should "have period subtracted" in {
+    assert(date - Period.ofDays(1) == LocalDate.parse("2019-07-10"))
+    assert(date - Period.ofDays(2) == LocalDate.parse("2019-07-09"))
+    assert(date - Period.ofDays(11) == LocalDate.parse("2019-06-30"))
+    assert(date - Period.ofMonths(5) == LocalDate.parse("2019-02-11"))
+    assert(date - Period.ofWeeks(2) == LocalDate.parse("2019-06-27"))
+    assert(date - Period.of(6, 3, 7) == LocalDate.parse("2013-04-04"))
+
+    assert(date - Period.ofDays(-1) == LocalDate.parse("2019-07-12"))
+    assert(date - Period.ofDays(-2) == LocalDate.parse("2019-07-13"))
+    assert(date - Period.ofDays(-31) == LocalDate.parse("2019-08-11"))
+    assert(date - Period.ofMonths(-5) == LocalDate.parse("2019-12-11"))
+    assert(date - Period.ofWeeks(-2) == LocalDate.parse("2019-07-25"))
+    assert(date - Period.of(-6, -3, -7) == LocalDate.parse("2025-10-18"))
+  }
+
   it should "be compared to other" in {
     import Ordered.orderingToOrdered
     val other1 = LocalDate.parse("2019-06-05")
     val other2 = LocalDate.parse("2019-07-11")
-    
+
     assert(date > other1)
     assert(date >= other1)
     assert(date != other1)
@@ -61,7 +93,7 @@ class LocalDateTypeSpec extends FlatSpec {
     assert(other1 < date)
     assert(other1 <= date)
     assert(other1 != date)
-    
+
     assert(date >= other2)
     assert(date <= other2)
     assert(date == other2)
@@ -86,7 +118,7 @@ class LocalDateTypeSpec extends FlatSpec {
   it should "create iterator to end date (inclusive)" in {
     val end = LocalDate.parse("2019-07-13")
     val iter = date.to(end, true)
-    
+
     assert(iter.next() == date)
     assert(iter.next() == LocalDate.parse("2019-07-12"))
     assert(iter.next() == end)
@@ -97,7 +129,7 @@ class LocalDateTypeSpec extends FlatSpec {
   it should "create iterator to end date (exclusive)" in {
     val end = LocalDate.parse("2019-07-13")
     val iter = date.to(end, false)
-    
+
     assert(iter.next() == date)
     assert(iter.next() == LocalDate.parse("2019-07-12"))
     assert(!iter.hasNext)

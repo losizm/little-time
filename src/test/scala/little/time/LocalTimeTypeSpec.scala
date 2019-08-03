@@ -15,7 +15,7 @@
  */
 package little.time
 
-import java.time.LocalTime
+import java.time.{ Duration, LocalTime }
 
 import org.scalatest.FlatSpec
 
@@ -25,11 +25,43 @@ import TimePrecision._
 class LocalTimeTypeSpec extends FlatSpec {
   private val time = LocalTime.parse("12:38:45.123456789")
 
-  "LocalTime" should "be compared to other" in {
+  "LocalTime" should "have duration added" in {
+    assert(time + Duration.ofSeconds(1) == LocalTime.parse("12:38:46.123456789"))
+    assert(time + Duration.ofMinutes(2) == LocalTime.parse("12:40:45.123456789"))
+    assert(time + Duration.ofHours(31) == LocalTime.parse("19:38:45.123456789"))
+    assert(time + Duration.ofMillis(5) == LocalTime.parse("12:38:45.128456789"))
+    assert(time + Duration.ofNanos(2) == LocalTime.parse("12:38:45.123456791"))
+    assert(time + Duration.ofDays(7) == LocalTime.parse("12:38:45.123456789"))
+
+    assert(time + Duration.ofSeconds(-1) == LocalTime.parse("12:38:44.123456789"))
+    assert(time + Duration.ofMinutes(-2) == LocalTime.parse("12:36:45.123456789"))
+    assert(time + Duration.ofHours(-31) == LocalTime.parse("05:38:45.123456789"))
+    assert(time + Duration.ofMillis(-5) == LocalTime.parse("12:38:45.118456789"))
+    assert(time + Duration.ofNanos(-2) == LocalTime.parse("12:38:45.123456787"))
+    assert(time + Duration.ofDays(-7) == LocalTime.parse("12:38:45.123456789"))
+  }
+
+  it should "have duration subtracted" in {
+    assert(time - Duration.ofSeconds(1) == LocalTime.parse("12:38:44.123456789"))
+    assert(time - Duration.ofMinutes(2) == LocalTime.parse("12:36:45.123456789"))
+    assert(time - Duration.ofHours(31) == LocalTime.parse("05:38:45.123456789"))
+    assert(time - Duration.ofMillis(5) == LocalTime.parse("12:38:45.118456789"))
+    assert(time - Duration.ofNanos(2) == LocalTime.parse("12:38:45.123456787"))
+    assert(time - Duration.ofDays(7) == LocalTime.parse("12:38:45.123456789"))
+
+    assert(time - Duration.ofSeconds(-1) == LocalTime.parse("12:38:46.123456789"))
+    assert(time - Duration.ofMinutes(-2) == LocalTime.parse("12:40:45.123456789"))
+    assert(time - Duration.ofHours(-31) == LocalTime.parse("19:38:45.123456789"))
+    assert(time - Duration.ofMillis(-5) == LocalTime.parse("12:38:45.128456789"))
+    assert(time - Duration.ofNanos(-2) == LocalTime.parse("12:38:45.123456791"))
+    assert(time - Duration.ofDays(-7) == LocalTime.parse("12:38:45.123456789"))
+  }
+
+  it should "be compared to other" in {
     import Ordered.orderingToOrdered
     val other1 = LocalTime.parse("12:38:45")
     val other2 = LocalTime.parse("12:38:45.123456789")
-    
+
     assert(time > other1)
     assert(time >= other1)
     assert(time != other1)
@@ -37,7 +69,7 @@ class LocalTimeTypeSpec extends FlatSpec {
     assert(other1 < time)
     assert(other1 <= time)
     assert(other1 != time)
-    
+
     assert(time >= other2)
     assert(time <= other2)
     assert(time == other2)

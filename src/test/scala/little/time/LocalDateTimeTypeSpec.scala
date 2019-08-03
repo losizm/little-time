@@ -15,7 +15,7 @@
  */
 package little.time
 
-import java.time.{ DayOfWeek, LocalDateTime, YearMonth }
+import java.time.{ DayOfWeek, Duration, LocalDateTime, Period, YearMonth }
 
 import org.scalatest.FlatSpec
 
@@ -26,7 +26,71 @@ import TimePrecision._
 class LocalDateTimeTypeSpec extends FlatSpec {
   private val dateTime = LocalDateTime.parse("2019-07-11T12:38:45.123456789")
 
-  "LocalDateTime" should "be converted to YearMonth" in {
+  "LocalDateTime" should "have duration added" in {
+    assert(dateTime + Duration.ofSeconds(1) == LocalDateTime.parse("2019-07-11T12:38:46.123456789"))
+    assert(dateTime + Duration.ofMinutes(2) == LocalDateTime.parse("2019-07-11T12:40:45.123456789"))
+    assert(dateTime + Duration.ofHours(31) == LocalDateTime.parse("2019-07-12T19:38:45.123456789"))
+    assert(dateTime + Duration.ofMillis(5) == LocalDateTime.parse("2019-07-11T12:38:45.128456789"))
+    assert(dateTime + Duration.ofNanos(2) == LocalDateTime.parse("2019-07-11T12:38:45.123456791"))
+    assert(dateTime + Duration.ofDays(7) == LocalDateTime.parse("2019-07-18T12:38:45.123456789"))
+
+    assert(dateTime + Duration.ofSeconds(-1) == LocalDateTime.parse("2019-07-11T12:38:44.123456789"))
+    assert(dateTime + Duration.ofMinutes(-2) == LocalDateTime.parse("2019-07-11T12:36:45.123456789"))
+    assert(dateTime + Duration.ofHours(-31) == LocalDateTime.parse("2019-07-10T05:38:45.123456789"))
+    assert(dateTime + Duration.ofMillis(-5) == LocalDateTime.parse("2019-07-11T12:38:45.118456789"))
+    assert(dateTime + Duration.ofNanos(-2) == LocalDateTime.parse("2019-07-11T12:38:45.123456787"))
+    assert(dateTime + Duration.ofDays(-7) == LocalDateTime.parse("2019-07-04T12:38:45.123456789"))
+  }
+
+  it should "be have duration subtracted" in {
+    assert(dateTime - Duration.ofSeconds(1) == LocalDateTime.parse("2019-07-11T12:38:44.123456789"))
+    assert(dateTime - Duration.ofMinutes(2) == LocalDateTime.parse("2019-07-11T12:36:45.123456789"))
+    assert(dateTime - Duration.ofHours(31) == LocalDateTime.parse("2019-07-10T05:38:45.123456789"))
+    assert(dateTime - Duration.ofMillis(5) == LocalDateTime.parse("2019-07-11T12:38:45.118456789"))
+    assert(dateTime - Duration.ofNanos(2) == LocalDateTime.parse("2019-07-11T12:38:45.123456787"))
+    assert(dateTime - Duration.ofDays(7) == LocalDateTime.parse("2019-07-04T12:38:45.123456789"))
+
+    assert(dateTime - Duration.ofSeconds(-1) == LocalDateTime.parse("2019-07-11T12:38:46.123456789"))
+    assert(dateTime - Duration.ofMinutes(-2) == LocalDateTime.parse("2019-07-11T12:40:45.123456789"))
+    assert(dateTime - Duration.ofHours(-31) == LocalDateTime.parse("2019-07-12T19:38:45.123456789"))
+    assert(dateTime - Duration.ofMillis(-5) == LocalDateTime.parse("2019-07-11T12:38:45.128456789"))
+    assert(dateTime - Duration.ofNanos(-2) == LocalDateTime.parse("2019-07-11T12:38:45.123456791"))
+    assert(dateTime - Duration.ofDays(-7) == LocalDateTime.parse("2019-07-18T12:38:45.123456789"))
+  }
+
+  "LocalDateTime" should "have period added" in {
+    assert(dateTime + Period.ofDays(1) == LocalDateTime.parse("2019-07-12T12:38:45.123456789"))
+    assert(dateTime + Period.ofDays(2) == LocalDateTime.parse("2019-07-13T12:38:45.123456789"))
+    assert(dateTime + Period.ofDays(31) == LocalDateTime.parse("2019-08-11T12:38:45.123456789"))
+    assert(dateTime + Period.ofMonths(5) == LocalDateTime.parse("2019-12-11T12:38:45.123456789"))
+    assert(dateTime + Period.ofWeeks(2) == LocalDateTime.parse("2019-07-25T12:38:45.123456789"))
+    assert(dateTime + Period.of(6, 3, 7) == LocalDateTime.parse("2025-10-18T12:38:45.123456789"))
+
+    assert(dateTime + Period.ofDays(-1) == LocalDateTime.parse("2019-07-10T12:38:45.123456789"))
+    assert(dateTime + Period.ofDays(-2) == LocalDateTime.parse("2019-07-09T12:38:45.123456789"))
+    assert(dateTime + Period.ofDays(-11) == LocalDateTime.parse("2019-06-30T12:38:45.123456789"))
+    assert(dateTime + Period.ofMonths(-5) == LocalDateTime.parse("2019-02-11T12:38:45.123456789"))
+    assert(dateTime + Period.ofWeeks(-2) == LocalDateTime.parse("2019-06-27T12:38:45.123456789"))
+    assert(dateTime + Period.of(-6, -3, -7) == LocalDateTime.parse("2013-04-04T12:38:45.123456789"))
+  }
+
+  it should "be have period subtracted" in {
+    assert(dateTime - Period.ofDays(1) == LocalDateTime.parse("2019-07-10T12:38:45.123456789"))
+    assert(dateTime - Period.ofDays(2) == LocalDateTime.parse("2019-07-09T12:38:45.123456789"))
+    assert(dateTime - Period.ofDays(11) == LocalDateTime.parse("2019-06-30T12:38:45.123456789"))
+    assert(dateTime - Period.ofMonths(5) == LocalDateTime.parse("2019-02-11T12:38:45.123456789"))
+    assert(dateTime - Period.ofWeeks(2) == LocalDateTime.parse("2019-06-27T12:38:45.123456789"))
+    assert(dateTime - Period.of(6, 3, 7) == LocalDateTime.parse("2013-04-04T12:38:45.123456789"))
+
+    assert(dateTime - Period.ofDays(-1) == LocalDateTime.parse("2019-07-12T12:38:45.123456789"))
+    assert(dateTime - Period.ofDays(-2) == LocalDateTime.parse("2019-07-13T12:38:45.123456789"))
+    assert(dateTime - Period.ofDays(-31) == LocalDateTime.parse("2019-08-11T12:38:45.123456789"))
+    assert(dateTime - Period.ofMonths(-5) == LocalDateTime.parse("2019-12-11T12:38:45.123456789"))
+    assert(dateTime - Period.ofWeeks(-2) == LocalDateTime.parse("2019-07-25T12:38:45.123456789"))
+    assert(dateTime - Period.of(-6, -3, -7) == LocalDateTime.parse("2025-10-18T12:38:45.123456789"))
+  }
+
+  it should "be converted to YearMonth" in {
     assert(dateTime.toYearMonth == YearMonth.parse("2019-07"))
   }
 
@@ -34,7 +98,7 @@ class LocalDateTimeTypeSpec extends FlatSpec {
     import Ordered.orderingToOrdered
     val other1 = LocalDateTime.parse("2019-06-05T12:38:45")
     val other2 = LocalDateTime.parse("2019-07-11T12:38:45.123456789")
-    
+
     assert(dateTime > other1)
     assert(dateTime >= other1)
     assert(dateTime != other1)
@@ -42,7 +106,7 @@ class LocalDateTimeTypeSpec extends FlatSpec {
     assert(other1 < dateTime)
     assert(other1 <= dateTime)
     assert(other1 != dateTime)
-    
+
     assert(dateTime >= other2)
     assert(dateTime <= other2)
     assert(dateTime == other2)

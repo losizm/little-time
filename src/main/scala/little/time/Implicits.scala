@@ -16,7 +16,7 @@
 package little.time
 
 import java.time._
-import java.time.temporal.ChronoUnit
+import java.time.temporal.{ ChronoUnit, Temporal, TemporalAmount }
 
 import DayOfWeek._
 import TimePrecision._
@@ -66,7 +66,7 @@ object Implicits {
 
   /** Provides ordering for `java.time.LocalDateTime`. */
   implicit val localDateTimeOrdering: Ordering[LocalDateTime] = (a, b) => a.compareTo(b)
-  
+
   /** Provides extension methods to `java.time.YearMonth` */
   implicit class YearMonthType(val month: YearMonth) extends AnyVal {
     /**
@@ -82,6 +82,20 @@ object Implicits {
      * @param months number of months
      */
     def -(months: Long): YearMonth = month.minusMonths(months)
+
+    /**
+     * Gets month with specified amount added.
+     *
+     * @param amount temporal amount
+     */
+    def +(amount: TemporalAmount): YearMonth = month.plus(amount)
+
+    /**
+     * Gets month with specified amount subtracted.
+     *
+     * @param amount temporal amount
+     */
+    def -(amount: TemporalAmount): YearMonth = month.minus(amount)
 
     /**
      * Compares to other month and returns the lesser value.
@@ -136,6 +150,20 @@ object Implicits {
      * @param days number of days
      */
     def -(days: Long): LocalDate = date.minusDays(days)
+
+    /**
+     * Gets date with specified amount added.
+     *
+     * @param amount temporal amount
+     */
+    def +(amount: TemporalAmount): LocalDate = date.plus(amount)
+
+    /**
+     * Gets date with specified amount subtracted.
+     *
+     * @param amount temporal amount
+     */
+    def -(amount: TemporalAmount): LocalDate = date.minus(amount)
 
     /**
      * Compares to other date and returns the lesser value.
@@ -226,6 +254,20 @@ object Implicits {
 
   /** Provides extension methods to `java.time.LocalTime` */
   implicit class LocalTimeType(val time: LocalTime) extends AnyVal {
+    /**
+     * Gets time with specified amount added.
+     *
+     * @param amount temporal amount
+     */
+    def +(amount: TemporalAmount): LocalTime = time.plus(amount)
+
+    /**
+     * Gets time with specified amount subtracted.
+     *
+     * @param amount temporal amount
+     */
+    def -(amount: TemporalAmount): LocalTime = time.minus(amount)
+
     /**
      * Compares to other time and returns the lesser value.
      *
@@ -336,6 +378,20 @@ object Implicits {
   implicit class LocalDateTimeType(val dateTime: LocalDateTime) extends AnyVal {
     /** Get `YearMonth` part of date-time. */
     def toYearMonth: YearMonth = YearMonth.of(dateTime.getYear, dateTime.getMonth)
+
+    /**
+     * Gets date-time with specified amount added.
+     *
+     * @param amount temporal amount
+     */
+    def +(amount: TemporalAmount): LocalDateTime = dateTime.plus(amount)
+
+    /**
+     * Gets date-time with specified amount subtracted.
+     *
+     * @param amount temporal amount
+     */
+    def -(amount: TemporalAmount): LocalDateTime = dateTime.minus(amount)
 
     /**
      * Compares to other date-time and returns the lesser value.
