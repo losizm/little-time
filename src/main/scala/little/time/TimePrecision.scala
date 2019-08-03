@@ -15,7 +15,7 @@
  */
 package little.time
 
-import java.time.{ LocalDateTime, LocalTime }
+import java.time.LocalTime
 
 /** Specifies precision of time. */
 sealed trait TimePrecision extends Ordered[TimePrecision] {
