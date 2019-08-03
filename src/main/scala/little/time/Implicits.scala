@@ -61,6 +61,20 @@ object Implicits {
     def -(amount: Duration): Duration = duration.minus(amount)
 
     /**
+     * Gets duration after multiplication.
+     *
+     * @param n number by which duration is multiplied
+     */
+    def *(n: Long): Duration = duration.multipliedBy(n)
+
+    /**
+     * Gets duration after division.
+     *
+     * @param n number by which duration is divided
+     */
+    def /(n: Long): Duration = duration.dividedBy(n)
+
+    /**
      * Compares to other duration and returns the lesser value.
      *
      * @param other other duration
@@ -113,6 +127,13 @@ object Implicits {
      * @param amount period to subtract
      */
     def -(amount: Period): Period = period.minus(amount)
+
+    /**
+     * Gets duration after multiplication.
+     *
+     * @param n number by which period is multiplied
+     */
+    def *(n: Int): Period = period.multipliedBy(n)
   }
 
   /** Provides extension methods to `java.time.YearMonth` */

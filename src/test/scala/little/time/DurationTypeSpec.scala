@@ -61,6 +61,17 @@ class DurationTypeSpec extends FlatSpec {
     assert(duration - Duration.ofDays(-7) == Duration.parse("P40DT5H6M4.123S"))
   }
 
+  it should "have duration multiplied" in {
+    assert(duration * 0 == duration.multipliedBy(0))
+    assert(duration * 3 == duration.multipliedBy(3))
+    assert(duration * -6 == duration.multipliedBy(-6))
+  }
+
+  it should "have duration divided" in {
+    assert(duration / 3 == duration.dividedBy(3))
+    assert(duration / -6 == duration.dividedBy(-6))
+  }
+
   it should "be compared to other" in {
     import Ordered.orderingToOrdered
     val other1 = Duration.parse("P33DT5H6M4S")

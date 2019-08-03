@@ -56,5 +56,11 @@ class PeriodTypeSpec extends FlatSpec {
     assert(period - Period.ofDays(-7) == Period.of(1, 3, 14))
     assert(period - -period == Period.of(2, 6, 14))
   }
+
+  it should "have period multiplied" in {
+    assert(period * 0 == period.multipliedBy(0))
+    assert(period * 3 == period.multipliedBy(3))
+    assert(period * -6 == period.multipliedBy(-6))
+  }
 }
 
