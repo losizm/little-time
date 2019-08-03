@@ -43,7 +43,7 @@ object Implicits {
 
   /** Provides extension methods to `java.time.Duration` */
   implicit class DurationType(val duration: Duration) extends AnyVal {
-    /** Get negated duration. */
+    /** Gets negated duration. */
     def unary_- : Duration = duration.negated()
 
     /**
@@ -111,7 +111,7 @@ object Implicits {
 
   /** Provides extension methods to `java.time.Period` */
   implicit class PeriodType(val period: Period) extends AnyVal {
-    /** Get negated period. */
+    /** Gets negated period. */
     def unary_- : Period = period.negated()
 
     /**
@@ -211,7 +211,7 @@ object Implicits {
 
   /** Provides extension methods to `java.time.LocalDate` */
   implicit class LocalDateType(val date: LocalDate) extends AnyVal {
-    /** Get `YearMonth` part of date. */
+    /** Gets `YearMonth` part of date. */
     def toYearMonth: YearMonth = YearMonth.of(date.getYear, date.getMonth)
 
     /**
@@ -481,7 +481,7 @@ object Implicits {
 
   /** Provides extension methods to `java.time.LocalDateTime` */
   implicit class LocalDateTimeType(val dateTime: LocalDateTime) extends AnyVal {
-    /** Get `YearMonth` part of date-time. */
+    /** Gets `YearMonth` part of date-time. */
     def toYearMonth: YearMonth = YearMonth.of(dateTime.getYear, dateTime.getMonth)
 
     /**
