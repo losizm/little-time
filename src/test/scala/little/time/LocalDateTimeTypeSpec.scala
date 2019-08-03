@@ -300,5 +300,157 @@ class LocalDateTimeTypeSpec extends FlatSpec {
     assert(dateTime.atEndOfYear(Minutes)              == LocalDateTime.parse("2019-12-31T23:59"))
     assert(dateTime.atEndOfYear(Hours)                == LocalDateTime.parse("2019-12-31T23:00"))
   }
+
+  it should "create iterator to other date-time (inclusive)(by period)" in {
+    val other = LocalDateTime.parse("2019-07-13T12:38:45.123456789")
+
+    var iter = dateTime.stepTo(other, Period.ofDays(1))
+    assert(iter.next() == dateTime)
+    assert(iter.next() == LocalDateTime.parse("2019-07-12T12:38:45.123456789"))
+    assert(iter.next() == other)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = dateTime.stepTo(other, Period.ofDays(2))
+    assert(iter.next() == dateTime)
+    assert(iter.next() == other)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = dateTime.stepTo(other, Period.ofDays(3))
+    assert(iter.next() == dateTime)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = other.stepTo(dateTime, Period.ofDays(-1))
+    assert(iter.next() == other)
+    assert(iter.next() == LocalDateTime.parse("2019-07-12T12:38:45.123456789"))
+    assert(iter.next() == dateTime)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = other.stepTo(dateTime, Period.ofDays(-2))
+    assert(iter.next() == other)
+    assert(iter.next() == dateTime)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = other.stepTo(dateTime, Period.ofDays(-3))
+    assert(iter.next() == other)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+  }
+
+  it should "create iterator to other date-time (exclusive)(by period)" in {
+    val other = LocalDateTime.parse("2019-07-13T12:38:45.123456789")
+
+    var iter = dateTime.stepUntil(other, Period.ofDays(1))
+    assert(iter.next() == dateTime)
+    assert(iter.next() == LocalDateTime.parse("2019-07-12T12:38:45.123456789"))
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = dateTime.stepUntil(other, Period.ofDays(2))
+    assert(iter.next() == dateTime)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = dateTime.stepUntil(other, Period.ofDays(3))
+    assert(iter.next() == dateTime)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = other.stepUntil(dateTime, Period.ofDays(-1))
+    assert(iter.next() == other)
+    assert(iter.next() == LocalDateTime.parse("2019-07-12T12:38:45.123456789"))
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = other.stepUntil(dateTime, Period.ofDays(-2))
+    assert(iter.next() == other)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = other.stepUntil(dateTime, Period.ofDays(-3))
+    assert(iter.next() == other)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+  }
+
+  it should "create iterator to other date-time (inclusive)(by duration)" in {
+    val other = LocalDateTime.parse("2019-07-11T12:40:45.123456789")
+
+    var iter = dateTime.stepTo(other, Duration.ofMinutes(1))
+    assert(iter.next() == dateTime)
+    assert(iter.next() == LocalDateTime.parse("2019-07-11T12:39:45.123456789"))
+    assert(iter.next() == other)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = dateTime.stepTo(other, Duration.ofMinutes(2))
+    assert(iter.next() == dateTime)
+    assert(iter.next() == other)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = dateTime.stepTo(other, Duration.ofMinutes(3))
+    assert(iter.next() == dateTime)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = other.stepTo(dateTime, Duration.ofMinutes(-1))
+    assert(iter.next() == other)
+    assert(iter.next() == LocalDateTime.parse("2019-07-11T12:39:45.123456789"))
+    assert(iter.next() == dateTime)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = other.stepTo(dateTime, Duration.ofMinutes(-2))
+    assert(iter.next() == other)
+    assert(iter.next() == dateTime)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = other.stepTo(dateTime, Duration.ofMinutes(-3))
+    assert(iter.next() == other)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+  }
+
+  it should "create iterator to other date-time (exclusive)(by duration)" in {
+    val other = LocalDateTime.parse("2019-07-11T12:40:45.123456789")
+
+    var iter = dateTime.stepUntil(other, Duration.ofMinutes(1))
+    assert(iter.next() == dateTime)
+    assert(iter.next() == LocalDateTime.parse("2019-07-11T12:39:45.123456789"))
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = dateTime.stepUntil(other, Duration.ofMinutes(2))
+    assert(iter.next() == dateTime)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = dateTime.stepUntil(other, Duration.ofMinutes(3))
+    assert(iter.next() == dateTime)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = other.stepUntil(dateTime, Duration.ofMinutes(-1))
+    assert(iter.next() == other)
+    assert(iter.next() == LocalDateTime.parse("2019-07-11T12:39:45.123456789"))
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = other.stepUntil(dateTime, Duration.ofMinutes(-2))
+    assert(iter.next() == other)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = other.stepUntil(dateTime, Duration.ofMinutes(-3))
+    assert(iter.next() == other)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+  }
 }
 

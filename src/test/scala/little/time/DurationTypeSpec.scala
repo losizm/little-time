@@ -94,5 +94,81 @@ class DurationTypeSpec extends FlatSpec {
     assert(duration.max(other) == other)
     assert(other.min(duration) == duration)
   }
+
+  it should "create iterator to other duration (inclusive)" in {
+    val other = Duration.parse("P33DT5H8M4.123S")
+
+    var iter = duration.stepTo(other, Duration.ofMinutes(1))
+    assert(iter.next() == duration)
+    assert(iter.next() == Duration.parse("P33DT5H7M4.123S"))
+    assert(iter.next() == other)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = duration.stepTo(other, Duration.ofMinutes(2))
+    assert(iter.next() == duration)
+    assert(iter.next() == other)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = duration.stepTo(other, Duration.ofMinutes(3))
+    assert(iter.next() == duration)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = other.stepTo(duration, Duration.ofMinutes(-1))
+    assert(iter.next() == other)
+    assert(iter.next() == Duration.parse("P33DT5H7M4.123S"))
+    assert(iter.next() == duration)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = other.stepTo(duration, Duration.ofMinutes(-2))
+    assert(iter.next() == other)
+    assert(iter.next() == duration)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = other.stepTo(duration, Duration.ofMinutes(-3))
+    assert(iter.next() == other)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+  }
+
+  it should "create iterator to other duration (exclusive)" in {
+    val other = Duration.parse("P33DT5H8M4.123S")
+
+    var iter = duration.stepUntil(other, Duration.ofMinutes(1))
+    assert(iter.next() == duration)
+    assert(iter.next() == Duration.parse("P33DT5H7M4.123S"))
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = duration.stepUntil(other, Duration.ofMinutes(2))
+    assert(iter.next() == duration)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = duration.stepUntil(other, Duration.ofMinutes(3))
+    assert(iter.next() == duration)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = other.stepUntil(duration, Duration.ofMinutes(-1))
+    assert(iter.next() == other)
+    assert(iter.next() == Duration.parse("P33DT5H7M4.123S"))
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = other.stepUntil(duration, Duration.ofMinutes(-2))
+    assert(iter.next() == other)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = other.stepUntil(duration, Duration.ofMinutes(-3))
+    assert(iter.next() == other)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+  }
 }
 

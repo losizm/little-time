@@ -40,6 +40,20 @@ object Implicits {
       }
   }
 
+  private def isZero(amount: TemporalAmount): Boolean =
+    amount match {
+      case p: Period   => p.isZero
+      case d: Duration => d.isZero
+      case _           => throw new IllegalArgumentException(s"Unsupported temporal amount: $amount")
+    }
+
+  private def isNegative(amount: TemporalAmount): Boolean =
+    amount match {
+      case p: Period   => p.isNegative
+      case d: Duration => d.isNegative
+      case _           => throw new IllegalArgumentException(s"Unsupported temporal amount: $amount")
+    }
+
   /** Provides ordering for `java.time.Duration`. */
   implicit val durationOrdering: Ordering[Duration] = (a, b) => a.compareTo(b)
 
@@ -89,6 +103,36 @@ object Implicits {
      */
     def max(other: Duration): Duration =
       durationOrdering.max(duration, other)
+
+    /**
+     * Creates iterator to end duration (inclusive).
+     *
+     * @param end end duration
+     *
+     * @throws IllegalArgumentException if `step` is zero.
+     */
+    def stepTo(end: Duration, step: Duration = Duration.ofSeconds(1)): Iterator[Duration] = {
+      require(!step.isZero(), s"Invalid step: $step")
+
+      val stepper = (x: Duration) => x.plus(step)
+      val tester = (a: Duration, b: Duration) => a.compareTo(b) * { if (step.isNegative) -1 else 1 } <= 0
+
+      new StepTestIterator(duration, end, stepper, tester)
+    }
+
+    /**
+     * Creates iterator to end duration (exclusive).
+     *
+     * @param end end duration
+     */
+    def stepUntil(end: Duration, step: Duration = Duration.ofSeconds(1)): Iterator[Duration] = {
+      require(!step.isZero(), s"Invalid step: $step")
+
+      val stepper = (x: Duration) => x.plus(step)
+      val tester = (a: Duration, b: Duration) => a.compareTo(b) * { if (step.isNegative) -1 else 1 } < 0
+
+      new StepTestIterator(duration, end, stepper, tester)
+    }
   }
 
   /** Provides extension methods to `java.time.Period` */
@@ -164,9 +208,10 @@ object Implicits {
     def atEndOfYear: YearMonth = month.withMonth(12)
 
     /**
-     * Creates iterator to forward to end month (inclusive).
+     * Creates iterator to end month (inclusive).
      *
      * @param end end month
+     * @param step period by which to step
      *
      * @throws IllegalArgumentException if `step` is zero.
      */
@@ -180,9 +225,10 @@ object Implicits {
     }
 
     /**
-     * Creates iterator to forward to end month (exclusive).
+     * Creates iterator to end month (exclusive).
      *
      * @param end end month
+     * @param step period by which to step
      */
     def stepUntil(end: YearMonth, step: Period = Period.ofMonths(1)): Iterator[YearMonth] = {
       require(!step.isZero(), s"Invalid step: $step")
@@ -302,9 +348,10 @@ object Implicits {
       }
 
     /**
-     * Creates iterator to forward to end date (inclusive).
+     * Creates iterator to end date (inclusive).
      *
      * @param end end date
+     * @param step period by which to step
      *
      * @throws IllegalArgumentException if `step` is zero.
      */
@@ -318,9 +365,10 @@ object Implicits {
     }
 
     /**
-     * Creates iterator to forward to end date (exclusive).
+     * Creates iterator to end date (exclusive).
      *
      * @param end end date
+     * @param step period by which to step
      */
     def stepUntil(end: LocalDate, step: Period = Period.ofDays(1)): Iterator[LocalDate] = {
       require(!step.isZero(), s"Invalid step: $step")
@@ -452,6 +500,38 @@ object Implicits {
         case true  => LocalTime.of(time.getHour, time.getMinute, time.getSecond, precision.limit.getNano)
         case false => throw new DateTimeException(s"Precision unit too large: $precision")
       }
+
+    /**
+     * Creates iterator to end time (inclusive).
+     *
+     * @param end end time
+     * @param step duration by which to step
+     *
+     * @throws IllegalArgumentException if `step` is zero.
+     */
+    def stepTo(end: LocalTime, step: Duration = Duration.ofSeconds(1)): Iterator[LocalTime] = {
+      require(!step.isZero(), s"Invalid step: $step")
+
+      val stepper = (x: LocalTime) => x.plus(step)
+      val tester = (a: LocalTime, b: LocalTime) => a.compareTo(b) * { if (step.isNegative) -1 else 1 } <= 0
+
+      new StepTestIterator(time, end, stepper, tester)
+    }
+
+    /**
+     * Creates iterator to end time (exclusive).
+     *
+     * @param end end time
+     * @param step duration by which to step
+     */
+    def stepUntil(end: LocalTime, step: Duration = Duration.ofSeconds(1)): Iterator[LocalTime] = {
+      require(!step.isZero(), s"Invalid step: $step")
+
+      val stepper = (x: LocalTime) => x.plus(step)
+      val tester = (a: LocalTime, b: LocalTime) => a.compareTo(b) * { if (step.isNegative) -1 else 1 } < 0
+
+      new StepTestIterator(time, end, stepper, tester)
+    }
   }
 
   /** Provides extension methods to `java.time.LocalDateTime` */
@@ -615,6 +695,38 @@ object Implicits {
      */
     def atEndOfMicros(implicit precision: TimePrecision): LocalDateTime =
       LocalDateTime.of(dateTime.toLocalDate, dateTime.toLocalTime.atEndOfMicros)
+
+    /**
+     * Creates iterator to end date-time (inclusive).
+     *
+     * @param end end date-time
+     * @param step temporal amount by which to step
+     *
+     * @throws IllegalArgumentException if `step` is zero.
+     */
+    def stepTo(end: LocalDateTime, step: TemporalAmount = Duration.ofSeconds(1)): Iterator[LocalDateTime] = {
+      require(!isZero(step), s"Invalid step: $step")
+
+      val stepper = (x: LocalDateTime) => x.plus(step)
+      val tester = (a: LocalDateTime, b: LocalDateTime) => a.compareTo(b) * { if (isNegative(step)) -1 else 1 } <= 0
+
+      new StepTestIterator(dateTime, end, stepper, tester)
+    }
+
+    /**
+     * Creates iterator to end date-time (exclusive).
+     *
+     * @param end end date-time
+     * @param step temporal amount by which to step
+     */
+    def stepUntil(end: LocalDateTime, step: TemporalAmount = Duration.ofSeconds(1)): Iterator[LocalDateTime] = {
+      require(!isZero(step), s"Invalid step: $step")
+
+      val stepper = (x: LocalDateTime) => x.plus(step)
+      val tester = (a: LocalDateTime, b: LocalDateTime) => a.compareTo(b) * { if (isNegative(step)) -1 else 1 } < 0
+
+      new StepTestIterator(dateTime, end, stepper, tester)
+    }
   }
 
   /** Provides time-related extension methods to `java.lang.String`. */

@@ -182,5 +182,81 @@ class LocalTimeTypeSpec extends FlatSpec {
     assert(time.atEndOfDay(Minutes)              == LocalTime.parse("23:59"))
     assert(time.atEndOfDay(Hours)                == LocalTime.parse("23:00"))
   }
+
+  it should "create iterator to other time (inclusive)" in {
+    val other = LocalTime.parse("12:40:45.123456789")
+
+    var iter = time.stepTo(other, Duration.ofMinutes(1))
+    assert(iter.next() == time)
+    assert(iter.next() == LocalTime.parse("12:39:45.123456789"))
+    assert(iter.next() == other)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = time.stepTo(other, Duration.ofMinutes(2))
+    assert(iter.next() == time)
+    assert(iter.next() == other)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = time.stepTo(other, Duration.ofMinutes(3))
+    assert(iter.next() == time)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = other.stepTo(time, Duration.ofMinutes(-1))
+    assert(iter.next() == other)
+    assert(iter.next() == LocalTime.parse("12:39:45.123456789"))
+    assert(iter.next() == time)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = other.stepTo(time, Duration.ofMinutes(-2))
+    assert(iter.next() == other)
+    assert(iter.next() == time)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = other.stepTo(time, Duration.ofMinutes(-3))
+    assert(iter.next() == other)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+  }
+
+  it should "create iterator to other time (exclusive)" in {
+    val other = LocalTime.parse("12:40:45.123456789")
+
+    var iter = time.stepUntil(other, Duration.ofMinutes(1))
+    assert(iter.next() == time)
+    assert(iter.next() == LocalTime.parse("12:39:45.123456789"))
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = time.stepUntil(other, Duration.ofMinutes(2))
+    assert(iter.next() == time)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = time.stepUntil(other, Duration.ofMinutes(3))
+    assert(iter.next() == time)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = other.stepUntil(time, Duration.ofMinutes(-1))
+    assert(iter.next() == other)
+    assert(iter.next() == LocalTime.parse("12:39:45.123456789"))
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = other.stepUntil(time, Duration.ofMinutes(-2))
+    assert(iter.next() == other)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = other.stepUntil(time, Duration.ofMinutes(-3))
+    assert(iter.next() == other)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+  }
 }
 
