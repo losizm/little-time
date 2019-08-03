@@ -102,23 +102,79 @@ class YearMonthTypeSpec extends FlatSpec {
     assert(other.min(month) == month)
   }
 
-  it should "create iterator to end month (inclusive)" in {
-    val end = YearMonth.parse("2019-09")
-    val iter = month.stepTo(end)
+  it should "create iterator to other month (inclusive)" in {
+    val other = YearMonth.parse("2019-09")
+    val other2 = YearMonth.parse("2021-07")
 
+    var iter = month.stepTo(other)
     assert(iter.next() == month)
     assert(iter.next() == YearMonth.parse("2019-08"))
-    assert(iter.next() == end)
+    assert(iter.next() == other)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = month.stepTo(other, Period.ofMonths(2))
+    assert(iter.next() == month)
+    assert(iter.next() == other)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = month.stepTo(other, Period.ofMonths(3))
+    assert(iter.next() == month)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = other.stepTo(month, Period.ofMonths(-1))
+    assert(iter.next() == other)
+    assert(iter.next() == YearMonth.parse("2019-08"))
+    assert(iter.next() == month)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = other.stepTo(month, Period.ofMonths(-2))
+    assert(iter.next() == other)
+    assert(iter.next() == month)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = other.stepTo(month, Period.ofMonths(-3))
+    assert(iter.next() == other)
     assert(!iter.hasNext)
     assertThrows[NoSuchElementException](iter.next())
   }
 
-  it should "create iterator to end month (exclusive)" in {
-    val end = YearMonth.parse("2019-09")
-    val iter = month.stepUntil(end)
+  it should "create iterator to other month (exclusive)" in {
+    val other = YearMonth.parse("2019-09")
 
+    var iter = month.stepUntil(other)
     assert(iter.next() == month)
     assert(iter.next() == YearMonth.parse("2019-08"))
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = month.stepUntil(other, Period.ofMonths(2))
+    assert(iter.next() == month)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = month.stepUntil(other, Period.ofMonths(3))
+    assert(iter.next() == month)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = other.stepUntil(month, Period.ofMonths(-1))
+    assert(iter.next() == other)
+    assert(iter.next() == YearMonth.parse("2019-08"))
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = other.stepUntil(month, Period.ofMonths(-2))
+    assert(iter.next() == other)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = other.stepUntil(month, Period.ofMonths(-3))
+    assert(iter.next() == other)
     assert(!iter.hasNext)
     assertThrows[NoSuchElementException](iter.next())
   }

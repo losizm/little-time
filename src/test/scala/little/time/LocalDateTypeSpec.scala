@@ -115,23 +115,78 @@ class LocalDateTypeSpec extends FlatSpec {
     assert(other.min(date) == date)
   }
 
-  it should "create iterator to end date (inclusive)" in {
-    val end = LocalDate.parse("2019-07-13")
-    val iter = date.stepTo(end)
+  it should "create iterator to other date (inclusive)" in {
+    val other = LocalDate.parse("2019-07-13")
 
+    var iter = date.stepTo(other)
     assert(iter.next() == date)
     assert(iter.next() == LocalDate.parse("2019-07-12"))
-    assert(iter.next() == end)
+    assert(iter.next() == other)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = date.stepTo(other, Period.ofDays(2))
+    assert(iter.next() == date)
+    assert(iter.next() == other)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = date.stepTo(other, Period.ofDays(3))
+    assert(iter.next() == date)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = other.stepTo(date, Period.ofDays(-1))
+    assert(iter.next() == other)
+    assert(iter.next() == LocalDate.parse("2019-07-12"))
+    assert(iter.next() == date)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = other.stepTo(date, Period.ofDays(-2))
+    assert(iter.next() == other)
+    assert(iter.next() == date)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = other.stepTo(date, Period.ofDays(-3))
+    assert(iter.next() == other)
     assert(!iter.hasNext)
     assertThrows[NoSuchElementException](iter.next())
   }
 
-  it should "create iterator to end date (exclusive)" in {
-    val end = LocalDate.parse("2019-07-13")
-    val iter = date.stepUntil(end)
+  it should "create iterator to other date (exclusive)" in {
+    val other = LocalDate.parse("2019-07-13")
 
+    var iter = date.stepUntil(other)
     assert(iter.next() == date)
     assert(iter.next() == LocalDate.parse("2019-07-12"))
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = date.stepUntil(other, Period.ofDays(2))
+    assert(iter.next() == date)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = date.stepUntil(other, Period.ofDays(3))
+    assert(iter.next() == date)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = other.stepUntil(date, Period.ofDays(-1))
+    assert(iter.next() == other)
+    assert(iter.next() == LocalDate.parse("2019-07-12"))
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = other.stepUntil(date, Period.ofDays(-2))
+    assert(iter.next() == other)
+    assert(!iter.hasNext)
+    assertThrows[NoSuchElementException](iter.next())
+
+    iter = other.stepUntil(date, Period.ofDays(-3))
+    assert(iter.next() == other)
     assert(!iter.hasNext)
     assertThrows[NoSuchElementException](iter.next())
   }

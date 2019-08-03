@@ -25,31 +25,16 @@ import TimePrecision._
 object Implicits {
   private val startOfDay = LocalTime.parse("00:00")
 
-  private class Inclusive[T](start: T, end: T, advance: (T) => T)(implicit order: Ordering[T]) extends Iterator[T] {
+  private class StepTestIterator[T](start: T, end: T, stepper: (T) => T, tester: (T, T) => Boolean) extends Iterator[T] {
     private var nextValue = start
 
-    def hasNext: Boolean = order.lteq(nextValue, end)
+    def hasNext: Boolean = tester(nextValue, end)
 
     def next(): T =
       hasNext match {
         case true =>
           val value = nextValue
-          nextValue = advance(value)
-          value
-        case false => throw new NoSuchElementException()
-      }
-  }
-
-  private class Exclusive[T](start: T, end: T, advance: (T) => T)(implicit order: Ordering[T]) extends Iterator[T] {
-    private var nextValue = start
-
-    def hasNext: Boolean = order.lt(nextValue, end)
-
-    def next(): T =
-      hasNext match {
-        case true =>
-          val value = nextValue
-          nextValue = advance(value)
+          nextValue = stepper(value)
           value
         case false => throw new NoSuchElementException()
       }
@@ -182,17 +167,31 @@ object Implicits {
      * Creates iterator to forward to end month (inclusive).
      *
      * @param end end month
+     *
+     * @throws IllegalArgumentException if `step` is zero.
      */
-    def stepTo(end: YearMonth): Iterator[YearMonth] =
-      new Inclusive(month, end, (x: YearMonth) => x.plus(Period.ofMonths(1)))
+    def stepTo(end: YearMonth, step: Period = Period.ofMonths(1)): Iterator[YearMonth] = {
+      require(!step.isZero(), s"Invalid step: $step")
+
+      val stepper = (x: YearMonth) => x.plus(step)
+      val tester = (a: YearMonth, b: YearMonth) => a.compareTo(b) * { if (step.isNegative) -1 else 1 } <= 0
+
+      new StepTestIterator(month, end, stepper, tester)
+    }
 
     /**
      * Creates iterator to forward to end month (exclusive).
      *
      * @param end end month
      */
-    def stepUntil(end: YearMonth): Iterator[YearMonth] =
-      new Exclusive(month, end, (x: YearMonth) => x.plus(Period.ofMonths(1)))
+    def stepUntil(end: YearMonth, step: Period = Period.ofMonths(1)): Iterator[YearMonth] = {
+      require(!step.isZero(), s"Invalid step: $step")
+
+      val stepper = (x: YearMonth) => x.plus(step)
+      val tester = (a: YearMonth, b: YearMonth) => a.compareTo(b) * { if (step.isNegative) -1 else 1 } < 0
+
+      new StepTestIterator(month, end, stepper, tester)
+    }
   }
 
   /** Provides extension methods to `java.time.LocalDate` */
@@ -306,17 +305,31 @@ object Implicits {
      * Creates iterator to forward to end date (inclusive).
      *
      * @param end end date
+     *
+     * @throws IllegalArgumentException if `step` is zero.
      */
-    def stepTo(end: LocalDate): Iterator[LocalDate] =
-      new Inclusive(date, end, (x: LocalDate) => x.plus(Period.ofDays(1)))
+    def stepTo(end: LocalDate, step: Period = Period.ofDays(1)): Iterator[LocalDate] = {
+      require(!step.isZero(), s"Invalid step: $step")
+
+      val stepper = (x: LocalDate) => x.plus(step)
+      val tester = (a: LocalDate, b: LocalDate) => a.compareTo(b) * { if (step.isNegative) -1 else 1 } <= 0
+
+      new StepTestIterator(date, end, stepper, tester)
+    }
 
     /**
      * Creates iterator to forward to end date (exclusive).
      *
      * @param end end date
      */
-    def stepUntil(end: LocalDate): Iterator[LocalDate] =
-      new Exclusive(date, end, (x: LocalDate) => x.plus(Period.ofDays(1)))
+    def stepUntil(end: LocalDate, step: Period = Period.ofDays(1)): Iterator[LocalDate] = {
+      require(!step.isZero(), s"Invalid step: $step")
+
+      val stepper = (x: LocalDate) => x.plus(step)
+      val tester = (a: LocalDate, b: LocalDate) => a.compareTo(b) * { if (step.isNegative) -1 else 1 } < 0
+
+      new StepTestIterator(date, end, stepper, tester)
+    }
   }
 
   /** Provides extension methods to `java.time.LocalTime` */
