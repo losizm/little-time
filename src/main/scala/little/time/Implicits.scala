@@ -83,7 +83,7 @@ object Implicits {
      *
      * @throws IllegalArgumentException if `step` is zero.
      */
-    def stepTo(end: Duration, step: Duration = Duration.ofSeconds(1)): Iterator[Duration] =
+    def iterateTo(end: Duration, step: Duration = Duration.ofSeconds(1)): Iterator[Duration] =
       inclusive(duration, end, step)
 
     /**
@@ -91,7 +91,7 @@ object Implicits {
      *
      * @param end end duration
      */
-    def stepUntil(end: Duration, step: Duration = Duration.ofSeconds(1)): Iterator[Duration] =
+    def iterateUntil(end: Duration, step: Duration = Duration.ofSeconds(1)): Iterator[Duration] =
       exclusive(duration, end, step)
   }
 
@@ -175,7 +175,7 @@ object Implicits {
      *
      * @throws IllegalArgumentException if `step` is zero.
      */
-    def stepTo(end: YearMonth, step: Period = Period.ofMonths(1)): Iterator[YearMonth] =
+    def iterateTo(end: YearMonth, step: Period = Period.ofMonths(1)): Iterator[YearMonth] =
       inclusive(month, end, step)
 
     /**
@@ -184,7 +184,7 @@ object Implicits {
      * @param end end month
      * @param step period by which to step
      */
-    def stepUntil(end: YearMonth, step: Period = Period.ofMonths(1)): Iterator[YearMonth] =
+    def iterateUntil(end: YearMonth, step: Period = Period.ofMonths(1)): Iterator[YearMonth] =
       exclusive(month, end, step)
   }
 
@@ -303,7 +303,7 @@ object Implicits {
      *
      * @throws IllegalArgumentException if `step` is zero.
      */
-    def stepTo(end: LocalDate, step: Period = Period.ofDays(1)): Iterator[LocalDate] =
+    def iterateTo(end: LocalDate, step: Period = Period.ofDays(1)): Iterator[LocalDate] =
       inclusive(date, end, step)
 
     /**
@@ -312,7 +312,7 @@ object Implicits {
      * @param end end date
      * @param step period by which to step
      */
-    def stepUntil(end: LocalDate, step: Period = Period.ofDays(1)): Iterator[LocalDate] =
+    def iterateUntil(end: LocalDate, step: Period = Period.ofDays(1)): Iterator[LocalDate] =
       exclusive(date, end, step)
   }
 
@@ -445,7 +445,7 @@ object Implicits {
      *
      * @throws IllegalArgumentException if `step` is zero.
      */
-    def stepTo(end: LocalTime, step: Duration = Duration.ofSeconds(1)): Iterator[LocalTime] =
+    def iterateTo(end: LocalTime, step: Duration = Duration.ofSeconds(1)): Iterator[LocalTime] =
       inclusive(time, end, step)
 
     /**
@@ -454,7 +454,7 @@ object Implicits {
      * @param end end time
      * @param step duration by which to step
      */
-    def stepUntil(end: LocalTime, step: Duration = Duration.ofSeconds(1)): Iterator[LocalTime] =
+    def iterateUntil(end: LocalTime, step: Duration = Duration.ofSeconds(1)): Iterator[LocalTime] =
       exclusive(time, end, step)
   }
 
@@ -628,7 +628,7 @@ object Implicits {
      *
      * @throws IllegalArgumentException if `step` is zero.
      */
-    def stepTo(end: LocalDateTime, step: TemporalAmount = Duration.ofSeconds(1)): Iterator[LocalDateTime] =
+    def iterateTo(end: LocalDateTime, step: TemporalAmount = Duration.ofSeconds(1)): Iterator[LocalDateTime] =
       inclusive(dateTime, end, step)
 
     /**
@@ -637,7 +637,7 @@ object Implicits {
      * @param end end date-time
      * @param step temporal amount by which to step
      */
-    def stepUntil(end: LocalDateTime, step: TemporalAmount = Duration.ofSeconds(1)): Iterator[LocalDateTime] =
+    def iterateUntil(end: LocalDateTime, step: TemporalAmount = Duration.ofSeconds(1)): Iterator[LocalDateTime] =
       exclusive(dateTime, end, step)
   }
 
