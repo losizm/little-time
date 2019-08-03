@@ -117,7 +117,7 @@ class LocalDateTypeSpec extends FlatSpec {
 
   it should "create iterator to end date (inclusive)" in {
     val end = LocalDate.parse("2019-07-13")
-    val iter = date.to(end, true)
+    val iter = date.stepTo(end)
 
     assert(iter.next() == date)
     assert(iter.next() == LocalDate.parse("2019-07-12"))
@@ -128,7 +128,7 @@ class LocalDateTypeSpec extends FlatSpec {
 
   it should "create iterator to end date (exclusive)" in {
     val end = LocalDate.parse("2019-07-13")
-    val iter = date.to(end, false)
+    val iter = date.stepUntil(end)
 
     assert(iter.next() == date)
     assert(iter.next() == LocalDate.parse("2019-07-12"))

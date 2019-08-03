@@ -179,16 +179,20 @@ object Implicits {
     def atEndOfYear: YearMonth = month.withMonth(12)
 
     /**
-     * Creates iterator forward to end month.
+     * Creates iterator to forward to end month (inclusive).
      *
      * @param end end month
-     * @param inclusive indicates if end is inclusive
      */
-    def to(end: YearMonth, inclusive: Boolean = true): Iterator[YearMonth] =
-      inclusive match {
-        case true  => new Inclusive(month, end, (x: YearMonth) => x.plusMonths(1))
-        case false => new Exclusive(month, end, (x: YearMonth) => x.plusMonths(1))
-      }
+    def stepTo(end: YearMonth): Iterator[YearMonth] =
+      new Inclusive(month, end, (x: YearMonth) => x.plus(Period.ofMonths(1)))
+
+    /**
+     * Creates iterator to forward to end month (exclusive).
+     *
+     * @param end end month
+     */
+    def stepUntil(end: YearMonth): Iterator[YearMonth] =
+      new Exclusive(month, end, (x: YearMonth) => x.plus(Period.ofMonths(1)))
   }
 
   /** Provides extension methods to `java.time.LocalDate` */
@@ -299,16 +303,20 @@ object Implicits {
       }
 
     /**
-     * Creates iterator forward to end date.
+     * Creates iterator to forward to end date (inclusive).
      *
      * @param end end date
-     * @param inclusive indicates if end is inclusive
      */
-    def to(end: LocalDate, inclusive: Boolean = true): Iterator[LocalDate] =
-      inclusive match {
-        case true  => new Inclusive(date, end, (x: LocalDate) => x.plusDays(1))
-        case false => new Exclusive(date, end, (x: LocalDate) => x.plusDays(1))
-      }
+    def stepTo(end: LocalDate): Iterator[LocalDate] =
+      new Inclusive(date, end, (x: LocalDate) => x.plus(Period.ofDays(1)))
+
+    /**
+     * Creates iterator to forward to end date (exclusive).
+     *
+     * @param end end date
+     */
+    def stepUntil(end: LocalDate): Iterator[LocalDate] =
+      new Exclusive(date, end, (x: LocalDate) => x.plus(Period.ofDays(1)))
   }
 
   /** Provides extension methods to `java.time.LocalTime` */

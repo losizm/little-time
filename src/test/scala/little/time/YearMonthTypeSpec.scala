@@ -104,7 +104,7 @@ class YearMonthTypeSpec extends FlatSpec {
 
   it should "create iterator to end month (inclusive)" in {
     val end = YearMonth.parse("2019-09")
-    val iter = month.to(end, true)
+    val iter = month.stepTo(end)
 
     assert(iter.next() == month)
     assert(iter.next() == YearMonth.parse("2019-08"))
@@ -115,7 +115,7 @@ class YearMonthTypeSpec extends FlatSpec {
 
   it should "create iterator to end month (exclusive)" in {
     val end = YearMonth.parse("2019-09")
-    val iter = month.to(end, false)
+    val iter = month.stepUntil(end)
 
     assert(iter.next() == month)
     assert(iter.next() == YearMonth.parse("2019-08"))
