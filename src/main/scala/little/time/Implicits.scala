@@ -643,6 +643,12 @@ object Implicits {
 
   /** Provides time-related extension methods to `java.lang.String`. */
   implicit class TimeStringType(val string: String) extends AnyVal {
+    /** Converts formatted string to `Period`. */
+    def toPeriod: Period = Period.parse(string)
+
+    /** Converts formatted string to `Duration`. */
+    def toDuration: Duration = Duration.parse(string)
+
     /** Converts formatted string to `YearMonth`. */
     def toYearMonth: YearMonth = YearMonth.parse(string)
 

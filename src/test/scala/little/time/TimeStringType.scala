@@ -15,7 +15,7 @@
  */
 package little.time
 
-import java.time.{ LocalDate, LocalDateTime, LocalTime, YearMonth }
+import java.time._
 
 import org.scalatest.FlatSpec
 
@@ -46,6 +46,14 @@ class TimeStringTypeSpec extends FlatSpec {
     assert("2019-07-11T12:38:45.123".toLocalDateTime == LocalDateTime.parse("2019-07-11T12:38:45.123"))
     assert("2019-07-11T12:38:45.123456".toLocalDateTime == LocalDateTime.parse("2019-07-11T12:38:45.123456"))
     assert("2019-07-11T12:38:45.123456789".toLocalDateTime == LocalDateTime.parse("2019-07-11T12:38:45.123456789"))
+  }
+
+  it should "be converted to Period" in {
+    assert("P12Y6M5D".toPeriod == Period.parse("P12Y6M5D"))
+  }
+
+  it should "be converted to Duration" in {
+    assert("P5DT3H2M1.999S".toDuration == Duration.parse("P5DT3H2M1.999S"))
   }
 }
 
