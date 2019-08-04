@@ -82,7 +82,7 @@ object TimePrecision {
     /**
      * Destructures fractional seconds to its scale value.
      *
-     * @param seconds
+     * @param fsecs fractional seconds
      */
     def unapply(fsecs: FractionalSeconds): Option[Int] =
       if (fsecs == null ) None
