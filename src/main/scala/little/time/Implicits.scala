@@ -42,7 +42,7 @@ object Implicits {
   implicit val localDateTimeOrdering: Ordering[LocalDateTime] = (a, b) => a.compareTo(b)
 
   /** Provides extension methods to `java.time.Duration` */
-  implicit class DurationType(val duration: Duration) extends AnyVal {
+  implicit class DurationType(private val duration: Duration) extends AnyVal {
     /** Gets negated duration. */
     def unary_- : Duration = duration.negated()
 
@@ -110,7 +110,7 @@ object Implicits {
   }
 
   /** Provides extension methods to `java.time.Period` */
-  implicit class PeriodType(val period: Period) extends AnyVal {
+  implicit class PeriodType(private val period: Period) extends AnyVal {
     /** Gets negated period. */
     def unary_- : Period = period.negated()
 
@@ -137,7 +137,7 @@ object Implicits {
   }
 
   /** Provides extension methods to `java.time.YearMonth` */
-  implicit class YearMonthType(val month: YearMonth) extends AnyVal {
+  implicit class YearMonthType(private val month: YearMonth) extends AnyVal {
     /**
      * Gets month with specified number of months added.
      *
@@ -210,7 +210,7 @@ object Implicits {
   }
 
   /** Provides extension methods to `java.time.LocalDate` */
-  implicit class LocalDateType(val date: LocalDate) extends AnyVal {
+  implicit class LocalDateType(private val date: LocalDate) extends AnyVal {
     /** Gets `YearMonth` part of date. */
     def toYearMonth: YearMonth = YearMonth.of(date.getYear, date.getMonth)
 
@@ -338,7 +338,7 @@ object Implicits {
   }
 
   /** Provides extension methods to `java.time.LocalTime` */
-  implicit class LocalTimeType(val time: LocalTime) extends AnyVal {
+  implicit class LocalTimeType(private val time: LocalTime) extends AnyVal {
     /**
      * Gets time with specified amount added.
      *
@@ -480,7 +480,7 @@ object Implicits {
   }
 
   /** Provides extension methods to `java.time.LocalDateTime` */
-  implicit class LocalDateTimeType(val dateTime: LocalDateTime) extends AnyVal {
+  implicit class LocalDateTimeType(private val dateTime: LocalDateTime) extends AnyVal {
     /** Gets `YearMonth` part of date-time. */
     def toYearMonth: YearMonth = YearMonth.of(dateTime.getYear, dateTime.getMonth)
 
@@ -663,7 +663,7 @@ object Implicits {
   }
 
   /** Provides time-related extension methods to `java.lang.String`. */
-  implicit class TimeStringType(val string: String) extends AnyVal {
+  implicit class TimeStringType(private val string: String) extends AnyVal {
     /** Converts formatted string to `Period`. */
     def toPeriod: Period = Period.parse(string)
 
