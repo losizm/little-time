@@ -9,7 +9,7 @@ The Scala library that provides extension methods to _java.time_.
 To use **little-time**, add it as a dependency to your project:
 
 ```scala
-libraryDependencies += "com.github.losizm" %% "little-time" % "0.2.0"
+libraryDependencies += "com.github.losizm" %% "little-time" % "0.3.0"
 ```
 
 ## A Taste of little-time
