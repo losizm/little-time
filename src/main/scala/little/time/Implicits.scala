@@ -107,6 +107,28 @@ object Implicits {
      */
     def iterateUntil(end: Duration, step: Duration = Duration.ofSeconds(1)): Iterator[Duration] =
       exclusive(duration, end, step)
+
+    /**
+     * Creates iterator to end duration (inclusive).
+     *
+     * @param end end duration
+     *
+     * @throws IllegalArgumentException if `step` is zero.
+     *
+     * @note Alias to [[iterateTo]].
+     */
+    def ~>(end: Duration, step: Duration = Duration.ofSeconds(1)): Iterator[Duration] =
+      iterateTo(end, step)
+
+    /**
+     * Creates iterator to end duration (exclusive).
+     *
+     * @param end end duration
+     *
+     * @note Alias to [[iterateUntil]].
+     */
+    def ~>|(end: Duration, step: Duration = Duration.ofSeconds(1)): Iterator[Duration] =
+      iterateUntil(end, step)
   }
 
   /** Provides extension methods to `java.time.Period` */
@@ -207,6 +229,30 @@ object Implicits {
      */
     def iterateUntil(end: YearMonth, step: Period = Period.ofMonths(1)): Iterator[YearMonth] =
       exclusive(month, end, step)
+
+    /**
+     * Creates iterator to end month (inclusive).
+     *
+     * @param end end month
+     * @param step period by which to step
+     *
+     * @throws IllegalArgumentException if `step` is zero.
+     *
+     * @note Alias to [[iterateTo]].
+     */
+    def ~>(end: YearMonth, step: Period = Period.ofMonths(1)): Iterator[YearMonth] =
+      iterateTo(end, step)
+
+    /**
+     * Creates iterator to end month (exclusive).
+     *
+     * @param end end month
+     * @param step period by which to step
+     *
+     * @note Alias to [[iterateUntil]].
+     */
+    def ~>|(end: YearMonth, step: Period = Period.ofMonths(1)): Iterator[YearMonth] =
+      iterateUntil(end, step)
   }
 
   /** Provides extension methods to `java.time.LocalDate` */
@@ -335,6 +381,30 @@ object Implicits {
      */
     def iterateUntil(end: LocalDate, step: Period = Period.ofDays(1)): Iterator[LocalDate] =
       exclusive(date, end, step)
+
+    /**
+     * Creates iterator to end date (inclusive).
+     *
+     * @param end end date
+     * @param step period by which to step
+     *
+     * @throws IllegalArgumentException if `step` is zero.
+     *
+     * @note Alias to [[iterateTo]].
+     */
+    def ~>(end: LocalDate, step: Period = Period.ofDays(1)): Iterator[LocalDate] =
+      iterateTo(end, step)
+
+    /**
+     * Creates iterator to end date (exclusive).
+     *
+     * @param end end date
+     * @param step period by which to step
+     *
+     * @note Alias to [[iterateUntil]].
+     */
+    def ~>|(end: LocalDate, step: Period = Period.ofDays(1)): Iterator[LocalDate] =
+      iterateUntil(end, step)
   }
 
   /** Provides extension methods to `java.time.LocalTime` */
@@ -477,6 +547,30 @@ object Implicits {
      */
     def iterateUntil(end: LocalTime, step: Duration = Duration.ofSeconds(1)): Iterator[LocalTime] =
       exclusive(time, end, step)
+
+    /**
+     * Creates iterator to end time (inclusive).
+     *
+     * @param end end time
+     * @param step duration by which to step
+     *
+     * @throws IllegalArgumentException if `step` is zero.
+     *
+     * @note Alias to [[iterateTo]].
+     */
+    def ~>(end: LocalTime, step: Duration = Duration.ofSeconds(1)): Iterator[LocalTime] =
+      iterateTo(end, step)
+
+    /**
+     * Creates iterator to end time (exclusive).
+     *
+     * @param end end time
+     * @param step duration by which to step
+     *
+     * @note Alias to [[iterateUntil]].
+     */
+    def ~>|(end: LocalTime, step: Duration = Duration.ofSeconds(1)): Iterator[LocalTime] =
+      iterateUntil(end, step)
   }
 
   /** Provides extension methods to `java.time.LocalDateTime` */
@@ -660,6 +754,30 @@ object Implicits {
      */
     def iterateUntil(end: LocalDateTime, step: TemporalAmount = Duration.ofSeconds(1)): Iterator[LocalDateTime] =
       exclusive(dateTime, end, step)
+
+    /**
+     * Creates iterator to end date-time (inclusive).
+     *
+     * @param end end date-time
+     * @param step temporal amount by which to step
+     *
+     * @throws IllegalArgumentException if `step` is zero.
+     *
+     * @note Alias to [[iterateTo]].
+     */
+    def ~>(end: LocalDateTime, step: TemporalAmount = Duration.ofSeconds(1)): Iterator[LocalDateTime] =
+      iterateTo(end, step)
+
+    /**
+     * Creates iterator to end date-time (exclusive).
+     *
+     * @param end end date-time
+     * @param step temporal amount by which to step
+     *
+     * @note Alias to [[iterateUntil]].
+     */
+    def ~>|(end: LocalDateTime, step: TemporalAmount = Duration.ofSeconds(1)): Iterator[LocalDateTime] =
+      iterateUntil(end, step)
   }
 
   /** Provides time-related extension methods to `java.lang.String`. */
