@@ -9,7 +9,7 @@ The Scala library that provides extension methods to _java.time_.
 To use **little-time**, add it as a dependency to your project:
 
 ```scala
-libraryDependencies += "com.github.losizm" %% "little-time" % "0.3.0"
+libraryDependencies += "com.github.losizm" %% "little-time" % "0.4.0"
 ```
 
 ## A Taste of little-time
@@ -39,6 +39,22 @@ start iterateUntil end foreach { date =>
   println(s"$date is on a ${date.getDayOfWeek}")
 }
 ```
+
+Or, if you prefer, use the `~>` and `~>|` shorthands.
+
+```scala
+// Iterate over dates, one day at a time (end inclusive)
+start ~> end foreach { date =>
+  println(s"$date is on a ${date.getDayOfWeek}")
+}
+
+// Iterate over dates, one day at a time (end exclusive)
+start ~>| end foreach { date =>
+  println(s"$date is on a ${date.getDayOfWeek}")
+}
+```
+
+### Specifying Step Unit
 
 When creating the iterator, you can specify the `Period` by which to step.
 
@@ -78,7 +94,7 @@ val startMonth = "2018-04".toYearMonth
 val endMonth   = "2020-03".toYearMonth
 
 // Iterate over months, 3 months at a time
-startMonth iterateTo (endMonth, Period.ofMonths(3)) foreach { month =>
+startMonth ~> (endMonth, Period.ofMonths(3)) foreach { month =>
   val diff = startMonth.until(month, ChronoUnit.MONTHS)
   println(s"$month is $diff month(s) after $startMonth")
 }
@@ -88,7 +104,7 @@ val startTime = "09:00".toLocalTime
 val endTime   = "17:00".toLocalTime
 
 // Iterate over times, 15 minutes at a time
-startTime iterateUntil (endTime, Duration.ofMinutes(15)) foreach {
+startTime ~>| (endTime, Duration.ofMinutes(15)) foreach {
   case time if time.getMinute == 0  => println(s"It's $time, back to work")
   case time if time.getMinute == 45 => println(s"It's $time, take a break")
   case time                         => println(s"It's $time")
