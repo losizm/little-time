@@ -2,18 +2,13 @@ name := "little-time"
 version := "0.5.0-SNAPSHOT"
 organization := "com.github.losizm" 
 
-scalaVersion := "2.13.0"
+scalaVersion := "2.13.3"
 scalacOptions ++= Seq("-deprecation", "-feature", "-Xcheckinit")
 
-crossScalaVersions := Seq("2.12.8")
+crossScalaVersions := Seq("2.12.12")
 
 unmanagedSourceDirectories in Compile += {
-  val sourceDir = (sourceDirectory in Compile).value
-  CrossVersion.partialVersion(scalaVersion.value) match {
-    case Some((2, 13)) => sourceDir / "scala-2.13"
-    case Some((2, 12)) => sourceDir / "scala-2.12"
-    case _ => throw new Exception("Scala version must be either 2.12 or 2.13")
-  }
+  (sourceDirectory in Compile).value / s"scala-${scalaBinaryVersion.value}"
 }
 
 libraryDependencies ++= Seq(
@@ -49,4 +44,3 @@ publishTo := {
 }
 
 publishMavenStyle := true
-
