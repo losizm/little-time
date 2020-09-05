@@ -17,13 +17,11 @@ package little.time
 
 import java.time.{ DayOfWeek, Duration, LocalDateTime, Period, YearMonth }
 
-import org.scalatest.FlatSpec
-
 import DayOfWeek._
 import Implicits._
 import TimePrecision._
 
-class LocalDateTimeTypeSpec extends FlatSpec {
+class LocalDateTimeTypeSpec extends org.scalatest.flatspec.AnyFlatSpec {
   private val dateTime = LocalDateTime.parse("2019-07-11T12:38:45.123456789")
 
   "LocalDateTime" should "have duration added" in {

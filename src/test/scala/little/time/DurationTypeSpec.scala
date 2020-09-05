@@ -17,11 +17,9 @@ package little.time
 
 import java.time.Duration
 
-import org.scalatest.FlatSpec
-
 import Implicits._
 
-class DurationTypeSpec extends FlatSpec {
+class DurationTypeSpec extends org.scalatest.flatspec.AnyFlatSpec {
   private val duration = Duration.parse("P33DT5H6M4.123S")
 
   "Duration" should "be negated" in {

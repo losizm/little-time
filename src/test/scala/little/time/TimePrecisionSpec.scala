@@ -17,11 +17,9 @@ package little.time
 
 import java.time.LocalTime
 
-import org.scalatest.FlatSpec
-
 import TimePrecision._
 
-class TimePrecisionSpec extends FlatSpec {
+class TimePrecisionSpec extends org.scalatest.flatspec.AnyFlatSpec {
   "TimePrecision" should "have limit" in {
     assert { Hours.limit        == LocalTime.parse("23:00") }
     assert { Minutes.limit      == LocalTime.parse("23:59") }

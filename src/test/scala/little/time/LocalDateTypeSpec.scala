@@ -17,12 +17,10 @@ package little.time
 
 import java.time.{ DayOfWeek, LocalDate, Period, YearMonth }
 
-import org.scalatest.FlatSpec
-
 import Implicits._
 import DayOfWeek._
 
-class LocalDateTypeSpec extends FlatSpec {
+class LocalDateTypeSpec extends org.scalatest.flatspec.AnyFlatSpec {
   private val date =  LocalDate.parse("2019-07-11")
 
   "LocalDate" should "be converted to YearMonth" in {

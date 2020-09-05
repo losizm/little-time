@@ -17,11 +17,9 @@ package little.time
 
 import java.time._
 
-import org.scalatest.FlatSpec
-
 import Implicits.TimeStringType
 
-class TimeStringTypeSpec extends FlatSpec {
+class TimeStringTypeSpec extends org.scalatest.flatspec.AnyFlatSpec {
   "String" should "be converted to YearMonth" in {
     assert("2019-07".toYearMonth == YearMonth.parse("2019-07"))
   }
