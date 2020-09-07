@@ -60,7 +60,7 @@ When creating the iterator, you can specify the `Period` by which to step.
 
 ```scala
 // Iterate over dates, two weeks at a time
-start iterateTo (end, Period.ofWeeks(2)) foreach { date =>
+start.iterateTo(end, Period.ofWeeks(2)) foreach { date =>
   println(s"$date is on a ${date.getDayOfWeek}")
 }
 ```
@@ -76,7 +76,7 @@ val startDate = LocalDate.now()
 val endDate   = startDate - 7
 
 // Iterator backward over dates, 1 day at a time
-startDate iterateUntil (endDate, -_1day) foreach { date =>
+startDate.iterateUntil(endDate, -_1day) foreach { date =>
   val daysAgo = date.until(startDate, ChronoUnit.DAYS)
   println(s"$date is $daysAgo days(s) ago")
 }
@@ -94,7 +94,7 @@ val startMonth = "2018-04".toYearMonth
 val endMonth   = "2020-03".toYearMonth
 
 // Iterate over months, 3 months at a time
-startMonth ~> (endMonth, Period.ofMonths(3)) foreach { month =>
+startMonth.iterateTo(endMonth, Period.ofMonths(3)) foreach { month =>
   val diff = startMonth.until(month, ChronoUnit.MONTHS)
   println(s"$month is $diff month(s) after $startMonth")
 }
@@ -104,7 +104,7 @@ val startTime = "09:00".toLocalTime
 val endTime   = "17:00".toLocalTime
 
 // Iterate over times, 15 minutes at a time
-startTime ~>| (endTime, Duration.ofMinutes(15)) foreach {
+startTime.iterateUntil(endTime, Duration.ofMinutes(15)) foreach {
   case time if time.getMinute == 0  => println(s"It's $time, back to work")
   case time if time.getMinute == 45 => println(s"It's $time, take a break")
   case time                         => println(s"It's $time")
@@ -119,7 +119,7 @@ val startDateTime = "2019-06-15T12:30:45".toLocalDateTime
 val endDateTime   = startDateTime + _2yrs * 3
 
 // Iterate over 6 years, 2 years at a time
-startDateTime iterateTo (endDateTime, _2yrs) foreach { dateTime =>
+startDateTime.iterateTo(endDateTime, _2yrs).foreach { dateTime =>
   println(s"Date-time is $dateTime")
 }
 
@@ -138,7 +138,7 @@ Lastly, you can iterate between one `Duration` and another.
 val _17mins = Duration.ofMinutes(17)
 
 // Iterate from 17 minutes to 34 minutes, 45 seconds at a time
-_17mins iterateTo (_17mins * 2, _45secs) foreach { duration =>
+_17mins.iterateTo(_17mins * 2, _45secs).foreach { duration =>
   println(s"${duration.toMillis / 1000} secs from now is ${LocalTime.now() + duration}")
 }
 ```
@@ -211,10 +211,10 @@ val endOfDay = dateTime.atEndOfDay(TimePrecision.Microseconds)
 
 ## Working with Schedule
 
-A schedule defines _cron_-like utility for specifying times at which _something_
-should occur. In particular, it specifies the months, days of month, days of
-week, dates, and times. These are combined with an effective period to constrain the
-start and end of a schedule.
+A `Schedule` offers a _cron_-like utility for specifying times at which
+_something_ should occur. In particular, it can specify the months, days of
+month, days of week, dates, and times of a schedule. To constrain the schedule
+to a finite set of times, its effective start and end times are specified.
 
 ```scala
 import java.time.DayOfWeek._
@@ -239,8 +239,8 @@ val schedule = Schedule(
 )
 ```
 
-A schedule is an `Iterable[LocalDateTime]`, so there are various ways to access
-its times.
+A `Schedule` is an `Iterable[LocalDateTime]`, so there are various ways to
+access its times.
 
 ```scala
 // Zip scheduled times with indices and print each
