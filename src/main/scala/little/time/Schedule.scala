@@ -21,7 +21,56 @@ import scala.math.Ordered.orderingToOrdered
 
 import Implicits._
 
-/** Defines schedule. */
+/**
+ * Defines ''cron''-like utility for specifying times at which ''something''
+ * should occur.
+ *
+ * A schedule specifies months, days of month, days of week, dates, and times.
+ * These are combined with an effective period to constrain the start and end of
+ * the schedule.
+ *
+ * A schedule is an `Iterable[LocalDateTime]`, so there are various ways to
+ * access its times.
+ *
+ * {{{
+ * import java.time.DayOfWeek._
+ * import java.time.LocalTime
+ * import java.time.Month._
+ *
+ * import little.time.Schedule
+ * import little.time.Implicits._
+ *
+ * // Create schedule that:
+ * //   - starts on Jan 15
+ * //   - ends before noon on Oct 15
+ * //   - includes Jan, Apr, July, and Oct
+ * //   - includes 1st and 15th of each month
+ * //   - occurs at midnight and noon
+ * val schedule = Schedule(
+ *   start       = "2020-01-15T00:00:00".toLocalDateTime,
+ *   end         = "2020-10-15T11:59:59".toLocalDateTime,
+ *   months      = Seq(JANUARY, APRIL, JULY, OCTOBER),
+ *   daysOfMonth = Seq(1, 15),
+ *   times       = Seq(LocalTime.MIDNIGHT, LocalTime.NOON)
+ * )
+ *
+ * // Zip scheduled times with indices and print each
+ * schedule.zipWithIndex.foreach {
+ *   case (time, index) => println(s"$index: $time")
+ * }
+ *
+ * // Filter to times that are on Wednesday
+ * val humpDays = schedule.filter { time =>
+ *   time.getDayOfWeek == WEDNESDAY
+ * }
+ *
+ * // Adjust schedule to Wednesday only
+ * val humpDaysToo = schedule.withDaysOfWeek(WEDNESDAY)
+ *
+ * // Get next scheduled time after specified time
+ * val nextTime = humpDaysToo.next("2020-04-30T23:59:59.999".toLocalDateTime)
+ * }}}
+ */
 sealed trait Schedule extends Iterable[LocalDateTime] {
   /** Gets effective start. */
   def start: LocalDateTime

@@ -9,7 +9,7 @@ The Scala library that provides extension methods to _java.time_.
 To use **little-time**, add it as a dependency to your project:
 
 ```scala
-libraryDependencies += "com.github.losizm" %% "little-time" % "0.4.0"
+libraryDependencies += "com.github.losizm" %% "little-time" % "0.5.0"
 ```
 
 ## A Taste of little-time
@@ -208,6 +208,62 @@ val endOfYear = dateTime.atEndOfYear
 // Get last microsecond of day
 val endOfDay = dateTime.atEndOfDay(TimePrecision.Microseconds)
 ```
+
+## Working with Schedule
+
+A schedule defines _cron_-like utility for specifying times at which _something_
+should occur. In particular, it specifies the months, days of month, days of
+week, dates, and times. These are combined with an effective period to constrain the
+start and end of a schedule.
+
+```scala
+import java.time.DayOfWeek._
+import java.time.LocalTime
+import java.time.Month._
+
+import little.time.Schedule
+import little.time.Implicits._
+
+// Create schedule that:
+//   - starts on Jan 15
+//   - ends before noon on Oct 15
+//   - includes Jan, Apr, July, and Oct
+//   - includes 1st and 15th of each month
+//   - occurs at midnight and noon
+val schedule = Schedule(
+  start       = "2020-01-15T00:00:00".toLocalDateTime,
+  end         = "2020-10-15T11:59:59".toLocalDateTime,
+  months      = Seq(JANUARY, APRIL, JULY, OCTOBER),
+  daysOfMonth = Seq(1, 15),
+  times       = Seq(LocalTime.MIDNIGHT, LocalTime.NOON)
+)
+```
+
+A schedule is an `Iterable[LocalDateTime]`, so there are various ways to access
+its times.
+
+```scala
+// Zip scheduled times with indices and print each
+schedule.zipWithIndex.foreach {
+  case (time, index) => println(s"$index: $time")
+}
+
+// Filter to times that are on Wednesday
+val humpDays = schedule.filter { time =>
+  time.getDayOfWeek == WEDNESDAY
+}
+```
+
+And there are other utilities provided for working with a schedule.
+
+```scala
+// Adjust schedule to Wednesday only
+val humpDaysToo = schedule.withDaysOfWeek(WEDNESDAY)
+
+// Get next scheduled time after specified time - Option[LocalDateTime]
+val nextTime = humpDaysToo.next("2020-04-30T23:59:59.999".toLocalDateTime)
+```
+
 
 ## API Documentation
 
