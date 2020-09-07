@@ -101,7 +101,8 @@ sealed trait Schedule extends Iterable[LocalDateTime] {
    *
    * @param after time after which to check
    */
-  def next(after: LocalDateTime = LocalDateTime.now()): Option[LocalDateTime]
+  def next(after: LocalDateTime = LocalDateTime.now()): Option[LocalDateTime] =
+    iterator.find(after.isBefore)
 
   /**
    * Creates new schedule by replacing start and end.
@@ -267,9 +268,6 @@ private case class StandardSchedule(
   def iterator = dateIterator
     .flatMap(date => times.map(date.atTime))
     .filter(time => time >= start && time <= end)
-
-  def next(after: LocalDateTime) =
-    iterator.find(after.isBefore)
 
   def withEffective(start: LocalDateTime, end: LocalDateTime) =
     copy(start = start, end = end)
