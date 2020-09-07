@@ -56,7 +56,7 @@ import Implicits._
  *
  * // Zip scheduled times with indices and print each
  * schedule.zipWithIndex.foreach {
- *   case (time, index) => println(s"$index: $time")
+ *   case (time, index) => println(s"\$index: \$time")
  * }
  *
  * // Filter to times that are on Wednesday
