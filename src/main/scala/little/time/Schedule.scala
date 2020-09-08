@@ -111,12 +111,30 @@ sealed trait Schedule extends Iterable[LocalDateTime] {
   /**
    * Creates new schedule by replacing start and end.
    *
-   * @param start effective start
-   * @param end effective end
+   * @param start start
+   * @param end end
    *
    * @return new schedule
    */
   def withEffective(start: LocalDateTime, end: LocalDateTime): Schedule
+
+  /**
+   * Creates new schedule by replacing start.
+   *
+   * @param start start
+   *
+   * @return new schedule
+   */
+  def withStart(start: LocalDateTime): Schedule
+
+  /**
+   * Creates new schedule by replacing end.
+   *
+   * @param end end
+   *
+   * @return new schedule
+   */
+  def withEnd(end: LocalDateTime): Schedule
 
   /**
    * Creates new schedule by replacing times.
@@ -273,6 +291,12 @@ private case class StandardSchedule(
 
   def withEffective(start: LocalDateTime, end: LocalDateTime) =
     copy(start = start, end = end)
+
+  def withStart(start: LocalDateTime) =
+    copy(start = start)
+
+  def withEnd(end: LocalDateTime) =
+    copy(end = end)
 
   def withTimes(times: Seq[LocalTime]) =
     copy(times = times.isEmpty match {

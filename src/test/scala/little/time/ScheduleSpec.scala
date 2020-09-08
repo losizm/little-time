@@ -145,4 +145,48 @@ class ScheduleSpec extends org.scalatest.flatspec.AnyFlatSpec {
 
     assert(schedule.isEmpty)
   }
+
+  it should "incrementally build schedule" in {
+    var schedule = Schedule(
+      start = LocalDateTime.parse("2020-01-01T12:00"),
+      end   = LocalDateTime.parse("2020-03-31T12:00")
+    )
+
+    assert(schedule.start == LocalDateTime.parse("2020-01-01T12:00"))
+    assert(schedule.end   == LocalDateTime.parse("2020-03-31T12:00"))
+    assert(schedule.times == Seq(LocalTime.MIDNIGHT))
+    assert(schedule.daysOfMonth.isEmpty)
+    assert(schedule.months.isEmpty)
+    assert(schedule.daysOfWeek.isEmpty)
+    assert(schedule.dates.isEmpty)
+
+    schedule = schedule.withStart(LocalDateTime.parse("2020-01-15T12:00"))
+      .withEnd(LocalDateTime.parse("2020-03-15T00:00"))
+      .withTimes(LocalTime.parse("16:00"), LocalTime.parse("08:00"))
+      .withDaysOfMonth(1, 28, 14)
+      .withMonths(JANUARY, MARCH, FEBRUARY, APRIL)
+      .withDaysOfWeek(SUNDAY, SATURDAY)
+      .withDates(LocalDate.parse("2020-03-03"), LocalDate.parse("2020-02-02"))
+
+    assert(schedule.start       == LocalDateTime.parse("2020-01-15T12:00"))
+    assert(schedule.end         == LocalDateTime.parse("2020-03-15T00:00"))
+    assert(schedule.times       == Seq(LocalTime.parse("08:00"), LocalTime.parse("16:00")))
+    assert(schedule.daysOfMonth == Seq(1, 14, 28))
+    assert(schedule.months      == Seq(JANUARY, FEBRUARY, MARCH, APRIL))
+    assert(schedule.daysOfWeek  == Seq(SATURDAY, SUNDAY))
+    assert(schedule.dates       == Seq(LocalDate.parse("2020-02-02"), LocalDate.parse("2020-03-03")))
+
+    schedule = schedule.withEffective(
+      LocalDateTime.parse("2020-01-01T00:00"),
+      LocalDateTime.parse("2020-12-31T23:59")
+    )
+
+    assert(schedule.start       == LocalDateTime.parse("2020-01-01T00:00"))
+    assert(schedule.end         == LocalDateTime.parse("2020-12-31T23:59"))
+    assert(schedule.times       == Seq(LocalTime.parse("08:00"), LocalTime.parse("16:00")))
+    assert(schedule.daysOfMonth == Seq(1, 14, 28))
+    assert(schedule.months      == Seq(JANUARY, FEBRUARY, MARCH, APRIL))
+    assert(schedule.daysOfWeek  == Seq(SATURDAY, SUNDAY))
+    assert(schedule.dates       == Seq(LocalDate.parse("2020-02-02"), LocalDate.parse("2020-03-03")))
+  }
 }
