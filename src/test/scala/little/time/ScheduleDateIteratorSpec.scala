@@ -60,6 +60,30 @@ class ScheduleDateIteratorSpec extends org.scalatest.flatspec.AnyFlatSpec {
     assertThrows[NoSuchElementException](iter.next())
   }
 
+  it should "create monthly/weekly iterator" in {
+    val iter = ScheduleDateIterator(
+      startDate   = LocalDate.parse("2020-10-17"),
+      endDate     = LocalDate.parse("2020-11-13"),
+      months      = Nil,
+      daysOfMonth = Seq(1, 20),
+      daysOfWeek  = Seq(FRIDAY, SATURDAY),
+      dates       = Nil
+    )
+
+    assert(iter.nonEmpty)
+    assert(iter.next() == LocalDate.parse("2020-10-17"))
+    assert(iter.next() == LocalDate.parse("2020-10-20"))
+    assert(iter.next() == LocalDate.parse("2020-10-23"))
+    assert(iter.next() == LocalDate.parse("2020-10-24"))
+    assert(iter.next() == LocalDate.parse("2020-10-30"))
+    assert(iter.next() == LocalDate.parse("2020-10-31"))
+    assert(iter.next() == LocalDate.parse("2020-11-01"))
+    assert(iter.next() == LocalDate.parse("2020-11-06"))
+    assert(iter.next() == LocalDate.parse("2020-11-07"))
+    assert(iter.next() == LocalDate.parse("2020-11-13"))
+    assertThrows[NoSuchElementException](iter.next())
+  }
+
   it should "create daily iterator" in {
     val iter = ScheduleDateIterator(
       startDate   = LocalDate.parse("2020-01-27"),
@@ -103,6 +127,37 @@ class ScheduleDateIteratorSpec extends org.scalatest.flatspec.AnyFlatSpec {
     assert(iter.next() == LocalDate.parse("2020-01-15"))
     assert(iter.next() == LocalDate.parse("2020-01-20"))
     assert(iter.next() == LocalDate.parse("2020-02-20"))
+    assert(iter.next() == LocalDate.parse("2020-03-30"))
+    assertThrows[NoSuchElementException](iter.next())
+  }
+
+  it should "create monthly with custom iterator" in {
+    val iter = ScheduleDateIterator(
+      startDate   = LocalDate.parse("2020-01-01"),
+      endDate     = LocalDate.parse("2020-03-31"),
+      months      = Nil,
+      daysOfMonth = Seq(1, 15),
+      daysOfWeek  = Nil,
+      dates       = Seq(
+        LocalDate.parse("2019-12-15"),
+        LocalDate.parse("2020-01-15"),
+        LocalDate.parse("2020-01-21"),
+        LocalDate.parse("2020-02-22"),
+        LocalDate.parse("2020-03-30"),
+        LocalDate.parse("2020-04-01"),
+        LocalDate.parse("2020-04-02")
+      )
+    )
+
+    assert(iter.nonEmpty)
+    assert(iter.next() == LocalDate.parse("2020-01-01"))
+    assert(iter.next() == LocalDate.parse("2020-01-15"))
+    assert(iter.next() == LocalDate.parse("2020-01-21"))
+    assert(iter.next() == LocalDate.parse("2020-02-01"))
+    assert(iter.next() == LocalDate.parse("2020-02-15"))
+    assert(iter.next() == LocalDate.parse("2020-02-22"))
+    assert(iter.next() == LocalDate.parse("2020-03-01"))
+    assert(iter.next() == LocalDate.parse("2020-03-15"))
     assert(iter.next() == LocalDate.parse("2020-03-30"))
     assertThrows[NoSuchElementException](iter.next())
   }

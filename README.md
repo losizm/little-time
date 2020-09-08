@@ -9,7 +9,7 @@ The Scala library that provides extension methods to _java.time_.
 To use **little-time**, add it as a dependency to your project:
 
 ```scala
-libraryDependencies += "com.github.losizm" %% "little-time" % "0.5.0"
+libraryDependencies += "com.github.losizm" %% "little-time" % "0.6.0"
 ```
 
 ## A Taste of little-time
@@ -212,9 +212,9 @@ val endOfDay = dateTime.atEndOfDay(TimePrecision.Microseconds)
 ## Working with Schedule
 
 A `Schedule` offers a _cron_-like utility for specifying times at which
-_something_ should occur. In particular, it can specify the months, days of
-month, days of week, dates, and times of a schedule. To constrain the schedule
-to a finite set of times, its effective start and end times are specified.
+_something_ should occur. In particular, it may specify `months`, `daysOfMonth`,
+`daysOfWeek`, `dates`, and `times`. To constrain a schedule to a finite period,
+its effective `start` and `end` are always specified.
 
 ```scala
 import java.time.DayOfWeek._
@@ -226,14 +226,14 @@ import little.time.Implicits._
 
 // Create schedule that:
 //   - starts on Jan 15
-//   - ends before noon on Oct 15
-//   - includes Jan, Apr, July, and Oct
+//   - ends before noon on Apr 15
+//   - includes Jan, Feb, and Apr
 //   - includes 1st and 15th of each month
 //   - occurs at midnight and noon
 val schedule = Schedule(
   start       = "2020-01-15T00:00:00".toLocalDateTime,
-  end         = "2020-10-15T11:59:59".toLocalDateTime,
-  months      = Seq(JANUARY, APRIL, JULY, OCTOBER),
+  end         = "2020-04-15T11:59:59".toLocalDateTime,
+  months      = Seq(JANUARY, FEBRUARY, APRIL),
   daysOfMonth = Seq(1, 15),
   times       = Seq(LocalTime.MIDNIGHT, LocalTime.NOON)
 )
@@ -248,22 +248,19 @@ schedule.zipWithIndex.foreach {
   case (time, index) => println(s"$index: $time")
 }
 
-// Filter to times that are on Wednesday
-val humpDays = schedule.filter { time =>
-  time.getDayOfWeek == WEDNESDAY
-}
+// Filter times to those on Wednesdays
+val humpDays = schedule.filter(_.getDayOfWeek == WEDNESDAY)
 ```
 
 And there are other utilities provided for working with a schedule.
 
 ```scala
-// Adjust schedule to Wednesday only
-val humpDaysToo = schedule.withDaysOfWeek(WEDNESDAY)
+// Add Mondays and Fridays to schedule
+val moreDays = schedule.withDaysOfWeek(MONDAY, FRIDAY)
 
-// Get next scheduled time after specified time - Option[LocalDateTime]
-val nextTime = humpDaysToo.next("2020-04-30T23:59:59.999".toLocalDateTime)
+// Get next scheduled time after specified time
+val nextTime = moreDays.next("2020-02-01T12:00:01".toLocalDateTime)
 ```
-
 
 ## API Documentation
 

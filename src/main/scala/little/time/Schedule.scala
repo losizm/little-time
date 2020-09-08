@@ -25,12 +25,9 @@ import Implicits._
  * Defines ''cron''-like utility for specifying times at which ''something''
  * should occur.
  *
- * A schedule specifies months, days of month, days of week, dates, and times.
- * These are combined with an effective period to constrain the start and end of
- * the schedule.
- *
- * A schedule is an `Iterable[LocalDateTime]`, so there are various ways to
- * access its times.
+ * A `Schedule` may specify `months`, `daysOfMonth`, `daysOfWeek`, `dates`, and
+ * `times`. To constrain it to a finite period, its effective `start` and `end`
+ * are always specified.
  *
  * {{{
  * import java.time.DayOfWeek._
@@ -42,33 +39,40 @@ import Implicits._
  *
  * // Create schedule that:
  * //   - starts on Jan 15
- * //   - ends before noon on Oct 15
- * //   - includes Jan, Apr, July, and Oct
+ * //   - ends before noon on Apr 15
+ * //   - includes Jan, Feb, and Apr
  * //   - includes 1st and 15th of each month
  * //   - occurs at midnight and noon
  * val schedule = Schedule(
  *   start       = "2020-01-15T00:00:00".toLocalDateTime,
- *   end         = "2020-10-15T11:59:59".toLocalDateTime,
- *   months      = Seq(JANUARY, APRIL, JULY, OCTOBER),
+ *   end         = "2020-04-15T11:59:59".toLocalDateTime,
+ *   months      = Seq(JANUARY, FEBRUARY, APRIL),
  *   daysOfMonth = Seq(1, 15),
  *   times       = Seq(LocalTime.MIDNIGHT, LocalTime.NOON)
  * )
+ * }}}
  *
+ * A `Schedule` is an `Iterable[LocalDateTime]`, so there are various ways to
+ * access its times.
+ *
+ * {{{
  * // Zip scheduled times with indices and print each
  * schedule.zipWithIndex.foreach {
  *   case (time, index) => println(s"\$index: \$time")
  * }
  *
  * // Filter to times that are on Wednesday
- * val humpDays = schedule.filter { time =>
- *   time.getDayOfWeek == WEDNESDAY
- * }
+ * val humpDays = schedule.filter(_.getDayOfWeek == WEDNESDAY)
+ * }}}
  *
- * // Adjust schedule to Wednesday only
- * val humpDaysToo = schedule.withDaysOfWeek(WEDNESDAY)
+ * And there are other utilities provided for working with a schedule.
+ *
+ * {{{
+ * // Add Mondays and Fridays to schedule
+ * val moreDays = schedule.withDaysOfWeek(MONDAY, FRIDAY)
  *
  * // Get next scheduled time after specified time
- * val nextTime = humpDaysToo.next("2020-04-30T23:59:59.999".toLocalDateTime)
+ * val nextTime = moreDays.next("2020-02-01T12:00:01".toLocalDateTime)
  * }}}
  */
 sealed trait Schedule extends Iterable[LocalDateTime] {
@@ -78,20 +82,20 @@ sealed trait Schedule extends Iterable[LocalDateTime] {
   /** Gets effective end. */
   def end: LocalDateTime
 
-  /** Gets months. */
-  def months: Seq[Month]
+  /** Gets times. */
+  def times: Seq[LocalTime]
 
   /** Gets days of month. */
   def daysOfMonth: Seq[Int]
+
+  /** Gets months. */
+  def months: Seq[Month]
 
   /** Gets days of week. */
   def daysOfWeek: Seq[DayOfWeek]
 
   /** Gets dates. */
   def dates: Seq[LocalDate]
-
-  /** Gets times. */
-  def times: Seq[LocalTime]
 
   /** Gets iterator of scheduled times. */
   def iterator: Iterator[LocalDateTime]
@@ -115,24 +119,24 @@ sealed trait Schedule extends Iterable[LocalDateTime] {
   def withEffective(start: LocalDateTime, end: LocalDateTime): Schedule
 
   /**
-   * Creates new schedule by replacing months.
+   * Creates new schedule by replacing times.
    *
-   * @param months months
+   * @param times times
    *
    * @return new schedule
    */
-  def withMonths(months: Seq[Month]): Schedule
+  def withTimes(times: Seq[LocalTime]): Schedule
 
   /**
-   * Creates new schedule by replacing months.
+   * Creates new schedule by replacing times.
    *
-   * @param one  month
-   * @param more additional months
+   * @param one  time
+   * @param more additional times
    *
    * @return new schedule
    */
-  def withMonths(one: Month, more: Month*): Schedule =
-    withMonths(one +: more)
+  def withTimes(one: LocalTime, more: LocalTime*): Schedule =
+    withTimes(one +: more)
 
   /**
    * Creates new schedule by replacing days of month.
@@ -153,6 +157,26 @@ sealed trait Schedule extends Iterable[LocalDateTime] {
    */
   def withDaysOfMonth(one: Int, more: Int*): Schedule =
     withDaysOfMonth(one +: more)
+
+  /**
+   * Creates new schedule by replacing months.
+   *
+   * @param months months
+   *
+   * @return new schedule
+   */
+  def withMonths(months: Seq[Month]): Schedule
+
+  /**
+   * Creates new schedule by replacing months.
+   *
+   * @param one  month
+   * @param more additional months
+   *
+   * @return new schedule
+   */
+  def withMonths(one: Month, more: Month*): Schedule =
+    withMonths(one +: more)
 
   /**
    * Creates new schedule by replacing days of week.
@@ -193,26 +217,6 @@ sealed trait Schedule extends Iterable[LocalDateTime] {
    */
   def withDates(one: LocalDate, more: LocalDate*): Schedule =
     withDates(one +: more)
-
-  /**
-   * Creates new schedule by replacing times.
-   *
-   * @param times times
-   *
-   * @return new schedule
-   */
-  def withTimes(times: Seq[LocalTime]): Schedule
-
-  /**
-   * Creates new schedule by replacing times.
-   *
-   * @param one  time
-   * @param more additional times
-   *
-   * @return new schedule
-   */
-  def withTimes(one: LocalTime, more: LocalTime*): Schedule =
-    withTimes(one +: more)
 }
 
 /** Provides `Schedule` factory. */
@@ -231,39 +235,37 @@ object Schedule {
   def apply(
     start: LocalDateTime,
     end: LocalDateTime,
-    months: Seq[Month] = Nil,
+    times: Seq[LocalTime] = Seq(LocalTime.MIDNIGHT),
     daysOfMonth: Seq[Int] = Nil,
+    months: Seq[Month] = Nil,
     daysOfWeek: Seq[DayOfWeek] = Nil,
-    dates: Seq[LocalDate] = Nil,
-    times: Seq[LocalTime] = Seq(LocalTime.MIN)
+    dates: Seq[LocalDate] = Nil
   ): Schedule =
     StandardSchedule(
       start,
       end,
-      SortedSeq(months),
+      times.isEmpty match {
+        case true  => Seq(LocalTime.MIDNIGHT)
+        case false => SortedSeq(times)
+      },
       SortedSeq(daysOfMonth),
+      SortedSeq(months),
       SortedSeq(daysOfWeek),
-      SortedSeq(dates),
-      SortedSeq(times)
+      SortedSeq(dates)
     )
 }
 
 private case class StandardSchedule(
   start: LocalDateTime,
   end: LocalDateTime,
-  months: Seq[Month],
+  times: Seq[LocalTime],
   daysOfMonth: Seq[Int],
+  months: Seq[Month],
   daysOfWeek: Seq[DayOfWeek],
-  dates: Seq[LocalDate],
-  _times: Seq[LocalTime]
+  dates: Seq[LocalDate]
 ) extends Schedule {
   require(start != null && end != null)
   require(daysOfMonth.forall(day => day >= 1 && day <= 31))
-
-  val times = _times.isEmpty match {
-    case true  => Seq(LocalTime.MIN)
-    case false => _times
-  }
 
   def iterator = dateIterator
     .flatMap(date => times.map(date.atTime))
@@ -272,20 +274,23 @@ private case class StandardSchedule(
   def withEffective(start: LocalDateTime, end: LocalDateTime) =
     copy(start = start, end = end)
 
-  def withMonths(months: Seq[Month]) =
-    copy(months = SortedSeq(months))
+  def withTimes(times: Seq[LocalTime]) =
+    copy(times = times.isEmpty match {
+      case true  => Seq(LocalTime.MIDNIGHT)
+      case false => SortedSeq(times)
+    })
 
   def withDaysOfMonth(days: Seq[Int]) =
     copy(daysOfMonth = SortedSeq(days))
+
+  def withMonths(months: Seq[Month]) =
+    copy(months = SortedSeq(months))
 
   def withDaysOfWeek(days: Seq[DayOfWeek]) =
     copy(daysOfWeek = SortedSeq(days))
 
   def withDates(dates: Seq[LocalDate]) =
     copy(dates = SortedSeq(dates))
-
-  def withTimes(times: Seq[LocalTime]) =
-    copy(_times = SortedSeq(times))
 
   override lazy val toString = s"StandardSchedule(start=$start,end=$end,isEmpty=$isEmpty)"
 

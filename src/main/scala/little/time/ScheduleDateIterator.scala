@@ -25,7 +25,7 @@ private case class ScheduleDateIterator(
   daysOfWeek: Seq[DayOfWeek],
   dates: Seq[LocalDate],
 ) extends Iterator[LocalDate] {
-  private val epochDays = dates.map(_.toEpochDay)
+  private val epochDays = restrictedDays
   private val lastDay   = endDate.toEpochDay
   private var currDay   = firstDay
   private var nextDate  = getNextDate()
@@ -52,6 +52,12 @@ private case class ScheduleDateIterator(
         }
     }
 
+  private def restrictedDays: Seq[Long] =
+    dates.nonEmpty && months.isEmpty && daysOfMonth.isEmpty && daysOfWeek.isEmpty match {
+      case true  => dates.map(_.toEpochDay)
+      case false => Nil
+    }
+
   private def firstDay: Long = {
     val startDay = startDate.toEpochDay
     epochDays.isEmpty match {
@@ -67,7 +73,14 @@ private case class ScheduleDateIterator(
     }
 
   private def schedule(date: LocalDate): Boolean =
-    (months.isEmpty      || months.contains(date.getMonth)) &&
-    (daysOfMonth.isEmpty || daysOfMonth.contains(date.getDayOfMonth)) &&
-    (daysOfWeek.isEmpty  || daysOfWeek.contains(date.getDayOfWeek))
+    dates.contains(date) ||
+      (schedule(date.getMonth) && schedule(date.getDayOfMonth, date.getDayOfWeek))
+
+  private def schedule(month: Month): Boolean =
+    months.isEmpty || months.contains(month)
+
+  private def schedule(dayOfMonth: Int, dayOfWeek: DayOfWeek): Boolean =
+    (daysOfMonth.isEmpty && daysOfWeek.isEmpty) ||
+      daysOfMonth.contains(dayOfMonth) ||
+      daysOfWeek.contains(dayOfWeek)
 }
