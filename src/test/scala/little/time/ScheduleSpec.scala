@@ -146,7 +146,7 @@ class ScheduleSpec extends org.scalatest.flatspec.AnyFlatSpec {
     assert(schedule.isEmpty)
   }
 
-  it should "incrementally build schedule" in {
+  it should "build schedule" in {
     var schedule = Schedule(
       start = LocalDateTime.parse("2020-01-01T12:00"),
       end   = LocalDateTime.parse("2020-03-31T12:00")

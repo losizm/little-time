@@ -168,7 +168,7 @@ sealed trait Schedule extends Iterable[LocalDateTime] {
   /**
    * Creates new schedule by replacing days of month.
    *
-   * @param one  day of months
+   * @param one  day of month
    * @param more additional days of month
    *
    * @return new schedule
@@ -208,7 +208,7 @@ sealed trait Schedule extends Iterable[LocalDateTime] {
   /**
    * Creates new schedule by replacing days of week.
    *
-   * @param one  day of weeks
+   * @param one  day of week
    * @param more additional days of week
    *
    * @return new schedule
@@ -244,11 +244,11 @@ object Schedule {
    *
    * @param start       start
    * @param end         end
+   * @param times       times
+   * @param daysOfMonth days of month
    * @param months      months
-   * @param daysOfMonth days of months
    * @param daysOfWeek  days of week
    * @param dates       dates
-   * @param times       times
    */
   def apply(
     start: LocalDateTime,
@@ -285,9 +285,23 @@ private case class StandardSchedule(
   require(start != null && end != null)
   require(daysOfMonth.forall(day => day >= 1 && day <= 31))
 
-  def iterator = dateIterator
-    .flatMap(date => times.map(date.atTime))
-    .filter(time => time >= start && time <= end)
+  private lazy val isKnownEmpty =
+    dates.isEmpty && (daysOfMonth.isEmpty || months.isEmpty || daysOfWeek.nonEmpty match {
+      case true  => false
+      case false =>
+        daysOfMonth.dropWhile(_ < 29) match {
+          case Nil  => false
+          case days => days.forall(day => months.forall(_.maxLength < day))
+        }
+    })
+
+  def iterator = isKnownEmpty match {
+    case true  => Iterator.empty
+    case false =>
+      dateIterator
+        .flatMap(date => times.map(date.atTime))
+        .filter(time => time >= start && time <= end)
+  }
 
   def withEffective(start: LocalDateTime, end: LocalDateTime) =
     copy(start = start, end = end)
