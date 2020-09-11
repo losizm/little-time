@@ -207,26 +207,6 @@ object Implicits {
      */
     def iterateUntil(end: YearMonth, step: Period = Period.ofMonths(1)): Iterator[YearMonth] =
       exclusive(month, end, step)
-
-    /**
-     * Creates iterator to end month (inclusive).
-     *
-     * @param end end month
-     *
-     * @note Alias to [[iterateTo]] with 1-month step.
-     */
-    def ~>(end: YearMonth): Iterator[YearMonth] =
-      iterateTo(end, Period.ofMonths(1))
-
-    /**
-     * Creates iterator to end month (exclusive).
-     *
-     * @param end end month
-     *
-     * @note Alias to [[iterateUntil]] with 1-month step.
-     */
-    def ~>|(end: YearMonth): Iterator[YearMonth] =
-      iterateUntil(end, Period.ofMonths(1))
   }
 
   /** Provides extension methods to `java.time.LocalDate` */
@@ -355,26 +335,6 @@ object Implicits {
      */
     def iterateUntil(end: LocalDate, step: Period = Period.ofDays(1)): Iterator[LocalDate] =
       exclusive(date, end, step)
-
-    /**
-     * Creates iterator to end date (inclusive).
-     *
-     * @param end end date
-     *
-     * @note Alias to [[iterateTo]] with 1-day step.
-     */
-    def ~>(end: LocalDate): Iterator[LocalDate] =
-      iterateTo(end, Period.ofDays(1))
-
-    /**
-     * Creates iterator to end date (exclusive).
-     *
-     * @param end end date
-     *
-     * @note Alias to [[iterateUntil]] with 1-day step.
-     */
-    def ~>|(end: LocalDate): Iterator[LocalDate] =
-      iterateUntil(end, Period.ofDays(1))
   }
 
   /** Provides extension methods to `java.time.LocalTime` */
