@@ -15,20 +15,18 @@
  */
 package little.time
 
-import java.time._
-import DayOfWeek._
-import Month._
+import java.time.LocalDate
+import java.time.DayOfWeek._
+import java.time.Month._
 
-class ScheduleDateIteratorSpec extends org.scalatest.flatspec.AnyFlatSpec {
+class CronDateIteratorSpec extends org.scalatest.flatspec.AnyFlatSpec {
   it should "create monthly iterator" in {
-    val iter = ScheduleDateIterator(
+    val iter = CronDateIterator(
       startDate   = LocalDate.parse("2020-10-01"),
       endDate     = LocalDate.parse("2020-12-01"),
       months      = Seq(FEBRUARY, APRIL, JUNE, AUGUST, OCTOBER, DECEMBER),
       daysOfMonth = Seq(1, 15, 31),
-      daysOfWeek  = Nil,
-      dates       = Nil
-    )
+      daysOfWeek  = Nil)
 
     assert(iter.nonEmpty)
     assert(iter.next() == LocalDate.parse("2020-10-01"))
@@ -39,14 +37,12 @@ class ScheduleDateIteratorSpec extends org.scalatest.flatspec.AnyFlatSpec {
   }
 
   it should "create weekly iterator" in {
-    val iter = ScheduleDateIterator(
+    val iter = CronDateIterator(
       startDate   = LocalDate.parse("2020-10-17"),
       endDate     = LocalDate.parse("2020-11-13"),
       months      = Nil,
       daysOfMonth = Nil,
-      daysOfWeek  = Seq(FRIDAY, SATURDAY),
-      dates       = Nil
-    )
+      daysOfWeek  = Seq(FRIDAY, SATURDAY))
 
     assert(iter.nonEmpty)
     assert(iter.next() == LocalDate.parse("2020-10-17"))
@@ -61,14 +57,12 @@ class ScheduleDateIteratorSpec extends org.scalatest.flatspec.AnyFlatSpec {
   }
 
   it should "create monthly/weekly iterator" in {
-    val iter = ScheduleDateIterator(
+    val iter = CronDateIterator(
       startDate   = LocalDate.parse("2020-10-17"),
       endDate     = LocalDate.parse("2020-11-13"),
       months      = Nil,
       daysOfMonth = Seq(1, 20),
-      daysOfWeek  = Seq(FRIDAY, SATURDAY),
-      dates       = Nil
-    )
+      daysOfWeek  = Seq(FRIDAY, SATURDAY))
 
     assert(iter.nonEmpty)
     assert(iter.next() == LocalDate.parse("2020-10-17"))
@@ -85,14 +79,12 @@ class ScheduleDateIteratorSpec extends org.scalatest.flatspec.AnyFlatSpec {
   }
 
   it should "create daily iterator" in {
-    val iter = ScheduleDateIterator(
+    val iter = CronDateIterator(
       startDate   = LocalDate.parse("2020-01-27"),
       endDate     = LocalDate.parse("2020-02-02"),
       months      = Nil,
       daysOfMonth = Nil,
-      daysOfWeek  = Nil,
-      dates       = Nil
-    )
+      daysOfWeek  = Nil)
 
     assert(iter.nonEmpty)
     assert(iter.next() == LocalDate.parse("2020-01-27"))
@@ -105,72 +97,13 @@ class ScheduleDateIteratorSpec extends org.scalatest.flatspec.AnyFlatSpec {
     assertThrows[NoSuchElementException](iter.next())
   }
 
-  it should "create custom iterator" in {
-    val iter = ScheduleDateIterator(
-      startDate   = LocalDate.parse("2020-01-01"),
-      endDate     = LocalDate.parse("2020-03-31"),
-      months      = Nil,
-      daysOfMonth = Nil,
-      daysOfWeek  = Nil,
-      dates       = Seq(
-        LocalDate.parse("2019-12-15"),
-        LocalDate.parse("2020-01-15"),
-        LocalDate.parse("2020-01-20"),
-        LocalDate.parse("2020-02-20"),
-        LocalDate.parse("2020-03-30"),
-        LocalDate.parse("2020-04-01"),
-        LocalDate.parse("2020-04-02")
-      )
-    )
-
-    assert(iter.nonEmpty)
-    assert(iter.next() == LocalDate.parse("2020-01-15"))
-    assert(iter.next() == LocalDate.parse("2020-01-20"))
-    assert(iter.next() == LocalDate.parse("2020-02-20"))
-    assert(iter.next() == LocalDate.parse("2020-03-30"))
-    assertThrows[NoSuchElementException](iter.next())
-  }
-
-  it should "create monthly with custom iterator" in {
-    val iter = ScheduleDateIterator(
-      startDate   = LocalDate.parse("2020-01-01"),
-      endDate     = LocalDate.parse("2020-03-31"),
-      months      = Nil,
-      daysOfMonth = Seq(1, 15),
-      daysOfWeek  = Nil,
-      dates       = Seq(
-        LocalDate.parse("2019-12-15"),
-        LocalDate.parse("2020-01-15"),
-        LocalDate.parse("2020-01-21"),
-        LocalDate.parse("2020-02-22"),
-        LocalDate.parse("2020-03-30"),
-        LocalDate.parse("2020-04-01"),
-        LocalDate.parse("2020-04-02")
-      )
-    )
-
-    assert(iter.nonEmpty)
-    assert(iter.next() == LocalDate.parse("2020-01-01"))
-    assert(iter.next() == LocalDate.parse("2020-01-15"))
-    assert(iter.next() == LocalDate.parse("2020-01-21"))
-    assert(iter.next() == LocalDate.parse("2020-02-01"))
-    assert(iter.next() == LocalDate.parse("2020-02-15"))
-    assert(iter.next() == LocalDate.parse("2020-02-22"))
-    assert(iter.next() == LocalDate.parse("2020-03-01"))
-    assert(iter.next() == LocalDate.parse("2020-03-15"))
-    assert(iter.next() == LocalDate.parse("2020-03-30"))
-    assertThrows[NoSuchElementException](iter.next())
-  }
-
   it should "create empty iterator" in {
-    val iter = ScheduleDateIterator(
+    val iter = CronDateIterator(
       startDate   = LocalDate.parse("2020-03-31"),
       endDate     = LocalDate.parse("2020-01-01"), // endDate < startDate
       months      = Nil,
       daysOfMonth = Nil,
-      daysOfWeek  = Nil,
-      dates       = Seq(LocalDate.parse("2020-01-15"))
-    )
+      daysOfWeek  = Nil)
 
     assert(iter.isEmpty)
     assertThrows[NoSuchElementException](iter.next())

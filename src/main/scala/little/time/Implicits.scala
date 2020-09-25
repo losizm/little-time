@@ -24,8 +24,6 @@ import TimePrecision._
 
 /** Provides extension methods to `java.time`. */
 object Implicits {
-  private val startOfDay = LocalTime.parse("00:00")
-
   /** Provides ordering for `java.time.Duration`. */
   implicit val durationOrdering: Ordering[Duration] = (a, b) => a.compareTo(b)
 
@@ -370,7 +368,7 @@ object Implicits {
       localTimeOrdering.max(time, other)
 
     /** Gets time truncated to day. */
-    def atStartOfDay: LocalTime = startOfDay
+    def atStartOfDay: LocalTime = LocalTime.MIN
 
     /**
      * Gets time adjusted to end of day.
@@ -516,7 +514,7 @@ object Implicits {
 
     /** Gets date-time adjusted to first day of year. */
     def atStartOfYear: LocalDateTime =
-      LocalDateTime.of(dateTime.toLocalDate.atStartOfYear, startOfDay)
+      LocalDateTime.of(dateTime.toLocalDate.atStartOfYear, LocalTime.MIN)
 
     /**
      * Gets date-time adjusted to last day of year.
@@ -528,7 +526,7 @@ object Implicits {
 
     /** Gets date-time adjusted to first day of month. */
     def atStartOfMonth: LocalDateTime =
-      LocalDateTime.of(dateTime.toLocalDate.atStartOfMonth, startOfDay)
+      LocalDateTime.of(dateTime.toLocalDate.atStartOfMonth, LocalTime.MIN)
 
     /**
      * Gets date-time adjusted to last day of month.
@@ -551,7 +549,7 @@ object Implicits {
      * @param firstDay first day of week
      */
     def atStartOfWeek(firstDay: DayOfWeek): LocalDateTime =
-      LocalDateTime.of(dateTime.toLocalDate.atStartOfWeek(firstDay), startOfDay)
+      LocalDateTime.of(dateTime.toLocalDate.atStartOfWeek(firstDay), LocalTime.MIN)
 
     /**
      * Gets date-time adjusted to last day of week.

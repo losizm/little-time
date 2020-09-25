@@ -15,330 +15,108 @@
  */
 package little.time
 
-import java.time._
+import java.time.{ LocalDate, LocalDateTime, LocalTime }
 
-import scala.math.Ordered.orderingToOrdered
+import Implicits.localDateTimeOrdering
 
-import Implicits._
-
-/**
- * Defines ''cron''-like utility for specifying times at which ''something''
- * should occur.
- *
- * A `Schedule` may specify `months`, `daysOfMonth`, `daysOfWeek`, `dates`, and
- * `times`. To constrain it to a finite period, its effective `start` and `end`
- * are always specified.
- *
- * {{{
- * import java.time.DayOfWeek._
- * import java.time.LocalTime
- * import java.time.Month._
- *
- * import little.time.Schedule
- * import little.time.Implicits._
- *
- * // Create schedule that:
- * //   - starts on Jan 15
- * //   - ends before noon on Apr 15
- * //   - includes Jan, Feb, and Apr
- * //   - includes 1st and 15th of each month
- * //   - occurs at midnight and noon
- * val schedule = Schedule(
- *   start       = "2020-01-15T00:00:00".toLocalDateTime,
- *   end         = "2020-04-15T11:59:59".toLocalDateTime,
- *   months      = Seq(JANUARY, FEBRUARY, APRIL),
- *   daysOfMonth = Seq(1, 15),
- *   times       = Seq(LocalTime.MIDNIGHT, LocalTime.NOON)
- * )
- * }}}
- *
- * A `Schedule` is an `Iterable[LocalDateTime]`, so there are various ways to
- * access its times.
- *
- * {{{
- * // Zip scheduled times with indices and print each
- * schedule.zipWithIndex.foreach {
- *   case (time, index) => println(s"\$index: \$time")
- * }
- *
- * // Filter to times that are on Wednesday
- * val humpDays = schedule.filter(_.getDayOfWeek == WEDNESDAY)
- * }}}
- *
- * And there are other utilities provided for working with a schedule.
- *
- * {{{
- * // Add Mondays and Fridays to schedule
- * val moreDays = schedule.withDaysOfWeek(MONDAY, FRIDAY)
- *
- * // Get next scheduled time after specified time
- * val nextTime = moreDays.next("2020-02-01T12:00:01".toLocalDateTime)
- * }}}
- */
-sealed trait Schedule extends Iterable[LocalDateTime] {
-  /** Gets effective start. */
-  def start: LocalDateTime
-
-  /** Gets effective end. */
-  def end: LocalDateTime
-
-  /** Gets times. */
-  def times: Seq[LocalTime]
-
-  /** Gets days of month. */
-  def daysOfMonth: Seq[Int]
-
-  /** Gets months. */
-  def months: Seq[Month]
-
-  /** Gets days of week. */
-  def daysOfWeek: Seq[DayOfWeek]
-
-  /** Gets dates. */
-  def dates: Seq[LocalDate]
-
-  /** Gets iterator of scheduled times. */
-  def iterator: Iterator[LocalDateTime]
-
+/** Defines utility for scheduled times. */
+trait Schedule {
   /**
-   * Gets next scheduled time.
+   * Gets scheduled times in given period.
    *
-   * @param after time after which to check
+   * @param start start of period
+   * @param end   end of period
+   *
+   * @note Both `start` and `end` are inclusive.
    */
-  def next(after: LocalDateTime = LocalDateTime.now()): Option[LocalDateTime] =
-    iterator.find(after.isBefore)
+  def between(start: LocalDateTime, end: LocalDateTime): Iterator[LocalDateTime]
 
   /**
-   * Creates new schedule by replacing start and end.
+   * Gets scheduled times in given period.
    *
-   * @param start start
-   * @param end end
+   * ''Equivalent to:'' `between(start.atTime(LocalTime.MIN), end.atTime(LocalTime.MAX))`
+   *
+   * @param start start of period
+   * @param end   end of period
+   *
+   * @note Both `start` and `end` are inclusive.
+   */
+  def between(start: LocalDate, end: LocalDate): Iterator[LocalDateTime] =
+    between(start.atTime(LocalTime.MIN), end.atTime(LocalTime.MAX))
+
+  /**
+   * Gets next scheduled time after given time.
+   *
+   * @param after time after which scheduled time occurs
+   */
+  def next(after: LocalDateTime = LocalDateTime.now()): Option[LocalDateTime] = {
+    val iter = between(after.plusNanos(1), LocalDateTime.MAX)
+
+    iter.hasNext match {
+      case true  => Some(iter.next())
+      case false => None
+    }
+  }
+
+  /**
+   * Creates new schedule by combining supplied schedule.
+   *
+   * @param other schedule
    *
    * @return new schedule
    */
-  def withEffective(start: LocalDateTime, end: LocalDateTime): Schedule
+  def combine(other: Schedule): Schedule =
+    new CombinedSchedule(this, other)
 
   /**
-   * Creates new schedule by replacing start.
+   * Creates new schedule by adding supplied scheduled time.
    *
-   * @param start start
+   * @param time schedule time
    *
    * @return new schedule
    */
-  def withStart(start: LocalDateTime): Schedule
+  def add(time: LocalDateTime): Schedule =
+    new CombinedSchedule(this, Schedule(time))
 
   /**
-   * Creates new schedule by replacing end.
+   * Creates new schedule by combining supplied schedule.
    *
-   * @param end end
+   * @param other schedule
    *
    * @return new schedule
+   *
+   * @note Alias to `combine`
    */
-  def withEnd(end: LocalDateTime): Schedule
+  def ++(other: Schedule): Schedule = combine(other)
 
   /**
-   * Creates new schedule by replacing times.
+   * Creates new schedule by adding supplied scheduled time.
    *
-   * @param times times
-   *
-   * @return new schedule
-   */
-  def withTimes(times: Seq[LocalTime]): Schedule
-
-  /**
-   * Creates new schedule by replacing times.
-   *
-   * @param one  time
-   * @param more additional times
+   * @param time schedule time
    *
    * @return new schedule
+   *
+   * @note Alias to `add`
    */
-  def withTimes(one: LocalTime, more: LocalTime*): Schedule =
-    withTimes(one +: more)
-
-  /**
-   * Creates new schedule by replacing days of month.
-   *
-   * @param days days of month
-   *
-   * @return new schedule
-   */
-  def withDaysOfMonth(days: Seq[Int]): Schedule
-
-  /**
-   * Creates new schedule by replacing days of month.
-   *
-   * @param one  day of month
-   * @param more additional days of month
-   *
-   * @return new schedule
-   */
-  def withDaysOfMonth(one: Int, more: Int*): Schedule =
-    withDaysOfMonth(one +: more)
-
-  /**
-   * Creates new schedule by replacing months.
-   *
-   * @param months months
-   *
-   * @return new schedule
-   */
-  def withMonths(months: Seq[Month]): Schedule
-
-  /**
-   * Creates new schedule by replacing months.
-   *
-   * @param one  month
-   * @param more additional months
-   *
-   * @return new schedule
-   */
-  def withMonths(one: Month, more: Month*): Schedule =
-    withMonths(one +: more)
-
-  /**
-   * Creates new schedule by replacing days of week.
-   *
-   * @param days days of week
-   *
-   * @return new schedule
-   */
-  def withDaysOfWeek(days: Seq[DayOfWeek]): Schedule
-
-  /**
-   * Creates new schedule by replacing days of week.
-   *
-   * @param one  day of week
-   * @param more additional days of week
-   *
-   * @return new schedule
-   */
-  def withDaysOfWeek(one: DayOfWeek, more: DayOfWeek*): Schedule =
-    withDaysOfWeek(one +: more)
-
-  /**
-   * Creates new schedule by replacing dates.
-   *
-   * @param dates dates
-   *
-   * @return new schedule
-   */
-  def withDates(dates: Seq[LocalDate]): Schedule
-
-  /**
-   * Creates new schedule by replacing dates.
-   *
-   * @param one  date
-   * @param more additional dates
-   *
-   * @return new schedule
-   */
-  def withDates(one: LocalDate, more: LocalDate*): Schedule =
-    withDates(one +: more)
+  def +(time: LocalDateTime): Schedule = add(time)
 }
 
 /** Provides `Schedule` factory. */
 object Schedule {
   /**
-   * Creates schedule with supplied attributes.
+   * Creates schedule with supplied times.
    *
-   * @param start       start
-   * @param end         end
-   * @param times       times
-   * @param daysOfMonth days of month
-   * @param months      months
-   * @param daysOfWeek  days of week
-   * @param dates       dates
+   * @param times schedule times
    */
-  def apply(
-    start: LocalDateTime,
-    end: LocalDateTime,
-    times: Seq[LocalTime] = Seq(LocalTime.MIDNIGHT),
-    daysOfMonth: Seq[Int] = Nil,
-    months: Seq[Month] = Nil,
-    daysOfWeek: Seq[DayOfWeek] = Nil,
-    dates: Seq[LocalDate] = Nil
-  ): Schedule =
-    StandardSchedule(
-      start,
-      end,
-      times.isEmpty match {
-        case true  => Seq(LocalTime.MIDNIGHT)
-        case false => SortedSeq(times)
-      },
-      SortedSeq(daysOfMonth),
-      SortedSeq(months),
-      SortedSeq(daysOfWeek),
-      SortedSeq(dates)
-    )
-}
+  def apply(times: Seq[LocalDateTime]): Schedule =
+    new SeqSchedule(SortedSeq(times))
 
-private case class StandardSchedule(
-  start: LocalDateTime,
-  end: LocalDateTime,
-  times: Seq[LocalTime],
-  daysOfMonth: Seq[Int],
-  months: Seq[Month],
-  daysOfWeek: Seq[DayOfWeek],
-  dates: Seq[LocalDate]
-) extends Schedule {
-  require(start != null && end != null)
-  require(daysOfMonth.forall(day => day >= 1 && day <= 31))
-
-  private lazy val isKnownEmpty =
-    dates.isEmpty && (daysOfMonth.isEmpty || months.isEmpty || daysOfWeek.nonEmpty match {
-      case true  => false
-      case false =>
-        daysOfMonth.dropWhile(_ < 29) match {
-          case Nil  => false
-          case days => days.forall(day => months.forall(_.maxLength < day))
-        }
-    })
-
-  def iterator = isKnownEmpty match {
-    case true  => Iterator.empty
-    case false =>
-      dateIterator
-        .flatMap(date => times.map(date.atTime))
-        .filter(time => time >= start && time <= end)
-  }
-
-  def withEffective(start: LocalDateTime, end: LocalDateTime) =
-    copy(start = start, end = end)
-
-  def withStart(start: LocalDateTime) =
-    copy(start = start)
-
-  def withEnd(end: LocalDateTime) =
-    copy(end = end)
-
-  def withTimes(times: Seq[LocalTime]) =
-    copy(times = times.isEmpty match {
-      case true  => Seq(LocalTime.MIDNIGHT)
-      case false => SortedSeq(times)
-    })
-
-  def withDaysOfMonth(days: Seq[Int]) =
-    copy(daysOfMonth = SortedSeq(days))
-
-  def withMonths(months: Seq[Month]) =
-    copy(months = SortedSeq(months))
-
-  def withDaysOfWeek(days: Seq[DayOfWeek]) =
-    copy(daysOfWeek = SortedSeq(days))
-
-  def withDates(dates: Seq[LocalDate]) =
-    copy(dates = SortedSeq(dates))
-
-  override lazy val toString = s"StandardSchedule(start=$start,end=$end,isEmpty=$isEmpty)"
-
-  private def dateIterator =
-    ScheduleDateIterator(
-      start.toLocalDate,
-      end.toLocalDate,
-      months,
-      daysOfMonth,
-      daysOfWeek,
-      dates
-    )
+  /**
+   * Creates schedule with supplied times.
+   *
+   * @param one  schedule time
+   * @param more additional scheduled times
+   */
+  def apply(one: LocalDateTime, more: LocalDateTime*): Schedule =
+    new SeqSchedule(SortedSeq(one +: more))
 }
