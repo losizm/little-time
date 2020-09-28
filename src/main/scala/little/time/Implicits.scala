@@ -25,52 +25,62 @@ import TimePrecision._
 /** Provides extension methods to `java.time`. */
 object Implicits {
   /** Provides ordering for `java.time.Duration`. */
-  implicit val durationOrdering: Ordering[Duration] = (a, b) => a.compareTo(b)
+  implicit val durationOrdering: Ordering[Duration] =
+    (a, b) => a.compareTo(b)
 
   /** Provides ordering for `java.time.YearMonth`. */
-  implicit val yearMonthOrdering: Ordering[YearMonth] = (a, b) => a.compareTo(b)
+  implicit val yearMonthOrdering: Ordering[YearMonth] =
+    (a, b) => a.compareTo(b)
 
   /** Provides ordering for `java.time.LocalDate`. */
-  implicit val localDateOrdering: Ordering[LocalDate] = (a, b) => a.compareTo(b)
+  implicit val localDateOrdering: Ordering[LocalDate] =
+    (a, b) => a.compareTo(b)
 
   /** Provides ordering for `java.time.LocalTime`. */
-  implicit val localTimeOrdering: Ordering[LocalTime] = (a, b) => a.compareTo(b)
+  implicit val localTimeOrdering: Ordering[LocalTime] =
+    (a, b) => a.compareTo(b)
 
   /** Provides ordering for `java.time.LocalDateTime`. */
-  implicit val localDateTimeOrdering: Ordering[LocalDateTime] = (a, b) => a.compareTo(b)
+  implicit val localDateTimeOrdering: Ordering[LocalDateTime] =
+    (a, b) => a.compareTo(b)
 
   /** Provides extension methods to `java.time.Duration` */
   implicit class DurationType(private val duration: Duration) extends AnyVal {
     /** Gets negated duration. */
-    def unary_- : Duration = duration.negated()
+    def unary_- : Duration =
+      duration.negated()
 
     /**
      * Gets duration with specified amount added.
      *
      * @param amount duration to add
      */
-    def +(amount: Duration): Duration = duration.plus(amount)
+    def +(amount: Duration): Duration =
+      duration.plus(amount)
 
     /**
      * Gets duration with specified amount subtracted.
      *
      * @param amount duration to subtract
      */
-    def -(amount: Duration): Duration = duration.minus(amount)
+    def -(amount: Duration): Duration =
+      duration.minus(amount)
 
     /**
      * Gets duration after multiplication.
      *
      * @param n number by which duration is multiplied
      */
-    def *(n: Long): Duration = duration.multipliedBy(n)
+    def *(n: Long): Duration =
+      duration.multipliedBy(n)
 
     /**
      * Gets duration after division.
      *
      * @param n number by which duration is divided
      */
-    def /(n: Long): Duration = duration.dividedBy(n)
+    def /(n: Long): Duration =
+      duration.dividedBy(n)
 
     /**
      * Compares to other duration and returns the lesser value.
@@ -110,28 +120,32 @@ object Implicits {
   /** Provides extension methods to `java.time.Period` */
   implicit class PeriodType(private val period: Period) extends AnyVal {
     /** Gets negated period. */
-    def unary_- : Period = period.negated()
+    def unary_- : Period =
+      period.negated()
 
     /**
      * Gets period with specified amount added.
      *
      * @param amount period to add
      */
-    def +(amount: Period): Period = period.plus(amount)
+    def +(amount: Period): Period =
+      period.plus(amount)
 
     /**
      * Gets period with specified amount subtracted.
      *
      * @param amount period to subtract
      */
-    def -(amount: Period): Period = period.minus(amount)
+    def -(amount: Period): Period =
+      period.minus(amount)
 
     /**
      * Gets duration after multiplication.
      *
      * @param n number by which period is multiplied
      */
-    def *(n: Int): Period = period.multipliedBy(n)
+    def *(n: Int): Period =
+      period.multipliedBy(n)
   }
 
   /** Provides extension methods to `java.time.YearMonth` */
@@ -141,28 +155,32 @@ object Implicits {
      *
      * @param months number of months
      */
-    def +(months: Long): YearMonth = month.plusMonths(months)
+    def +(months: Long): YearMonth =
+      month.plusMonths(months)
 
     /**
      * Gets month with specified number of months subtracted.
      *
      * @param months number of months
      */
-    def -(months: Long): YearMonth = month.minusMonths(months)
+    def -(months: Long): YearMonth =
+      month.minusMonths(months)
 
     /**
      * Gets month with specified amount added.
      *
      * @param amount temporal amount
      */
-    def +(amount: TemporalAmount): YearMonth = month.plus(amount)
+    def +(amount: TemporalAmount): YearMonth =
+      month.plus(amount)
 
     /**
      * Gets month with specified amount subtracted.
      *
      * @param amount temporal amount
      */
-    def -(amount: TemporalAmount): YearMonth = month.minus(amount)
+    def -(amount: TemporalAmount): YearMonth =
+      month.minus(amount)
 
     /**
      * Compares to other month and returns the lesser value.
@@ -181,10 +199,12 @@ object Implicits {
       yearMonthOrdering.max(month, other)
 
     /** Gets month adjusted to first month of year. */
-    def atStartOfYear: YearMonth = month.withMonth(1)
+    def atStartOfYear: YearMonth =
+      month.withMonth(1)
 
     /** Gets month adjusted to last month of year. */
-    def atEndOfYear: YearMonth = month.withMonth(12)
+    def atEndOfYear: YearMonth =
+      month.withMonth(12)
 
     /**
      * Creates iterator to end month (inclusive).
@@ -210,35 +230,40 @@ object Implicits {
   /** Provides extension methods to `java.time.LocalDate` */
   implicit class LocalDateType(private val date: LocalDate) extends AnyVal {
     /** Gets `YearMonth` part of date. */
-    def toYearMonth: YearMonth = YearMonth.of(date.getYear, date.getMonth)
+    def toYearMonth: YearMonth =
+      YearMonth.of(date.getYear, date.getMonth)
 
     /**
      * Gets date with specified number of days added.
      *
      * @param days number of days
      */
-    def +(days: Long): LocalDate = date.plusDays(days)
+    def +(days: Long): LocalDate =
+      date.plusDays(days)
 
     /**
      * Gets date with specified number of days subtracted.
      *
      * @param days number of days
      */
-    def -(days: Long): LocalDate = date.minusDays(days)
+    def -(days: Long): LocalDate =
+      date.minusDays(days)
 
     /**
      * Gets date with specified amount added.
      *
      * @param amount temporal amount
      */
-    def +(amount: TemporalAmount): LocalDate = date.plus(amount)
+    def +(amount: TemporalAmount): LocalDate =
+      date.plus(amount)
 
     /**
      * Gets date with specified amount subtracted.
      *
      * @param amount temporal amount
      */
-    def -(amount: TemporalAmount): LocalDate = date.minus(amount)
+    def -(amount: TemporalAmount): LocalDate =
+      date.minus(amount)
 
     /**
      * Compares to other date and returns the lesser value.
@@ -277,7 +302,8 @@ object Implicits {
      *
      * @note Sunday is first day of week.
      */
-    def atStartOfWeek: LocalDate = atStartOfWeek(SUNDAY)
+    def atStartOfWeek: LocalDate =
+      atStartOfWeek(SUNDAY)
 
     /**
      * Gets date adjusted to specified first day of week.
@@ -298,7 +324,8 @@ object Implicits {
      *
      * @note Saturday is last day of week.
      */
-    def atEndOfWeek: LocalDate = atEndOfWeek(SATURDAY)
+    def atEndOfWeek: LocalDate =
+      atEndOfWeek(SATURDAY)
 
     /**
      * Gets date adjusted to last day of week.
@@ -342,7 +369,8 @@ object Implicits {
      *
      * @param amount temporal amount
      */
-    def +(amount: TemporalAmount): LocalTime = time.plus(amount)
+    def +(amount: TemporalAmount): LocalTime =
+      time.plus(amount)
 
     /**
      * Gets time with specified amount subtracted.
@@ -368,7 +396,8 @@ object Implicits {
       localTimeOrdering.max(time, other)
 
     /** Gets time truncated to day. */
-    def atStartOfDay: LocalTime = LocalTime.MIN
+    def atStartOfDay: LocalTime =
+      LocalTime.MIN
 
     /**
      * Gets time adjusted to end of day.
@@ -421,7 +450,7 @@ object Implicits {
      * @param precision time precision
      */
     def atEndOfSecond(implicit precision: TimePrecision): LocalTime =
-      (precision > Seconds) match {
+      precision > Seconds match {
         case true  => LocalTime.of(time.getHour, time.getMinute, time.getSecond, precision.limit.getNano)
         case false => throw new DateTimeException(s"Precision unit too large: $precision")
       }
@@ -436,7 +465,7 @@ object Implicits {
      * @param precision time precision
      */
     def atEndOfMillis(implicit precision: TimePrecision): LocalTime =
-      (precision > Milliseconds) match {
+      precision > Milliseconds match {
         case true  => LocalTime.of(time.getHour, time.getMinute, time.getSecond, precision.limit.getNano)
         case false => throw new DateTimeException(s"Precision unit too large: $precision")
       }
@@ -451,7 +480,7 @@ object Implicits {
      * @param precision time precision
      */
     def atEndOfMicros(implicit precision: TimePrecision): LocalTime =
-      (precision > Microseconds) match {
+      precision > Microseconds match {
         case true  => LocalTime.of(time.getHour, time.getMinute, time.getSecond, precision.limit.getNano)
         case false => throw new DateTimeException(s"Precision unit too large: $precision")
       }
@@ -480,21 +509,24 @@ object Implicits {
   /** Provides extension methods to `java.time.LocalDateTime` */
   implicit class LocalDateTimeType(private val dateTime: LocalDateTime) extends AnyVal {
     /** Gets `YearMonth` part of date-time. */
-    def toYearMonth: YearMonth = YearMonth.of(dateTime.getYear, dateTime.getMonth)
+    def toYearMonth: YearMonth =
+      YearMonth.of(dateTime.getYear, dateTime.getMonth)
 
     /**
      * Gets date-time with specified amount added.
      *
      * @param amount temporal amount
      */
-    def +(amount: TemporalAmount): LocalDateTime = dateTime.plus(amount)
+    def +(amount: TemporalAmount): LocalDateTime =
+      dateTime.plus(amount)
 
     /**
      * Gets date-time with specified amount subtracted.
      *
      * @param amount temporal amount
      */
-    def -(amount: TemporalAmount): LocalDateTime = dateTime.minus(amount)
+    def -(amount: TemporalAmount): LocalDateTime =
+      dateTime.minus(amount)
 
     /**
      * Compares to other date-time and returns the lesser value.
@@ -556,7 +588,8 @@ object Implicits {
      *
      * @note Saturday is last day of week.
      */
-    def atEndOfWeek(implicit precision: TimePrecision): LocalDateTime = atEndOfWeek(SATURDAY)
+    def atEndOfWeek(implicit precision: TimePrecision): LocalDateTime =
+      atEndOfWeek(SATURDAY)
 
     /**
      * Gets date-time adjusted to specified last day of week.
@@ -663,22 +696,27 @@ object Implicits {
   /** Provides time-related extension methods to `java.lang.String`. */
   implicit class TimeStringType(private val string: String) extends AnyVal {
     /** Converts formatted string to `Period`. */
-    def toPeriod: Period = Period.parse(string)
+    def toPeriod: Period =
+      Period.parse(string)
 
     /** Converts formatted string to `Duration`. */
-    def toDuration: Duration = Duration.parse(string)
+    def toDuration: Duration =
+      Duration.parse(string)
 
     /** Converts formatted string to `YearMonth`. */
-    def toYearMonth: YearMonth = YearMonth.parse(string)
+    def toYearMonth: YearMonth =
+      YearMonth.parse(string)
 
     /** Converts formatted string to `LocalDate`. */
-    def toLocalDate: LocalDate = LocalDate.parse(string)
+    def toLocalDate: LocalDate =
+      LocalDate.parse(string)
 
     /** Converts formatted string to `LocalTime`. */
-    def toLocalTime: LocalTime = LocalTime.parse(string)
+    def toLocalTime: LocalTime =
+      LocalTime.parse(string)
 
     /** Converts formatted string to `LocalDateTime`. */
-    def toLocalDateTime: LocalDateTime = LocalDateTime.parse(string)
+    def toLocalDateTime: LocalDateTime =
+      LocalDateTime.parse(string)
   }
 }
-

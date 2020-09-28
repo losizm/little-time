@@ -23,42 +23,41 @@ class PeriodTypeSpec extends org.scalatest.flatspec.AnyFlatSpec {
   private val period = Period.of(1, 3, 7)
 
   "Period" should "be negated" in {
-    assert(-period == Period.of(-1, -3, -7))
-    assert(period == -Period.of(-1, -3, -7))
+    assert(-period ==  Period.of(-1, -3, -7))
+    assert( period == -Period.of(-1, -3, -7))
   }
 
   it should "have period added" in {
-    assert(period + Period.ofYears(1) == Period.of(2, 3, 7))
+    assert(period + Period.ofYears(1)  == Period.of(2, 3, 7))
     assert(period + Period.ofMonths(3) == Period.of(1, 6, 7))
-    assert(period + Period.ofWeeks(2) == Period.of(1, 3, 21))
-    assert(period + Period.ofDays(7) == Period.of(1, 3, 14))
-    assert(period + period == Period.of(2, 6, 14))
+    assert(period + Period.ofWeeks(2)  == Period.of(1, 3, 21))
+    assert(period + Period.ofDays(7)   == Period.of(1, 3, 14))
+    assert(period + period             == Period.of(2, 6, 14))
 
-    assert(period + Period.ofYears(-1) == Period.of(0, 3, 7))
+    assert(period + Period.ofYears(-1)  == Period.of(0, 3, 7))
     assert(period + Period.ofMonths(-3) == Period.of(1, 0, 7))
-    assert(period + Period.ofWeeks(-2) == Period.of(1, 3, -7))
-    assert(period + Period.ofDays(-7) == Period.of(1, 3, 0))
-    assert(period + -period == Period.of(0, 0, 0))
+    assert(period + Period.ofWeeks(-2)  == Period.of(1, 3, -7))
+    assert(period + Period.ofDays(-7)   == Period.of(1, 3, 0))
+    assert(period + -period             == Period.of(0, 0, 0))
   }
 
   it should "have period subtracted" in {
-    assert(period - Period.ofYears(1) == Period.of(0, 3, 7))
+    assert(period - Period.ofYears(1)  == Period.of(0, 3, 7))
     assert(period - Period.ofMonths(3) == Period.of(1, 0, 7))
-    assert(period - Period.ofWeeks(2) == Period.of(1, 3, -7))
-    assert(period - Period.ofDays(7) == Period.of(1, 3, 0))
-    assert(period - period == Period.of(0, 0, 0))
+    assert(period - Period.ofWeeks(2)  == Period.of(1, 3, -7))
+    assert(period - Period.ofDays(7)   == Period.of(1, 3, 0))
+    assert(period - period             == Period.of(0, 0, 0))
 
-    assert(period - Period.ofYears(-1) == Period.of(2, 3, 7))
+    assert(period - Period.ofYears(-1)  == Period.of(2, 3, 7))
     assert(period - Period.ofMonths(-3) == Period.of(1, 6, 7))
-    assert(period - Period.ofWeeks(-2) == Period.of(1, 3, 21))
-    assert(period - Period.ofDays(-7) == Period.of(1, 3, 14))
-    assert(period - -period == Period.of(2, 6, 14))
+    assert(period - Period.ofWeeks(-2)  == Period.of(1, 3, 21))
+    assert(period - Period.ofDays(-7)   == Period.of(1, 3, 14))
+    assert(period - -period             == Period.of(2, 6, 14))
   }
 
   it should "have period multiplied" in {
-    assert(period * 0 == period.multipliedBy(0))
-    assert(period * 3 == period.multipliedBy(3))
+    assert(period *  0 == period.multipliedBy(0))
+    assert(period *  3 == period.multipliedBy(3))
     assert(period * -6 == period.multipliedBy(-6))
   }
 }
-

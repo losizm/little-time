@@ -40,17 +40,17 @@ class TimePrecisionSpec extends org.scalatest.flatspec.AnyFlatSpec {
   }
 
   it should "be compared" in {
-    assert { Hours < Minutes }
-    assert { Minutes < Seconds }
-    assert { Seconds < Milliseconds }
+    assert { Hours        < Minutes }
+    assert { Minutes      < Seconds }
+    assert { Seconds      < Milliseconds }
     assert { Milliseconds < Microseconds }
     assert { Microseconds < Nanoseconds }
 
-    assert { Nanoseconds > Microseconds }
+    assert { Nanoseconds  > Microseconds }
     assert { Microseconds > Milliseconds }
     assert { Milliseconds > Seconds }
-    assert { Seconds > Minutes }
-    assert { Minutes > Hours }
+    assert { Seconds      > Minutes }
+    assert { Minutes      > Hours }
 
     assert { FractionalSeconds(1) < FractionalSeconds(2) }
     assert { FractionalSeconds(2) < FractionalSeconds(3) }
@@ -72,7 +72,7 @@ class TimePrecisionSpec extends org.scalatest.flatspec.AnyFlatSpec {
 
     assert { Milliseconds == FractionalSeconds(3) }
     assert { Microseconds == FractionalSeconds(6) }
-    assert { Nanoseconds == FractionalSeconds(9) }
+    assert { Nanoseconds  == FractionalSeconds(9) }
 
     assert { (1 to 9).forall(Hours        < FractionalSeconds(_)) }
     assert { (1 to 9).forall(Minutes      < FractionalSeconds(_)) }
@@ -102,4 +102,3 @@ class TimePrecisionSpec extends org.scalatest.flatspec.AnyFlatSpec {
     assertThrows[IllegalArgumentException] { FractionalSeconds(11) }
   }
 }
-

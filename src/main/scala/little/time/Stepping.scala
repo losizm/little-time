@@ -30,7 +30,8 @@ private object Stepping {
           val value = nextValue
           nextValue = stepper(value)
           value
-        case false => throw new NoSuchElementException()
+        case false =>
+          throw new NoSuchElementException()
       }
   }
 
@@ -52,7 +53,7 @@ private object Stepping {
     require(!step.isZero, s"Invalid step: $step")
 
     val stepper = (x: Duration) => x.plus(step)
-    val tester = (a: Duration, b: Duration) => a.compareTo(b) * { if (step.isNegative) -1 else 1 } <= 0
+    val tester  = (a: Duration, b: Duration) => a.compareTo(b) * { if (step.isNegative) -1 else 1 } <= 0
 
     new SteppingIterator(start, end, stepper, tester)
   }
@@ -61,7 +62,7 @@ private object Stepping {
     require(!step.isZero, s"Invalid step: $step")
 
     val stepper = (x: Duration) => x.plus(step)
-    val tester = (a: Duration, b: Duration) => a.compareTo(b) * { if (step.isNegative) -1 else 1 } < 0
+    val tester  = (a: Duration, b: Duration) => a.compareTo(b) * { if (step.isNegative) -1 else 1 } < 0
 
     new SteppingIterator(start, end, stepper, tester)
   }
@@ -70,7 +71,7 @@ private object Stepping {
     require(!step.isZero, s"Invalid step: $step")
 
     val stepper = (x: YearMonth) => x.plus(step)
-    val tester = (a: YearMonth, b: YearMonth) => a.compareTo(b) * { if (step.isNegative) -1 else 1 } <= 0
+    val tester  = (a: YearMonth, b: YearMonth) => a.compareTo(b) * { if (step.isNegative) -1 else 1 } <= 0
 
     new SteppingIterator(start, end, stepper, tester)
   }
@@ -79,7 +80,7 @@ private object Stepping {
     require(!step.isZero, s"Invalid step: $step")
 
     val stepper = (x: YearMonth) => x.plus(step)
-    val tester = (a: YearMonth, b: YearMonth) => a.compareTo(b) * { if (step.isNegative) -1 else 1 } < 0
+    val tester  = (a: YearMonth, b: YearMonth) => a.compareTo(b) * { if (step.isNegative) -1 else 1 } < 0
 
     new SteppingIterator(start, end, stepper, tester)
   }
@@ -88,7 +89,7 @@ private object Stepping {
     require(!step.isZero, s"Invalid step: $step")
 
     val stepper = (x: LocalDate) => x.plus(step)
-    val tester = (a: LocalDate, b: LocalDate) => a.compareTo(b) * { if (step.isNegative) -1 else 1 } <= 0
+    val tester  = (a: LocalDate, b: LocalDate) => a.compareTo(b) * { if (step.isNegative) -1 else 1 } <= 0
 
     new SteppingIterator(start, end, stepper, tester)
   }
@@ -97,7 +98,7 @@ private object Stepping {
     require(!isZero(step), s"Invalid step: $step")
 
     val stepper = (x: LocalDate) => x.plus(step)
-    val tester = (a: LocalDate, b: LocalDate) => a.compareTo(b) * { if (step.isNegative) -1 else 1 } < 0
+    val tester  = (a: LocalDate, b: LocalDate) => a.compareTo(b) * { if (step.isNegative) -1 else 1 } < 0
 
     new SteppingIterator(start, end, stepper, tester)
   }
@@ -106,7 +107,7 @@ private object Stepping {
     require(!step.isZero, s"Invalid step: $step")
 
     val stepper = (x: LocalTime) => x.plus(step)
-    val tester = (a: LocalTime, b: LocalTime) => a.compareTo(b) * { if (step.isNegative) -1 else 1 } <= 0
+    val tester  = (a: LocalTime, b: LocalTime) => a.compareTo(b) * { if (step.isNegative) -1 else 1 } <= 0
 
     new SteppingIterator(start, end, stepper, tester)
   }
@@ -115,7 +116,7 @@ private object Stepping {
     require(!isZero(step), s"Invalid step: $step")
 
     val stepper = (x: LocalTime) => x.plus(step)
-    val tester = (a: LocalTime, b: LocalTime) => a.compareTo(b) * { if (step.isNegative) -1 else 1 } < 0
+    val tester  = (a: LocalTime, b: LocalTime) => a.compareTo(b) * { if (step.isNegative) -1 else 1 } < 0
 
     new SteppingIterator(start, end, stepper, tester)
   }
@@ -124,7 +125,7 @@ private object Stepping {
     require(!isZero(step), s"Invalid step: $step")
 
     val stepper = (x: LocalDateTime) => x.plus(step)
-    val tester = (a: LocalDateTime, b: LocalDateTime) => a.compareTo(b) * { if (isNegative(step)) -1 else 1 } <= 0
+    val tester  = (a: LocalDateTime, b: LocalDateTime) => a.compareTo(b) * { if (isNegative(step)) -1 else 1 } <= 0
 
     new SteppingIterator(start, end, stepper, tester)
   }
@@ -133,9 +134,8 @@ private object Stepping {
     require(!isZero(step), s"Invalid step: $step")
 
     val stepper = (x: LocalDateTime) => x.plus(step)
-    val tester = (a: LocalDateTime, b: LocalDateTime) => a.compareTo(b) * { if (isNegative(step)) -1 else 1 } < 0
+    val tester  = (a: LocalDateTime, b: LocalDateTime) => a.compareTo(b) * { if (isNegative(step)) -1 else 1 } < 0
 
     new SteppingIterator(start, end, stepper, tester)
   }
 }
-

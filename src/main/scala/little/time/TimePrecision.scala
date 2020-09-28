@@ -33,22 +33,22 @@ sealed trait TimePrecision extends Ordered[TimePrecision] {
 
 /** Provides available `TimePrecision`s .*/
 object TimePrecision {
-  /** Indicates time precision of hours. */
+  /** Specifies time precision of hours. */
   case object Hours extends TimePrecision {
     val limit: LocalTime = LocalTime.of(23, 0, 0)
   }
 
-  /** Indicates time precision of minutes. */
+  /** Specifies time precision of minutes. */
   case object Minutes extends TimePrecision {
     val limit: LocalTime = LocalTime.of(23, 59, 0)
   }
 
-  /** Indicates time precision of seconds. */
+  /** Specifies time precision of seconds. */
   case object Seconds extends TimePrecision {
     val limit: LocalTime = LocalTime.of(23, 59, 59)
   }
 
-  /** Indicates time precision of fractional seconds. */
+  /** Specifies time precision of fractional seconds. */
   trait FractionalSeconds extends TimePrecision {
     /** Number of digits in fractional seconds. */
     def scale: Int
@@ -85,26 +85,28 @@ object TimePrecision {
      * @param fsecs fractional seconds
      */
     def unapply(fsecs: FractionalSeconds): Option[Int] =
-      if (fsecs == null ) None
-      else Some(fsecs.scale)
+      fsecs == null match {
+        case true  => None
+        case false => Some(fsecs.scale)
+      }
   }
 
   /**
-   * Indicates time precision of milliseconds.
+   * Specifies time precision of milliseconds.
    *
    * @note Scale is 3.
    */
   case object Milliseconds extends FractionalSeconds { val scale: Int = 3 }
 
   /**
-   * Indicates time precision of microseconds.
+   * Specifies time precision of microseconds.
    *
    * @note Scale is 6.
    */
   case object Microseconds extends FractionalSeconds { val scale: Int = 6 }
 
   /**
-   * Indicates time precision of nanoseconds.
+   * Specifies time precision of nanoseconds.
    *
    * @note Scale is 9.
    */
@@ -117,4 +119,3 @@ object TimePrecision {
   private case object FractionalSeconds7 extends FractionalSeconds { val scale: Int = 7 }
   private case object FractionalSeconds8 extends FractionalSeconds { val scale: Int = 8 }
 }
-

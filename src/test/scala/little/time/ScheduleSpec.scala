@@ -23,8 +23,7 @@ class ScheduleSpec extends org.scalatest.flatspec.AnyFlatSpec {
       "2020-10-31T12:00".toLocalDateTime,
       "2020-12-15T12:00".toLocalDateTime,
       "2020-10-31T18:00".toLocalDateTime,
-      "2020-10-15T18:00".toLocalDateTime
-    )
+      "2020-10-15T18:00".toLocalDateTime)
 
     val between = schedule.between("2020-10-15T12:01".toLocalDateTime, "2020-12-15T12:00".toLocalDateTime)
     assert(between.next() == "2020-10-15T18:00".toLocalDateTime)
@@ -45,13 +44,12 @@ class ScheduleSpec extends org.scalatest.flatspec.AnyFlatSpec {
       "2020-10-15T18:00".toLocalDateTime,
       "2020-10-31T12:00".toLocalDateTime,
       "2020-10-31T18:00".toLocalDateTime,
-      "2020-12-15T12:00".toLocalDateTime
-    ) ++ Schedule(
+      "2020-12-15T12:00".toLocalDateTime) ++
+      Schedule(
       "2020-10-15T18:00".toLocalDateTime,
       "2020-10-31T11:00".toLocalDateTime,
       "2020-10-31T18:30".toLocalDateTime,
-      "2020-12-15T00:00".toLocalDateTime
-    )
+      "2020-12-15T00:00".toLocalDateTime)
 
     val between = schedule.between("2020-10-15T12:01".toLocalDateTime, "2020-12-15T12:00".toLocalDateTime)
     assert(between.next() == "2020-10-15T18:00".toLocalDateTime)
@@ -69,8 +67,9 @@ class ScheduleSpec extends org.scalatest.flatspec.AnyFlatSpec {
       "2020-10-31T12:00".toLocalDateTime,
       "2020-12-15T12:00".toLocalDateTime,
       "2020-10-31T18:00".toLocalDateTime,
-      "2020-10-15T18:00".toLocalDateTime
-    ) + "2020-10-15T13:00".toLocalDateTime + "2020-10-15T18:15".toLocalDateTime
+      "2020-10-15T18:00".toLocalDateTime) +
+      "2020-10-15T13:00".toLocalDateTime +
+      "2020-10-15T18:15".toLocalDateTime
 
     val between = schedule.between("2020-10-15T12:01".toLocalDateTime, "2020-12-15T12:00".toLocalDateTime)
     assert(between.next() == "2020-10-15T13:00".toLocalDateTime)

@@ -27,64 +27,64 @@ class LocalDateTimeTypeSpec extends org.scalatest.flatspec.AnyFlatSpec {
   "LocalDateTime" should "have duration added" in {
     assert(dateTime + Duration.ofSeconds(1) == LocalDateTime.parse("2019-07-11T12:38:46.123456789"))
     assert(dateTime + Duration.ofMinutes(2) == LocalDateTime.parse("2019-07-11T12:40:45.123456789"))
-    assert(dateTime + Duration.ofHours(31) == LocalDateTime.parse("2019-07-12T19:38:45.123456789"))
-    assert(dateTime + Duration.ofMillis(5) == LocalDateTime.parse("2019-07-11T12:38:45.128456789"))
-    assert(dateTime + Duration.ofNanos(2) == LocalDateTime.parse("2019-07-11T12:38:45.123456791"))
-    assert(dateTime + Duration.ofDays(7) == LocalDateTime.parse("2019-07-18T12:38:45.123456789"))
+    assert(dateTime + Duration.ofHours(31)  == LocalDateTime.parse("2019-07-12T19:38:45.123456789"))
+    assert(dateTime + Duration.ofMillis(5)  == LocalDateTime.parse("2019-07-11T12:38:45.128456789"))
+    assert(dateTime + Duration.ofNanos(2)   == LocalDateTime.parse("2019-07-11T12:38:45.123456791"))
+    assert(dateTime + Duration.ofDays(7)    == LocalDateTime.parse("2019-07-18T12:38:45.123456789"))
 
     assert(dateTime + Duration.ofSeconds(-1) == LocalDateTime.parse("2019-07-11T12:38:44.123456789"))
     assert(dateTime + Duration.ofMinutes(-2) == LocalDateTime.parse("2019-07-11T12:36:45.123456789"))
-    assert(dateTime + Duration.ofHours(-31) == LocalDateTime.parse("2019-07-10T05:38:45.123456789"))
-    assert(dateTime + Duration.ofMillis(-5) == LocalDateTime.parse("2019-07-11T12:38:45.118456789"))
-    assert(dateTime + Duration.ofNanos(-2) == LocalDateTime.parse("2019-07-11T12:38:45.123456787"))
-    assert(dateTime + Duration.ofDays(-7) == LocalDateTime.parse("2019-07-04T12:38:45.123456789"))
+    assert(dateTime + Duration.ofHours(-31)  == LocalDateTime.parse("2019-07-10T05:38:45.123456789"))
+    assert(dateTime + Duration.ofMillis(-5)  == LocalDateTime.parse("2019-07-11T12:38:45.118456789"))
+    assert(dateTime + Duration.ofNanos(-2)   == LocalDateTime.parse("2019-07-11T12:38:45.123456787"))
+    assert(dateTime + Duration.ofDays(-7)    == LocalDateTime.parse("2019-07-04T12:38:45.123456789"))
   }
 
   it should "be have duration subtracted" in {
     assert(dateTime - Duration.ofSeconds(1) == LocalDateTime.parse("2019-07-11T12:38:44.123456789"))
     assert(dateTime - Duration.ofMinutes(2) == LocalDateTime.parse("2019-07-11T12:36:45.123456789"))
-    assert(dateTime - Duration.ofHours(31) == LocalDateTime.parse("2019-07-10T05:38:45.123456789"))
-    assert(dateTime - Duration.ofMillis(5) == LocalDateTime.parse("2019-07-11T12:38:45.118456789"))
-    assert(dateTime - Duration.ofNanos(2) == LocalDateTime.parse("2019-07-11T12:38:45.123456787"))
-    assert(dateTime - Duration.ofDays(7) == LocalDateTime.parse("2019-07-04T12:38:45.123456789"))
+    assert(dateTime - Duration.ofHours(31)  == LocalDateTime.parse("2019-07-10T05:38:45.123456789"))
+    assert(dateTime - Duration.ofMillis(5)  == LocalDateTime.parse("2019-07-11T12:38:45.118456789"))
+    assert(dateTime - Duration.ofNanos(2)   == LocalDateTime.parse("2019-07-11T12:38:45.123456787"))
+    assert(dateTime - Duration.ofDays(7)    == LocalDateTime.parse("2019-07-04T12:38:45.123456789"))
 
     assert(dateTime - Duration.ofSeconds(-1) == LocalDateTime.parse("2019-07-11T12:38:46.123456789"))
     assert(dateTime - Duration.ofMinutes(-2) == LocalDateTime.parse("2019-07-11T12:40:45.123456789"))
-    assert(dateTime - Duration.ofHours(-31) == LocalDateTime.parse("2019-07-12T19:38:45.123456789"))
-    assert(dateTime - Duration.ofMillis(-5) == LocalDateTime.parse("2019-07-11T12:38:45.128456789"))
-    assert(dateTime - Duration.ofNanos(-2) == LocalDateTime.parse("2019-07-11T12:38:45.123456791"))
-    assert(dateTime - Duration.ofDays(-7) == LocalDateTime.parse("2019-07-18T12:38:45.123456789"))
+    assert(dateTime - Duration.ofHours(-31)  == LocalDateTime.parse("2019-07-12T19:38:45.123456789"))
+    assert(dateTime - Duration.ofMillis(-5)  == LocalDateTime.parse("2019-07-11T12:38:45.128456789"))
+    assert(dateTime - Duration.ofNanos(-2)   == LocalDateTime.parse("2019-07-11T12:38:45.123456791"))
+    assert(dateTime - Duration.ofDays(-7)    == LocalDateTime.parse("2019-07-18T12:38:45.123456789"))
   }
 
   "LocalDateTime" should "have period added" in {
-    assert(dateTime + Period.ofDays(1) == LocalDateTime.parse("2019-07-12T12:38:45.123456789"))
-    assert(dateTime + Period.ofDays(2) == LocalDateTime.parse("2019-07-13T12:38:45.123456789"))
-    assert(dateTime + Period.ofDays(31) == LocalDateTime.parse("2019-08-11T12:38:45.123456789"))
+    assert(dateTime + Period.ofDays(1)   == LocalDateTime.parse("2019-07-12T12:38:45.123456789"))
+    assert(dateTime + Period.ofDays(2)   == LocalDateTime.parse("2019-07-13T12:38:45.123456789"))
+    assert(dateTime + Period.ofDays(31)  == LocalDateTime.parse("2019-08-11T12:38:45.123456789"))
     assert(dateTime + Period.ofMonths(5) == LocalDateTime.parse("2019-12-11T12:38:45.123456789"))
-    assert(dateTime + Period.ofWeeks(2) == LocalDateTime.parse("2019-07-25T12:38:45.123456789"))
+    assert(dateTime + Period.ofWeeks(2)  == LocalDateTime.parse("2019-07-25T12:38:45.123456789"))
     assert(dateTime + Period.of(6, 3, 7) == LocalDateTime.parse("2025-10-18T12:38:45.123456789"))
 
-    assert(dateTime + Period.ofDays(-1) == LocalDateTime.parse("2019-07-10T12:38:45.123456789"))
-    assert(dateTime + Period.ofDays(-2) == LocalDateTime.parse("2019-07-09T12:38:45.123456789"))
-    assert(dateTime + Period.ofDays(-11) == LocalDateTime.parse("2019-06-30T12:38:45.123456789"))
-    assert(dateTime + Period.ofMonths(-5) == LocalDateTime.parse("2019-02-11T12:38:45.123456789"))
-    assert(dateTime + Period.ofWeeks(-2) == LocalDateTime.parse("2019-06-27T12:38:45.123456789"))
+    assert(dateTime + Period.ofDays(-1)     == LocalDateTime.parse("2019-07-10T12:38:45.123456789"))
+    assert(dateTime + Period.ofDays(-2)     == LocalDateTime.parse("2019-07-09T12:38:45.123456789"))
+    assert(dateTime + Period.ofDays(-11)    == LocalDateTime.parse("2019-06-30T12:38:45.123456789"))
+    assert(dateTime + Period.ofMonths(-5)   == LocalDateTime.parse("2019-02-11T12:38:45.123456789"))
+    assert(dateTime + Period.ofWeeks(-2)    == LocalDateTime.parse("2019-06-27T12:38:45.123456789"))
     assert(dateTime + Period.of(-6, -3, -7) == LocalDateTime.parse("2013-04-04T12:38:45.123456789"))
   }
 
   it should "be have period subtracted" in {
-    assert(dateTime - Period.ofDays(1) == LocalDateTime.parse("2019-07-10T12:38:45.123456789"))
-    assert(dateTime - Period.ofDays(2) == LocalDateTime.parse("2019-07-09T12:38:45.123456789"))
-    assert(dateTime - Period.ofDays(11) == LocalDateTime.parse("2019-06-30T12:38:45.123456789"))
+    assert(dateTime - Period.ofDays(1)   == LocalDateTime.parse("2019-07-10T12:38:45.123456789"))
+    assert(dateTime - Period.ofDays(2)   == LocalDateTime.parse("2019-07-09T12:38:45.123456789"))
+    assert(dateTime - Period.ofDays(11)  == LocalDateTime.parse("2019-06-30T12:38:45.123456789"))
     assert(dateTime - Period.ofMonths(5) == LocalDateTime.parse("2019-02-11T12:38:45.123456789"))
-    assert(dateTime - Period.ofWeeks(2) == LocalDateTime.parse("2019-06-27T12:38:45.123456789"))
+    assert(dateTime - Period.ofWeeks(2)  == LocalDateTime.parse("2019-06-27T12:38:45.123456789"))
     assert(dateTime - Period.of(6, 3, 7) == LocalDateTime.parse("2013-04-04T12:38:45.123456789"))
 
-    assert(dateTime - Period.ofDays(-1) == LocalDateTime.parse("2019-07-12T12:38:45.123456789"))
-    assert(dateTime - Period.ofDays(-2) == LocalDateTime.parse("2019-07-13T12:38:45.123456789"))
-    assert(dateTime - Period.ofDays(-31) == LocalDateTime.parse("2019-08-11T12:38:45.123456789"))
-    assert(dateTime - Period.ofMonths(-5) == LocalDateTime.parse("2019-12-11T12:38:45.123456789"))
-    assert(dateTime - Period.ofWeeks(-2) == LocalDateTime.parse("2019-07-25T12:38:45.123456789"))
+    assert(dateTime - Period.ofDays(-1)     == LocalDateTime.parse("2019-07-12T12:38:45.123456789"))
+    assert(dateTime - Period.ofDays(-2)     == LocalDateTime.parse("2019-07-13T12:38:45.123456789"))
+    assert(dateTime - Period.ofDays(-31)    == LocalDateTime.parse("2019-08-11T12:38:45.123456789"))
+    assert(dateTime - Period.ofMonths(-5)   == LocalDateTime.parse("2019-12-11T12:38:45.123456789"))
+    assert(dateTime - Period.ofWeeks(-2)    == LocalDateTime.parse("2019-07-25T12:38:45.123456789"))
     assert(dateTime - Period.of(-6, -3, -7) == LocalDateTime.parse("2025-10-18T12:38:45.123456789"))
   }
 
@@ -152,13 +152,13 @@ class LocalDateTimeTypeSpec extends org.scalatest.flatspec.AnyFlatSpec {
 
   it should "be set to start of week" in {
     assert(dateTime.atStartOfWeek == LocalDateTime.parse("2019-07-07T00:00"))
-    assert(dateTime.atStartOfWeek(SUNDAY) == LocalDateTime.parse("2019-07-07T00:00"))
-    assert(dateTime.atStartOfWeek(MONDAY) == LocalDateTime.parse("2019-07-08T00:00"))
-    assert(dateTime.atStartOfWeek(TUESDAY) == LocalDateTime.parse("2019-07-09T00:00"))
+    assert(dateTime.atStartOfWeek(SUNDAY)    == LocalDateTime.parse("2019-07-07T00:00"))
+    assert(dateTime.atStartOfWeek(MONDAY)    == LocalDateTime.parse("2019-07-08T00:00"))
+    assert(dateTime.atStartOfWeek(TUESDAY)   == LocalDateTime.parse("2019-07-09T00:00"))
     assert(dateTime.atStartOfWeek(WEDNESDAY) == LocalDateTime.parse("2019-07-10T00:00"))
-    assert(dateTime.atStartOfWeek(THURSDAY) == LocalDateTime.parse("2019-07-11T00:00"))
-    assert(dateTime.atStartOfWeek(FRIDAY) == LocalDateTime.parse("2019-07-05T00:00"))
-    assert(dateTime.atStartOfWeek(SATURDAY) == LocalDateTime.parse("2019-07-06T00:00"))
+    assert(dateTime.atStartOfWeek(THURSDAY)  == LocalDateTime.parse("2019-07-11T00:00"))
+    assert(dateTime.atStartOfWeek(FRIDAY)    == LocalDateTime.parse("2019-07-05T00:00"))
+    assert(dateTime.atStartOfWeek(SATURDAY)  == LocalDateTime.parse("2019-07-06T00:00"))
   }
 
   it should "be set to start of month" in {
@@ -451,4 +451,3 @@ class LocalDateTimeTypeSpec extends org.scalatest.flatspec.AnyFlatSpec {
     assertThrows[NoSuchElementException](iter.next())
   }
 }
-

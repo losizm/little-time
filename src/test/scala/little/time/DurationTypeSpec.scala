@@ -30,43 +30,43 @@ class DurationTypeSpec extends org.scalatest.flatspec.AnyFlatSpec {
   it should "have duration added" in {
     assert(duration + Duration.ofSeconds(1) == Duration.parse("P33DT5H6M5.123S"))
     assert(duration + Duration.ofMinutes(2) == Duration.parse("P33DT5H8M4.123S"))
-    assert(duration + Duration.ofHours(31) == Duration.parse("P34DT12H6M4.123S"))
-    assert(duration + Duration.ofMillis(5) == Duration.parse("P33DT5H6M4.128S"))
-    assert(duration + Duration.ofNanos(2) == Duration.parse("P33DT5H6M4.123000002S"))
-    assert(duration + Duration.ofDays(7) == Duration.parse("P40DT5H6M4.123S"))
+    assert(duration + Duration.ofHours(31)  == Duration.parse("P34DT12H6M4.123S"))
+    assert(duration + Duration.ofMillis(5)  == Duration.parse("P33DT5H6M4.128S"))
+    assert(duration + Duration.ofNanos(2)   == Duration.parse("P33DT5H6M4.123000002S"))
+    assert(duration + Duration.ofDays(7)    == Duration.parse("P40DT5H6M4.123S"))
 
     assert(duration + Duration.ofSeconds(-1) == Duration.parse("P33DT5H6M3.123S"))
     assert(duration + Duration.ofMinutes(-2) == Duration.parse("P33DT5H4M4.123S"))
-    assert(duration + Duration.ofHours(-31) == Duration.parse("P31DT22H6M4.123S"))
-    assert(duration + Duration.ofMillis(-5) == Duration.parse("P33DT5H6M4.118S"))
-    assert(duration + Duration.ofNanos(-2) == Duration.parse("P33DT5H6M4.122999998S"))
-    assert(duration + Duration.ofDays(-7) == Duration.parse("P26DT5H6M4.123S"))
+    assert(duration + Duration.ofHours(-31)  == Duration.parse("P31DT22H6M4.123S"))
+    assert(duration + Duration.ofMillis(-5)  == Duration.parse("P33DT5H6M4.118S"))
+    assert(duration + Duration.ofNanos(-2)   == Duration.parse("P33DT5H6M4.122999998S"))
+    assert(duration + Duration.ofDays(-7)    == Duration.parse("P26DT5H6M4.123S"))
   }
 
   it should "have duration subtracted" in {
     assert(duration - Duration.ofSeconds(1) == Duration.parse("P33DT5H6M3.123S"))
     assert(duration - Duration.ofMinutes(2) == Duration.parse("P33DT5H4M4.123S"))
-    assert(duration - Duration.ofHours(31) == Duration.parse("P31DT22H6M4.123S"))
-    assert(duration - Duration.ofMillis(5) == Duration.parse("P33DT5H6M4.118S"))
-    assert(duration - Duration.ofNanos(2) == Duration.parse("P33DT5H6M4.122999998S"))
-    assert(duration - Duration.ofDays(7) == Duration.parse("P26DT5H6M4.123S"))
+    assert(duration - Duration.ofHours(31)  == Duration.parse("P31DT22H6M4.123S"))
+    assert(duration - Duration.ofMillis(5)  == Duration.parse("P33DT5H6M4.118S"))
+    assert(duration - Duration.ofNanos(2)   == Duration.parse("P33DT5H6M4.122999998S"))
+    assert(duration - Duration.ofDays(7)    == Duration.parse("P26DT5H6M4.123S"))
 
     assert(duration - Duration.ofSeconds(-1) == Duration.parse("P33DT5H6M5.123S"))
     assert(duration - Duration.ofMinutes(-2) == Duration.parse("P33DT5H8M4.123S"))
-    assert(duration - Duration.ofHours(-31) == Duration.parse("P34DT12H6M4.123S"))
-    assert(duration - Duration.ofMillis(-5) == Duration.parse("P33DT5H6M4.128S"))
-    assert(duration - Duration.ofNanos(-2) == Duration.parse("P33DT5H6M4.123000002S"))
-    assert(duration - Duration.ofDays(-7) == Duration.parse("P40DT5H6M4.123S"))
+    assert(duration - Duration.ofHours(-31)  == Duration.parse("P34DT12H6M4.123S"))
+    assert(duration - Duration.ofMillis(-5)  == Duration.parse("P33DT5H6M4.128S"))
+    assert(duration - Duration.ofNanos(-2)   == Duration.parse("P33DT5H6M4.123000002S"))
+    assert(duration - Duration.ofDays(-7)    == Duration.parse("P40DT5H6M4.123S"))
   }
 
   it should "have duration multiplied" in {
-    assert(duration * 0 == duration.multipliedBy(0))
-    assert(duration * 3 == duration.multipliedBy(3))
+    assert(duration *  0 == duration.multipliedBy(0))
+    assert(duration *  3 == duration.multipliedBy(3))
     assert(duration * -6 == duration.multipliedBy(-6))
   }
 
   it should "have duration divided" in {
-    assert(duration / 3 == duration.dividedBy(3))
+    assert(duration /  3 == duration.dividedBy(3))
     assert(duration / -6 == duration.dividedBy(-6))
   }
 
@@ -180,4 +180,3 @@ class DurationTypeSpec extends org.scalatest.flatspec.AnyFlatSpec {
     assertThrows[NoSuchElementException](iter.next())
   }
 }
-

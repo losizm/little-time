@@ -28,54 +28,54 @@ class LocalDateTypeSpec extends org.scalatest.flatspec.AnyFlatSpec {
   }
 
   it should "have days added" in {
-    assert(date + 1 == LocalDate.parse("2019-07-12"))
-    assert(date + 2 == LocalDate.parse("2019-07-13"))
+    assert(date + 1  == LocalDate.parse("2019-07-12"))
+    assert(date + 2  == LocalDate.parse("2019-07-13"))
     assert(date + 31 == LocalDate.parse("2019-08-11"))
 
-    assert(date + -1 == LocalDate.parse("2019-07-10"))
-    assert(date + -2 == LocalDate.parse("2019-07-09"))
+    assert(date + -1  == LocalDate.parse("2019-07-10"))
+    assert(date + -2  == LocalDate.parse("2019-07-09"))
     assert(date + -11 == LocalDate.parse("2019-06-30"))
   }
 
   it should "have days subtracted" in {
-    assert(date - 1 == LocalDate.parse("2019-07-10"))
-    assert(date - 2 == LocalDate.parse("2019-07-09"))
+    assert(date - 1  == LocalDate.parse("2019-07-10"))
+    assert(date - 2  == LocalDate.parse("2019-07-09"))
     assert(date - 11 == LocalDate.parse("2019-06-30"))
 
-    assert(date - -1 == LocalDate.parse("2019-07-12"))
-    assert(date - -2 == LocalDate.parse("2019-07-13"))
+    assert(date - -1  == LocalDate.parse("2019-07-12"))
+    assert(date - -2  == LocalDate.parse("2019-07-13"))
     assert(date - -31 == LocalDate.parse("2019-08-11"))
   }
 
   it should "have period added" in {
-    assert(date + Period.ofDays(1) == LocalDate.parse("2019-07-12"))
-    assert(date + Period.ofDays(2) == LocalDate.parse("2019-07-13"))
-    assert(date + Period.ofDays(31) == LocalDate.parse("2019-08-11"))
+    assert(date + Period.ofDays(1)   == LocalDate.parse("2019-07-12"))
+    assert(date + Period.ofDays(2)   == LocalDate.parse("2019-07-13"))
+    assert(date + Period.ofDays(31)  == LocalDate.parse("2019-08-11"))
     assert(date + Period.ofMonths(5) == LocalDate.parse("2019-12-11"))
-    assert(date + Period.ofWeeks(2) == LocalDate.parse("2019-07-25"))
+    assert(date + Period.ofWeeks(2)  == LocalDate.parse("2019-07-25"))
     assert(date + Period.of(6, 3, 7) == LocalDate.parse("2025-10-18"))
 
-    assert(date + Period.ofDays(-1) == LocalDate.parse("2019-07-10"))
-    assert(date + Period.ofDays(-2) == LocalDate.parse("2019-07-09"))
-    assert(date + Period.ofDays(-11) == LocalDate.parse("2019-06-30"))
-    assert(date + Period.ofMonths(-5) == LocalDate.parse("2019-02-11"))
-    assert(date + Period.ofWeeks(-2) == LocalDate.parse("2019-06-27"))
+    assert(date + Period.ofDays(-1)     == LocalDate.parse("2019-07-10"))
+    assert(date + Period.ofDays(-2)     == LocalDate.parse("2019-07-09"))
+    assert(date + Period.ofDays(-11)    == LocalDate.parse("2019-06-30"))
+    assert(date + Period.ofMonths(-5)   == LocalDate.parse("2019-02-11"))
+    assert(date + Period.ofWeeks(-2)    == LocalDate.parse("2019-06-27"))
     assert(date + Period.of(-6, -3, -7) == LocalDate.parse("2013-04-04"))
   }
 
   it should "have period subtracted" in {
-    assert(date - Period.ofDays(1) == LocalDate.parse("2019-07-10"))
-    assert(date - Period.ofDays(2) == LocalDate.parse("2019-07-09"))
-    assert(date - Period.ofDays(11) == LocalDate.parse("2019-06-30"))
+    assert(date - Period.ofDays(1)   == LocalDate.parse("2019-07-10"))
+    assert(date - Period.ofDays(2)   == LocalDate.parse("2019-07-09"))
+    assert(date - Period.ofDays(11)  == LocalDate.parse("2019-06-30"))
     assert(date - Period.ofMonths(5) == LocalDate.parse("2019-02-11"))
-    assert(date - Period.ofWeeks(2) == LocalDate.parse("2019-06-27"))
+    assert(date - Period.ofWeeks(2)  == LocalDate.parse("2019-06-27"))
     assert(date - Period.of(6, 3, 7) == LocalDate.parse("2013-04-04"))
 
-    assert(date - Period.ofDays(-1) == LocalDate.parse("2019-07-12"))
-    assert(date - Period.ofDays(-2) == LocalDate.parse("2019-07-13"))
-    assert(date - Period.ofDays(-31) == LocalDate.parse("2019-08-11"))
-    assert(date - Period.ofMonths(-5) == LocalDate.parse("2019-12-11"))
-    assert(date - Period.ofWeeks(-2) == LocalDate.parse("2019-07-25"))
+    assert(date - Period.ofDays(-1)     == LocalDate.parse("2019-07-12"))
+    assert(date - Period.ofDays(-2)     == LocalDate.parse("2019-07-13"))
+    assert(date - Period.ofDays(-31)    == LocalDate.parse("2019-08-11"))
+    assert(date - Period.ofMonths(-5)   == LocalDate.parse("2019-12-11"))
+    assert(date - Period.ofWeeks(-2)    == LocalDate.parse("2019-07-25"))
     assert(date - Period.of(-6, -3, -7) == LocalDate.parse("2025-10-18"))
   }
 
@@ -190,25 +190,25 @@ class LocalDateTypeSpec extends org.scalatest.flatspec.AnyFlatSpec {
   }
 
   it should "be set to start of week" in {
-    assert(date.atStartOfWeek == LocalDate.parse("2019-07-07"))
-    assert(date.atStartOfWeek(SUNDAY) == LocalDate.parse("2019-07-07"))
-    assert(date.atStartOfWeek(MONDAY) == LocalDate.parse("2019-07-08"))
-    assert(date.atStartOfWeek(TUESDAY) == LocalDate.parse("2019-07-09"))
+    assert(date.atStartOfWeek            == LocalDate.parse("2019-07-07"))
+    assert(date.atStartOfWeek(SUNDAY)    == LocalDate.parse("2019-07-07"))
+    assert(date.atStartOfWeek(MONDAY)    == LocalDate.parse("2019-07-08"))
+    assert(date.atStartOfWeek(TUESDAY)   == LocalDate.parse("2019-07-09"))
     assert(date.atStartOfWeek(WEDNESDAY) == LocalDate.parse("2019-07-10"))
-    assert(date.atStartOfWeek(THURSDAY) == LocalDate.parse("2019-07-11"))
-    assert(date.atStartOfWeek(FRIDAY) == LocalDate.parse("2019-07-05"))
-    assert(date.atStartOfWeek(SATURDAY) == LocalDate.parse("2019-07-06"))
+    assert(date.atStartOfWeek(THURSDAY)  == LocalDate.parse("2019-07-11"))
+    assert(date.atStartOfWeek(FRIDAY)    == LocalDate.parse("2019-07-05"))
+    assert(date.atStartOfWeek(SATURDAY)  == LocalDate.parse("2019-07-06"))
   }
 
   it should "be set to end of week" in {
-    assert(date.atEndOfWeek == LocalDate.parse("2019-07-13"))
-    assert(date.atEndOfWeek(SUNDAY) == LocalDate.parse("2019-07-14"))
-    assert(date.atEndOfWeek(MONDAY) == LocalDate.parse("2019-07-15"))
-    assert(date.atEndOfWeek(TUESDAY) == LocalDate.parse("2019-07-16"))
+    assert(date.atEndOfWeek            == LocalDate.parse("2019-07-13"))
+    assert(date.atEndOfWeek(SUNDAY)    == LocalDate.parse("2019-07-14"))
+    assert(date.atEndOfWeek(MONDAY)    == LocalDate.parse("2019-07-15"))
+    assert(date.atEndOfWeek(TUESDAY)   == LocalDate.parse("2019-07-16"))
     assert(date.atEndOfWeek(WEDNESDAY) == LocalDate.parse("2019-07-17"))
-    assert(date.atEndOfWeek(THURSDAY) == LocalDate.parse("2019-07-11"))
-    assert(date.atEndOfWeek(FRIDAY) == LocalDate.parse("2019-07-12"))
-    assert(date.atEndOfWeek(SATURDAY) == LocalDate.parse("2019-07-13"))
+    assert(date.atEndOfWeek(THURSDAY)  == LocalDate.parse("2019-07-11"))
+    assert(date.atEndOfWeek(FRIDAY)    == LocalDate.parse("2019-07-12"))
+    assert(date.atEndOfWeek(SATURDAY)  == LocalDate.parse("2019-07-13"))
   }
 
   it should "be set to start of month" in {
@@ -227,4 +227,3 @@ class LocalDateTypeSpec extends org.scalatest.flatspec.AnyFlatSpec {
     assert(date.atEndOfYear == LocalDate.parse("2019-12-31"))
   }
 }
-

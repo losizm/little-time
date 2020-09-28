@@ -29,20 +29,20 @@ class TimeStringTypeSpec extends org.scalatest.flatspec.AnyFlatSpec {
   }
 
   it should "be converted to LocalTime" in {
-    assert("12:38".toLocalTime == LocalTime.parse("12:38"))
-    assert("12:38:45".toLocalTime == LocalTime.parse("12:38:45"))
-    assert("12:38:45.1".toLocalTime == LocalTime.parse("12:38:45.1"))
-    assert("12:38:45.123".toLocalTime == LocalTime.parse("12:38:45.123"))
-    assert("12:38:45.123456".toLocalTime == LocalTime.parse("12:38:45.123456"))
+    assert("12:38".toLocalTime              == LocalTime.parse("12:38"))
+    assert("12:38:45".toLocalTime           == LocalTime.parse("12:38:45"))
+    assert("12:38:45.1".toLocalTime         == LocalTime.parse("12:38:45.1"))
+    assert("12:38:45.123".toLocalTime       == LocalTime.parse("12:38:45.123"))
+    assert("12:38:45.123456".toLocalTime    == LocalTime.parse("12:38:45.123456"))
     assert("12:38:45.123456789".toLocalTime == LocalTime.parse("12:38:45.123456789"))
   }
 
   it should "be converted to LocalDateTime" in {
-    assert("2019-07-11T12:38".toLocalDateTime == LocalDateTime.parse("2019-07-11T12:38"))
-    assert("2019-07-11T12:38:45".toLocalDateTime == LocalDateTime.parse("2019-07-11T12:38:45"))
-    assert("2019-07-11T12:38:45.1".toLocalDateTime == LocalDateTime.parse("2019-07-11T12:38:45.1"))
-    assert("2019-07-11T12:38:45.123".toLocalDateTime == LocalDateTime.parse("2019-07-11T12:38:45.123"))
-    assert("2019-07-11T12:38:45.123456".toLocalDateTime == LocalDateTime.parse("2019-07-11T12:38:45.123456"))
+    assert("2019-07-11T12:38".toLocalDateTime              == LocalDateTime.parse("2019-07-11T12:38"))
+    assert("2019-07-11T12:38:45".toLocalDateTime           == LocalDateTime.parse("2019-07-11T12:38:45"))
+    assert("2019-07-11T12:38:45.1".toLocalDateTime         == LocalDateTime.parse("2019-07-11T12:38:45.1"))
+    assert("2019-07-11T12:38:45.123".toLocalDateTime       == LocalDateTime.parse("2019-07-11T12:38:45.123"))
+    assert("2019-07-11T12:38:45.123456".toLocalDateTime    == LocalDateTime.parse("2019-07-11T12:38:45.123456"))
     assert("2019-07-11T12:38:45.123456789".toLocalDateTime == LocalDateTime.parse("2019-07-11T12:38:45.123456789"))
   }
 
@@ -54,4 +54,3 @@ class TimeStringTypeSpec extends org.scalatest.flatspec.AnyFlatSpec {
     assert("P5DT3H2M1.999S".toDuration == Duration.parse("P5DT3H2M1.999S"))
   }
 }
-
