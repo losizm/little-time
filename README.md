@@ -9,7 +9,7 @@ The Scala library that provides extension methods to _java.time_.
 To use **little-time**, add it as a dependency to your project:
 
 ```scala
-libraryDependencies += "com.github.losizm" %% "little-time" % "0.6.1"
+libraryDependencies += "com.github.losizm" %% "little-time" % "0.7.0"
 ```
 
 ## A Taste of little-time
@@ -30,26 +30,12 @@ val start = "2018-04-01".toLocalDate
 val end   = "2018-07-01".toLocalDate
 
 // Iterate over dates, one day at a time (end inclusive)
-start iterateTo end foreach { date =>
+start.iterateTo(end).foreach { date =>
   println(s"$date is on a ${date.getDayOfWeek}")
 }
 
 // Iterate over dates, one day at a time (end exclusive)
-start iterateUntil end foreach { date =>
-  println(s"$date is on a ${date.getDayOfWeek}")
-}
-```
-
-Or, if you prefer, use the `~>` and `~>|` shorthands.
-
-```scala
-// Iterate over dates, one day at a time (end inclusive)
-start ~> end foreach { date =>
-  println(s"$date is on a ${date.getDayOfWeek}")
-}
-
-// Iterate over dates, one day at a time (end exclusive)
-start ~>| end foreach { date =>
+start.iterateUntil(end).foreach { date =>
   println(s"$date is on a ${date.getDayOfWeek}")
 }
 ```
@@ -71,12 +57,12 @@ is negative, you step backward to the end date.
 ```scala
 import java.time.temporal.ChronoUnit
 
-val _1day = Period.ofDays(1)
+val oneDay    = Period.ofDays(1)
 val startDate = LocalDate.now()
 val endDate   = startDate - 7
 
 // Iterator backward over dates, 1 day at a time
-startDate.iterateUntil(endDate, -_1day) foreach { date =>
+startDate.iterateUntil(endDate, -oneDay).foreach { date =>
   val daysAgo = date.until(startDate, ChronoUnit.DAYS)
   println(s"$date is $daysAgo days(s) ago")
 }
@@ -94,7 +80,7 @@ val startMonth = "2018-04".toYearMonth
 val endMonth   = "2020-03".toYearMonth
 
 // Iterate over months, 3 months at a time
-startMonth.iterateTo(endMonth, Period.ofMonths(3)) foreach { month =>
+startMonth.iterateTo(endMonth, Period.ofMonths(3)).foreach { month =>
   val diff = startMonth.until(month, ChronoUnit.MONTHS)
   println(s"$month is $diff month(s) after $startMonth")
 }
@@ -104,8 +90,8 @@ val startTime = "09:00".toLocalTime
 val endTime   = "17:00".toLocalTime
 
 // Iterate over times, 15 minutes at a time
-startTime.iterateUntil(endTime, Duration.ofMinutes(15)) foreach {
-  case time if time.getMinute == 0  => println(s"It's $time, back to work")
+startTime.iterateUntil(endTime, Duration.ofMinutes(15)).foreach {
+  case time if time.getMinute ==  0 => println(s"It's $time, back to work")
   case time if time.getMinute == 45 => println(s"It's $time, take a break")
   case time                         => println(s"It's $time")
 }
@@ -114,12 +100,12 @@ startTime.iterateUntil(endTime, Duration.ofMinutes(15)) foreach {
 For `LocalDateTime`, you can specify either a `Period` or `Duration` by which to step.
 
 ```scala
-val _2yrs = Period.ofYears(2)
+val twoYears      = Period.ofYears(2)
 val startDateTime = "2019-06-15T12:30:45".toLocalDateTime
-val endDateTime   = startDateTime + _2yrs * 3
+val endDateTime   = startDateTime + twoYears * 3
 
 // Iterate over 6 years, 2 years at a time
-startDateTime.iterateTo(endDateTime, _2yrs).foreach { dateTime =>
+startDateTime.iterateTo(endDateTime, twoYears).foreach { dateTime =>
   println(s"Date-time is $dateTime")
 }
 
@@ -154,15 +140,15 @@ val now = LocalDate.now()
 
 // Get first and last date of current month
 val startOfMonth = now.atStartOfMonth
-val endOfMonth = now.atEndOfMonth
+val endOfMonth   = now.atEndOfMonth
 
 // Get first and last date of current week
 val startOfWeek = now.atStartOfWeek
-val endOfWeek = now.atEndOfWeek
+val endOfWeek   = now.atEndOfWeek
 
 // Print first and last date of current week, with Monday as first day of week
-println { now.atStartOfWeek(MONDAY) }
-println { now.atEndOfWeek(SUNDAY) }
+println(now.atStartOfWeek(MONDAY))
+println(now.atEndOfWeek(SUNDAY))
 ```
 
 ### Setting Times to Common Boundaries
@@ -182,15 +168,15 @@ val now = LocalTime.now()
 
 // Get first and last millisecond of current hour
 val startOfHour = now.atStartOfHour
-val endOfHour = now.atEndOfHour
+val endOfHour   = now.atEndOfHour
 
 // Get first and last millisecond of current minute
 val startOfMinute = now.atStartOfMinute
-val endOfMinute = now.atEndOfMinute
+val endOfMinute   = now.atEndOfMinute
 
 // Get first and last millisecond of current second
 val startOfSecond = now.atStartOfSecond
-val endOfSecond = now.atEndOfSecond
+val endOfSecond   = now.atEndOfSecond
 ```
 
 The same applies to `LocalDateTime`, which is both a date and a time. You must
@@ -202,64 +188,44 @@ implicit val precision = TimePrecision.Seconds
 
 val dateTime = "2017-05-12T15:23:17.123456789".toLocalDateTime
 
-// Get last second of year
+// Set to last second of year
 val endOfYear = dateTime.atEndOfYear
 
-// Get last microsecond of day
+// Set to last microsecond of day
 val endOfDay = dateTime.atEndOfDay(TimePrecision.Microseconds)
 ```
 
-## Working with Schedule
+## Working with CronSchedule
 
-A `Schedule` offers a _cron_-like utility for specifying times at which
-_something_ should occur. In particular, it may specify `months`, `daysOfMonth`,
-`daysOfWeek`, `dates`, and `times`. To constrain a schedule to a finite period,
-its effective `start` and `end` are always specified.
+A `CronSchedule` provides a _cron_-like utility for specifying times at which
+_something_ should occur.
 
 ```scala
-import java.time.DayOfWeek._
-import java.time.LocalTime
-import java.time.Month._
+import java.time.{ LocalDateTime, Period }
+import java.time.LocalTime.NOON
+import java.time.Month.{ OCTOBER, NOVEMBER, DECEMBER }
 
-import little.time.Schedule
+import little.time.CronSchedule
 import little.time.Implicits._
 
-// Create schedule that:
-//   - starts on Jan 15
-//   - ends before noon on Apr 15
-//   - includes Jan, Feb, and Apr
-//   - includes 1st and 15th of each month
-//   - occurs at midnight and noon
-val schedule = Schedule(
-  start       = "2020-01-15T00:00:00".toLocalDateTime,
-  end         = "2020-04-15T11:59:59".toLocalDateTime,
-  months      = Seq(JANUARY, FEBRUARY, APRIL),
+// Create schedule
+val schedule = CronSchedule(
+  times       = Seq(NOON),
   daysOfMonth = Seq(1, 15),
-  times       = Seq(LocalTime.MIDNIGHT, LocalTime.NOON)
-)
-```
+  months      = Seq(OCTOBER, NOVEMBER, DECEMBER),
+  daysOfWeek  = Nil)
 
-A `Schedule` is an `Iterable[LocalDateTime]`, so there are various ways to
-access its times.
+val start = LocalDateTime.now()
+val end   = start + Period.ofYears(1)
 
-```scala
-// Zip scheduled times with indices and print each
-schedule.zipWithIndex.foreach {
-  case (time, index) => println(s"$index: $time")
+// Iterate over scheduled times
+schedule.between(start, end).foreach { time =>
+  println(s"${time.toLocalDate} at ${time.toLocalTime}")
 }
 
-// Filter times to those on Wednesdays
-val humpDays = schedule.filter(_.getDayOfWeek == WEDNESDAY)
-```
-
-And there are other utilities provided for working with a schedule.
-
-```scala
-// Add Mondays and Fridays to schedule
-val moreDays = schedule.withDaysOfWeek(MONDAY, FRIDAY)
-
-// Get next scheduled time after specified time
-val nextTime = moreDays.next("2020-02-01T12:00:01".toLocalDateTime)
+// Create schedule using cron-like syntax
+val altSchedule = CronSchedule("0 12 1,15 Oct-Dec *")
+assert(altSchedule.next(start) == schedule.next(start))
 ```
 
 ## API Documentation
@@ -268,6 +234,5 @@ See [scaladoc](https://losizm.github.io/little-time/latest/api/little/time/index
 for additional details.
 
 ## License
-**little-time** is licensed under the Apache License, Version 2. See LICENSE file
-for more information.
-
+**little-time** is licensed under the Apache License, Version 2. See LICENSE
+file for more information.
