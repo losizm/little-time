@@ -234,5 +234,5 @@ See [scaladoc](https://losizm.github.io/little-time/latest/api/little/time/index
 for additional details.
 
 ## License
-**little-time** is licensed under the Apache License, Version 2. See LICENSE
-file for more information.
+**little-time** is licensed under the Apache License, Version 2. See [LICENSE](LICENSE)
+for more information.
