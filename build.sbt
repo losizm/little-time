@@ -1,6 +1,6 @@
 organization := "com.github.losizm"
 name         := "little-time"
-version      := "1.0.0-SNAPSHOT"
+version      := "1.0.0"
 description  := "The Scala library that provides extension methods to java.time"
 homepage     := Some(url("https://github.com/losizm/little-time"))
 licenses     := List("Apache License, Version 2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt"))
