@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Carlos Conyers
+ * Copyright 2021 Carlos Conyers
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@ package little.time
 
 import java.time.{ Period, YearMonth }
 
-import Implicits._
+import Implicits.*
 
-class YearMonthTypeSpec extends org.scalatest.flatspec.AnyFlatSpec {
+class YearMonthTypeSpec extends org.scalatest.flatspec.AnyFlatSpec:
   private val month = YearMonth.parse("2019-07")
 
   "YearMonth" should "be compared to other" in {
@@ -184,4 +184,3 @@ class YearMonthTypeSpec extends org.scalatest.flatspec.AnyFlatSpec {
   it should "be set to end of year" in {
     assert(month.atEndOfYear == YearMonth.parse("2019-12"))
   }
-}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Carlos Conyers
+ * Copyright 2021 Carlos Conyers
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,10 @@ package little.time
 
 import java.time.{ DayOfWeek, LocalDate, Period, YearMonth }
 
-import Implicits._
-import DayOfWeek._
+import Implicits.*
+import DayOfWeek.*
 
-class LocalDateTypeSpec extends org.scalatest.flatspec.AnyFlatSpec {
+class LocalDateTypeSpec extends org.scalatest.flatspec.AnyFlatSpec:
   private val date =  LocalDate.parse("2019-07-11")
 
   "LocalDate" should "be converted to YearMonth" in {
@@ -226,4 +226,3 @@ class LocalDateTypeSpec extends org.scalatest.flatspec.AnyFlatSpec {
   it should "be set to end of year" in {
     assert(date.atEndOfYear == LocalDate.parse("2019-12-31"))
   }
-}

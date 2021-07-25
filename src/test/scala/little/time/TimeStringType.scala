@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Carlos Conyers
+ * Copyright 2021 Carlos Conyers
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
  */
 package little.time
 
-import java.time._
+import java.time.*
 
 import Implicits.TimeStringType
 
-class TimeStringTypeSpec extends org.scalatest.flatspec.AnyFlatSpec {
+class TimeStringTypeSpec extends org.scalatest.flatspec.AnyFlatSpec:
   "String" should "be converted to YearMonth" in {
     assert("2019-07".toYearMonth == YearMonth.parse("2019-07"))
   }
@@ -53,4 +53,3 @@ class TimeStringTypeSpec extends org.scalatest.flatspec.AnyFlatSpec {
   it should "be converted to Duration" in {
     assert("P5DT3H2M1.999S".toDuration == Duration.parse("P5DT3H2M1.999S"))
   }
-}

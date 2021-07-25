@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Carlos Conyers
+ * Copyright 2021 Carlos Conyers
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@ package little.time
 
 import java.time.Duration
 
-import Implicits._
+import Implicits.*
 
-class DurationTypeSpec extends org.scalatest.flatspec.AnyFlatSpec {
+class DurationTypeSpec extends org.scalatest.flatspec.AnyFlatSpec:
   private val duration = Duration.parse("P33DT5H6M4.123S")
 
   "Duration" should "be negated" in {
@@ -179,4 +179,3 @@ class DurationTypeSpec extends org.scalatest.flatspec.AnyFlatSpec {
     assert(!iter.hasNext)
     assertThrows[NoSuchElementException](iter.next())
   }
-}

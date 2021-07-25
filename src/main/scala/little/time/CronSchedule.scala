@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Carlos Conyers
+ * Copyright 2021 Carlos Conyers
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,16 +15,16 @@
  */
 package little.time
 
-import java.time._
+import java.time.*
 
 import scala.math.Ordered.orderingToOrdered
 
-import Implicits._
+import Implicits.*
 
 /**
- * Defines ''cron''-like utility for scheduled times.
+ * Defines _cron_-like utility for scheduled times.
  *
- * == Scheduled Times ===
+ * ## Scheduled Times
  *
  * `CronSchedule` determines its scheduled times using fields, where each field
  * is a sorted sequence of distinct values specifying a component of time.
@@ -69,7 +69,7 @@ import Implicits._
  * val altSchedule = CronSchedule("0 12 1,15 Oct-Dec *")
  * }}}
  */
-sealed trait CronSchedule extends Schedule {
+sealed trait CronSchedule extends Schedule:
   /** Gets times. */
   def times: Seq[LocalTime]
 
@@ -161,14 +161,13 @@ sealed trait CronSchedule extends Schedule {
    */
   def withDaysOfWeek(one: DayOfWeek, more: DayOfWeek*): CronSchedule =
     withDaysOfWeek(one +: more)
-}
 
 /**
  * Provides `CronSchedule` factory.
  *
  * @define asterisk *
  */
-object CronSchedule {
+object CronSchedule:
   private val any    = "\\*(?:/(\\w+))?".r
   private val single = "(\\w+)".r
   private val range  = "(\\w+)-(\\w+)(?:/(\\w+))?".r
@@ -176,7 +175,7 @@ object CronSchedule {
   /**
    * Creates cron schedule with supplied fields.
    *
-   * === Examples ===
+   * ### Examples
    *
    * {{{
    * import java.time.DayOfWeek.SUNDAY
@@ -214,13 +213,14 @@ object CronSchedule {
     times:       Seq[LocalTime] = Seq(LocalTime.MIDNIGHT),
     daysOfMonth: Seq[Int]       = Nil,
     months:      Seq[Month]     = Nil,
-    daysOfWeek:  Seq[DayOfWeek] = Nil): CronSchedule =
+    daysOfWeek:  Seq[DayOfWeek] = Nil
+  ): CronSchedule =
 
     CronScheduleImpl(
-      times.isEmpty match {
+      times.isEmpty match
         case true  => Seq(LocalTime.MIDNIGHT)
         case false => SortedSeq(times)
-      },
+      ,
       SortedSeq(daysOfMonth),
       SortedSeq(months),
       SortedSeq(daysOfWeek))
@@ -228,7 +228,7 @@ object CronSchedule {
   /**
    * Parses fields to cron schedule.
    *
-   * == Cron Schedule Format ==
+   * ## Cron Schedule Format
    *
    * The formatted cron schedule must be supplied as either 5 or 6 fields
    * separated by space. If only 5 fields are supplied, then `second` defaults
@@ -241,7 +241,7 @@ object CronSchedule {
    * | `hour`       | Yes      | `0-23` |
    * | `dayOfMonth` | Yes      | `1-31` |
    * | `month`      | Yes      | `1-12` or `Jan-Dec` |
-   * | `dayOfWeek`  | Yes      | `0-7` or `Sun-Sat` ''(Note: Sun is `0` or `7`)'' |
+   * | `dayOfWeek`  | Yes      | `0-7` or `Sun-Sat` _(Note: Sun is `0` or `7`)_ |
    *
    * A field may be specified as an asterisk (`*`), which denotes `first-last`
    * based on field's allowed values.
@@ -255,13 +255,13 @@ object CronSchedule {
    *
    * A step may be appended to a range to include only incremental values in
    * range, where range and step are supplied as `<range>/<step>`. For example,
-   * `0-30/5` in `minute` indicates ''every 5 minutes from 0 to 30'', which
+   * `0-30/5` in `minute` indicates _every 5 minutes from 0 to 30_, which
    * alternatively could be specified as `0,5,10,15,20,25,30`.
    *
    * A step may also be appended to an asterisk to apply similar semantics. For
-   * example, `*``/15` in `minute` indicates ''every 15 minutes''.
+   * example, `*``/15` in `minute` indicates _every 15 minutes_.
    *
-   * === Examples ===
+   * ### Examples
    *
    * {{{
    * // At 8 AM every Sunday
@@ -285,24 +285,23 @@ object CronSchedule {
    * schedule
    */
   def apply(fields: String): CronSchedule =
-    fields.trim.split("\\s+") match {
+    fields.trim.split("\\s+") match
       case Array(second, minute, hour, dayOfMonth, month, dayOfWeek) =>
-        new CronScheduleImpl(
+        CronScheduleImpl(
           SortedSeq(parseTime(second, minute, hour)),
           SortedSeq(parseDayOfMonth(dayOfMonth)),
           SortedSeq(parseMonth(month)),
           SortedSeq(parseDayOfWeek(dayOfWeek)))
 
       case Array(minute, hour, dayOfMonth, month, dayOfWeek) =>
-        new CronScheduleImpl(
+        CronScheduleImpl(
           SortedSeq(parseTime("0", minute, hour)),
           SortedSeq(parseDayOfMonth(dayOfMonth)),
           SortedSeq(parseMonth(month)),
           SortedSeq(parseDayOfWeek(dayOfWeek)))
 
       case _ =>
-        throw new IllegalArgumentException("Invalid cron syntax")
-    }
+        throw IllegalArgumentException("Invalid cron syntax")
 
   private def parseTime(second: String, minute: String, hour: String): Seq[LocalTime] =
     parseSecond(second).flatMap { s =>
@@ -313,46 +312,35 @@ object CronSchedule {
 
   private def parseSecond(s: String): Seq[Int] =
     try
-      s.split(",", -1).flatMap(parseField(_, 0, 59)).toSeq match {
+      s.split(",", -1).flatMap(parseField(_, 0, 59)).toSeq match
         case Nil    => Seq(0)
         case second => second
-      }
-    catch {
-      case _: Exception =>
-        throw new IllegalArgumentException("Invalid cron second")
-    }
+    catch case _: Exception =>
+      throw IllegalArgumentException("Invalid cron second")
 
   private def parseMinute(m: String): Seq[Int] =
     try
-      m.split(",", -1).flatMap(parseField(_, 0, 59)).toSeq match {
+      m.split(",", -1).flatMap(parseField(_, 0, 59)).toSeq match
         case Nil    => Seq(0)
         case minute => minute
-      }
-    catch {
-      case _: Exception =>
-        throw new IllegalArgumentException("Invalid cron minute")
-    }
+    catch case _: Exception =>
+      throw IllegalArgumentException("Invalid cron minute")
 
   private def parseHour(h: String): Seq[Int] =
     try
-      h.split(",", -1).flatMap(parseField(_, 0, 23)).toSeq match {
+      h.split(",", -1).flatMap(parseField(_, 0, 23)).toSeq match
         case Nil  => Seq(0)
         case hour => hour
-      }
-    catch {
-      case _: Exception =>
-        throw new IllegalArgumentException("Invalid cron hour")
-    }
+    catch case _: Exception =>
+      throw IllegalArgumentException("Invalid cron hour")
 
   private def parseDayOfMonth(d: String): Seq[Int] =
     try
       d.split(",", -1)
         .flatMap(parseField(_, 1, 31))
         .toSeq
-    catch {
-      case _: Exception =>
-        throw new IllegalArgumentException("Invalid cron day of month")
-    }
+    catch case _: Exception =>
+        throw IllegalArgumentException("Invalid cron day of month")
 
   private def parseMonth(m: String): Seq[Month] =
     try
@@ -360,10 +348,8 @@ object CronSchedule {
         .flatMap(parseField(_, 1, 12, toMonth))
         .map(Month.of)
         .toSeq
-    catch {
-      case _: Exception =>
-        throw new IllegalArgumentException("Invalid cron month")
-    }
+    catch case _: Exception =>
+      throw IllegalArgumentException("Invalid cron month")
 
   private def parseDayOfWeek(d: String): Seq[DayOfWeek] =
     try
@@ -372,29 +358,25 @@ object CronSchedule {
         .map(_.max(1))
         .map(DayOfWeek.of)
         .toSeq
-    catch {
-      case _: Exception =>
-        throw new IllegalArgumentException("Invalid cron day of week")
-    }
+    catch case _: Exception =>
+      throw IllegalArgumentException("Invalid cron day of week")
 
-  private def parseField(value: String, min: Int, max: Int, toInt: String => Int = _.toInt): Seq[Int] = {
-    val field = value match {
+  private def parseField(value: String, min: Int, max: Int, toInt: String => Int = _.toInt): Seq[Int] =
+    val field = value match
       case any(null)               => Nil
       case any(step)               => min to max by step.toInt
       case single(_)               => Seq(toInt(value))
       case range(start, end, null) => toInt(start) to toInt(end)
       case range(start, end, step) => toInt(start) to toInt(end) by step.toInt
-      case _                       => throw new Exception
-    }
+      case _                       => throw RuntimeException()
 
-    if (field.headOption.exists(x => x < min || x > max)) throw new Exception
-    if (field.lastOption.exists(x => x < min || x > max)) throw new Exception
+    if field.headOption.exists(x => x < min || x > max) then throw RuntimeException()
+    if field.lastOption.exists(x => x < min || x > max) then throw RuntimeException()
 
     field
-  }
 
   private def toMonth(s: String): Int =
-    s.toLowerCase match {
+    s.toLowerCase match
       case "jan" | "january"   => 1
       case "feb" | "february"  => 2
       case "mar" | "march"     => 3
@@ -408,10 +390,9 @@ object CronSchedule {
       case "nov" | "november"  => 11
       case "dec" | "december"  => 12
       case _                   => s.toInt
-    }
 
   private def toDayOfWeek(s: String): Int =
-    s.toLowerCase match {
+    s.toLowerCase match
       case "mon" | "monday"    => 1
       case "tue" | "tuesday"   => 2
       case "wed" | "wednesday" => 3
@@ -420,27 +401,24 @@ object CronSchedule {
       case "sat" | "saturday"  => 6
       case "sun" | "sunday"    => 7
       case _                   => s.toInt
-    }
-}
 
 private case class CronScheduleImpl(
   times:       Seq[LocalTime],
   daysOfMonth: Seq[Int],
   months:      Seq[Month],
-  daysOfWeek:  Seq[DayOfWeek]) extends CronSchedule {
+  daysOfWeek:  Seq[DayOfWeek]
+) extends CronSchedule:
 
   private lazy val isEmpty =
-    daysOfMonth.isEmpty || months.isEmpty || daysOfWeek.nonEmpty match {
+    daysOfMonth.isEmpty || months.isEmpty || daysOfWeek.nonEmpty match
       case true  => false
       case false =>
-        daysOfMonth.dropWhile(_ < 29) match {
+        daysOfMonth.dropWhile(_ < 29) match
           case Nil  => false
           case days => days.forall(day => months.forall(_.maxLength < day))
-        }
-    }
 
   def between(start: LocalDateTime, end: LocalDateTime) =
-    isEmpty match {
+    isEmpty match
       case true  => Iterator.empty
       case false =>
         val dateIterator = CronDateIterator(
@@ -452,13 +430,12 @@ private case class CronScheduleImpl(
 
         dateIterator.flatMap(date => times.map(date.atTime))
           .filter(time => time >= start && time <= end)
-    }
 
   def withTimes(times: Seq[LocalTime]) =
-    copy(times = times.isEmpty match {
+    copy(times = times.isEmpty match
       case true  => Seq(LocalTime.MIDNIGHT)
       case false => SortedSeq(times)
-    })
+    )
 
   def withDaysOfMonth(days: Seq[Int]) =
     copy(daysOfMonth = SortedSeq(days))
@@ -468,4 +445,3 @@ private case class CronScheduleImpl(
 
   def withDaysOfWeek(days: Seq[DayOfWeek]) =
     copy(daysOfWeek = SortedSeq(days))
-}

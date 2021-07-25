@@ -2,14 +2,14 @@
 
 The Scala library that provides extension methods to _java.time_.
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.github.losizm/little-time_2.12.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.losizm%22%20AND%20a:%22little-time_2.12%22)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.losizm/little-time_3.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.losizm%22%20AND%20a:%22little-time_3%22)
 
 ## Getting Started
 
-To use **little-time**, add it as a dependency to your project:
+To get started, add **little-time** as a dependency to your project:
 
 ```scala
-libraryDependencies += "com.github.losizm" %% "little-time" % "0.7.0"
+libraryDependencies += "com.github.losizm" %% "little-time" % "1.0.0"
 ```
 
 ## A Taste of little-time
@@ -22,8 +22,8 @@ You can create an iterator from one `LocalDate` to another, stepping thru each
 date between the two.
 
 ```scala
-import java.time._
-import little.time.Implicits._
+import java.time.*
+import little.time.Implicits.{ *, given }
 
 // Convert String to LocalDate
 val start = "2018-04-01".toLocalDate
@@ -134,7 +134,7 @@ _17mins.iterateTo(_17mins * 2, _45secs).foreach { duration =>
 When working with dates, you can set them to common boundaries.
 
 ```scala
-import DayOfWeek._
+import DayOfWeek.*
 
 val now = LocalDate.now()
 
@@ -155,14 +155,14 @@ println(now.atEndOfWeek(SUNDAY))
 
 When working with times, you can set them to common boundaries, too. However,
 to set an end boundary, you must specify the `TimePrecision`. You may do this
-explicitly by passing the precision in the method call, or keep an implicit
+explicitly by passing the precision in the method call, or keep a given
 precision in scope.
 
 ```scala
 import little.time.TimePrecision
 
-// Implicitly set time precision to milliseconds
-implicit val precision = TimePrecision.Milliseconds
+// Set time precision to milliseconds
+given TimePrecision = TimePrecision.Milliseconds
 
 val now = LocalTime.now()
 
@@ -180,11 +180,11 @@ val endOfSecond   = now.atEndOfSecond
 ```
 
 The same applies to `LocalDateTime`, which is both a date and a time. You must
-ensure an implicit `TimePrecision` is in scope when setting to an end boundary
+ensure a given `TimePrecision` is in scope when setting to an end boundary
 &ndash; or supply one explicitly in the method call.
 
 ```scala
-implicit val precision = TimePrecision.Seconds
+given TimePrecision = TimePrecision.Seconds
 
 val dateTime = "2017-05-12T15:23:17.123456789".toLocalDateTime
 
@@ -192,7 +192,7 @@ val dateTime = "2017-05-12T15:23:17.123456789".toLocalDateTime
 val endOfYear = dateTime.atEndOfYear
 
 // Set to last microsecond of day
-val endOfDay = dateTime.atEndOfDay(TimePrecision.Microseconds)
+val endOfDay = dateTime.atEndOfDay(using TimePrecision.Microseconds)
 ```
 
 ## Working with CronSchedule
@@ -206,7 +206,7 @@ import java.time.LocalTime.NOON
 import java.time.Month.{ OCTOBER, NOVEMBER, DECEMBER }
 
 import little.time.CronSchedule
-import little.time.Implicits._
+import little.time.Implicits.{ *, given }
 
 // Create schedule
 val schedule = CronSchedule(
@@ -230,7 +230,7 @@ assert(altSchedule.next(start) == schedule.next(start))
 
 ## API Documentation
 
-See [scaladoc](https://losizm.github.io/little-time/latest/api/little/time/index.html)
+See [scaladoc](https://losizm.github.io/little-time/latest/api/little/time.html)
 for additional details.
 
 ## License

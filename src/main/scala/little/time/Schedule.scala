@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Carlos Conyers
+ * Copyright 2021 Carlos Conyers
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import java.time.{ LocalDate, LocalDateTime, LocalTime }
 import Implicits.localDateTimeOrdering
 
 /** Defines utility for scheduled times. */
-trait Schedule {
+trait Schedule:
   /**
    * Gets scheduled times in given period.
    *
@@ -34,7 +34,7 @@ trait Schedule {
   /**
    * Gets scheduled times in given period.
    *
-   * ''Equivalent to:'' `between(start.atTime(LocalTime.MIN), end.atTime(LocalTime.MAX))`
+   * _Equivalent to:_ `between(start.atTime(LocalTime.MIN), end.atTime(LocalTime.MAX))`
    *
    * @param start start of period
    * @param end   end of period
@@ -49,14 +49,12 @@ trait Schedule {
    *
    * @param after time after which scheduled time occurs
    */
-  def next(after: LocalDateTime = LocalDateTime.now()): Option[LocalDateTime] = {
+  def next(after: LocalDateTime = LocalDateTime.now()): Option[LocalDateTime] =
     val iter = between(after.plusNanos(1), LocalDateTime.MAX)
 
-    iter.hasNext match {
+    iter.hasNext match
       case true  => Some(iter.next())
       case false => None
-    }
-  }
 
   /**
    * Creates new schedule by combining supplied schedule.
@@ -66,7 +64,7 @@ trait Schedule {
    * @return new schedule
    */
   def combine(other: Schedule): Schedule =
-    new CombinedSchedule(this, other)
+    CombinedSchedule(this, other)
 
   /**
    * Creates new schedule by adding supplied scheduled time.
@@ -76,7 +74,7 @@ trait Schedule {
    * @return new schedule
    */
   def add(time: LocalDateTime): Schedule =
-    new CombinedSchedule(this, Schedule(time))
+    CombinedSchedule(this, Schedule(time))
 
   /**
    * Creates new schedule by combining supplied schedule.
@@ -99,17 +97,16 @@ trait Schedule {
    * @note Alias to `add`
    */
   def +(time: LocalDateTime): Schedule = add(time)
-}
 
 /** Provides `Schedule` factory. */
-object Schedule {
+object Schedule:
   /**
    * Creates schedule with supplied times.
    *
    * @param times schedule times
    */
   def apply(times: Seq[LocalDateTime]): Schedule =
-    new SeqSchedule(SortedSeq(times))
+    SeqSchedule(SortedSeq(times))
 
   /**
    * Creates schedule with supplied times.
@@ -118,5 +115,4 @@ object Schedule {
    * @param more additional scheduled times
    */
   def apply(one: LocalDateTime, more: LocalDateTime*): Schedule =
-    new SeqSchedule(SortedSeq(one +: more))
-}
+    SeqSchedule(SortedSeq(one +: more))

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Carlos Conyers
+ * Copyright 2021 Carlos Conyers
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,37 +15,37 @@
  */
 package little.time
 
-import java.time._
+import java.time.*
 import java.time.temporal.{ ChronoUnit, TemporalAmount }
 
-import DayOfWeek._
-import Stepping._
-import TimePrecision._
+import DayOfWeek.*
+import Stepping.*
+import TimePrecision.*
 
 /** Provides extension methods to `java.time`. */
-object Implicits {
+object Implicits:
   /** Provides ordering for `java.time.Duration`. */
-  implicit val durationOrdering: Ordering[Duration] =
+  given durationOrdering: Ordering[Duration] =
     (a, b) => a.compareTo(b)
 
   /** Provides ordering for `java.time.YearMonth`. */
-  implicit val yearMonthOrdering: Ordering[YearMonth] =
+  given yearMonthOrdering: Ordering[YearMonth] =
     (a, b) => a.compareTo(b)
 
   /** Provides ordering for `java.time.LocalDate`. */
-  implicit val localDateOrdering: Ordering[LocalDate] =
+  given localDateOrdering: Ordering[LocalDate] =
     (a, b) => a.compareTo(b)
 
   /** Provides ordering for `java.time.LocalTime`. */
-  implicit val localTimeOrdering: Ordering[LocalTime] =
+  given localTimeOrdering: Ordering[LocalTime] =
     (a, b) => a.compareTo(b)
 
   /** Provides ordering for `java.time.LocalDateTime`. */
-  implicit val localDateTimeOrdering: Ordering[LocalDateTime] =
+  given localDateTimeOrdering: Ordering[LocalDateTime] =
     (a, b) => a.compareTo(b)
 
   /** Provides extension methods to `java.time.Duration` */
-  implicit class DurationType(private val duration: Duration) extends AnyVal {
+  implicit class DurationType(duration: Duration) extends AnyVal:
     /** Gets negated duration. */
     def unary_- : Duration =
       duration.negated()
@@ -115,10 +115,9 @@ object Implicits {
      */
     def iterateUntil(end: Duration, step: Duration = Duration.ofSeconds(1)): Iterator[Duration] =
       exclusive(duration, end, step)
-  }
 
   /** Provides extension methods to `java.time.Period` */
-  implicit class PeriodType(private val period: Period) extends AnyVal {
+  implicit class PeriodType(period: Period) extends AnyVal:
     /** Gets negated period. */
     def unary_- : Period =
       period.negated()
@@ -146,10 +145,9 @@ object Implicits {
      */
     def *(n: Int): Period =
       period.multipliedBy(n)
-  }
 
   /** Provides extension methods to `java.time.YearMonth` */
-  implicit class YearMonthType(private val month: YearMonth) extends AnyVal {
+  implicit class YearMonthType(month: YearMonth) extends AnyVal:
     /**
      * Gets month with specified number of months added.
      *
@@ -225,10 +223,9 @@ object Implicits {
      */
     def iterateUntil(end: YearMonth, step: Period = Period.ofMonths(1)): Iterator[YearMonth] =
       exclusive(month, end, step)
-  }
 
   /** Provides extension methods to `java.time.LocalDate` */
-  implicit class LocalDateType(private val date: LocalDate) extends AnyVal {
+  implicit class LocalDateType(date: LocalDate) extends AnyVal:
     /** Gets `YearMonth` part of date. */
     def toYearMonth: YearMonth =
       YearMonth.of(date.getYear, date.getMonth)
@@ -311,13 +308,12 @@ object Implicits {
      * @param firstDay first day of week
      */
     def atStartOfWeek(firstDay: DayOfWeek): LocalDate =
-      date.getDayOfWeek match {
+      date.getDayOfWeek match
         case `firstDay` => date
         case dayOfWeek  =>
           date.minusDays {
             (dayOfWeek.getValue - firstDay.getValue + 7) % 7
           }
-      }
 
     /**
      * Gets date adjusted to last day of week.
@@ -333,13 +329,12 @@ object Implicits {
      * @param lastDay last day of week
      */
     def atEndOfWeek(lastDay: DayOfWeek): LocalDate =
-      date.getDayOfWeek match {
+      date.getDayOfWeek match
         case `lastDay` => date
         case dayOfWeek  =>
           date.plusDays {
             (lastDay.getValue - dayOfWeek.getValue + 7) % 7
           }
-      }
 
     /**
      * Creates iterator to end date (inclusive).
@@ -360,10 +355,9 @@ object Implicits {
      */
     def iterateUntil(end: LocalDate, step: Period = Period.ofDays(1)): Iterator[LocalDate] =
       exclusive(date, end, step)
-  }
 
   /** Provides extension methods to `java.time.LocalTime` */
-  implicit class LocalTimeType(private val time: LocalTime) extends AnyVal {
+  implicit class LocalTimeType(time: LocalTime) extends AnyVal:
     /**
      * Gets time with specified amount added.
      *
@@ -404,7 +398,7 @@ object Implicits {
      *
      * @param precision time precision
      */
-    def atEndOfDay(implicit precision: TimePrecision): LocalTime =
+    def atEndOfDay(using precision: TimePrecision): LocalTime =
       precision.limit
 
     /** Gets time truncated to hour. */
@@ -416,13 +410,12 @@ object Implicits {
      *
      * @param precision time precision
      */
-    def atEndOfHour(implicit precision: TimePrecision): LocalTime =
-      precision match {
+    def atEndOfHour(using precision: TimePrecision): LocalTime =
+      precision match
         case Minutes              => LocalTime.of(time.getHour, 59)
         case Seconds              => LocalTime.of(time.getHour, 59, 59)
         case FractionalSeconds(_) => LocalTime.of(time.getHour, 59, 59, precision.limit.getNano)
-        case _                    => throw new DateTimeException(s"Precision unit too large: $precision")
-      }
+        case _                    => throw DateTimeException(s"Precision unit too large: $precision")
 
     /** Gets time truncated to minute. */
     def atStartOfMinute: LocalTime =
@@ -433,12 +426,11 @@ object Implicits {
      *
      * @param precision time precision
      */
-    def atEndOfMinute(implicit precision: TimePrecision): LocalTime =
-      precision match {
+    def atEndOfMinute(using precision: TimePrecision): LocalTime =
+      precision match
         case Seconds              => LocalTime.of(time.getHour, time.getMinute, 59)
         case FractionalSeconds(_) => LocalTime.of(time.getHour, time.getMinute, 59, precision.limit.getNano)
-        case _                    => throw new DateTimeException(s"Precision unit too large: $precision")
-      }
+        case _                    => throw DateTimeException(s"Precision unit too large: $precision")
 
     /** Gets time truncated to second. */
     def atStartOfSecond: LocalTime =
@@ -449,11 +441,10 @@ object Implicits {
      *
      * @param precision time precision
      */
-    def atEndOfSecond(implicit precision: TimePrecision): LocalTime =
-      precision > Seconds match {
+    def atEndOfSecond(using precision: TimePrecision): LocalTime =
+      (precision > Seconds) match
         case true  => LocalTime.of(time.getHour, time.getMinute, time.getSecond, precision.limit.getNano)
-        case false => throw new DateTimeException(s"Precision unit too large: $precision")
-      }
+        case false => throw DateTimeException(s"Precision unit too large: $precision")
 
     /** Gets time truncated to millisecond. */
     def atStartOfMillis: LocalTime =
@@ -464,11 +455,10 @@ object Implicits {
      *
      * @param precision time precision
      */
-    def atEndOfMillis(implicit precision: TimePrecision): LocalTime =
-      precision > Milliseconds match {
+    def atEndOfMillis(using precision: TimePrecision): LocalTime =
+      precision > Milliseconds match
         case true  => LocalTime.of(time.getHour, time.getMinute, time.getSecond, precision.limit.getNano)
-        case false => throw new DateTimeException(s"Precision unit too large: $precision")
-      }
+        case false => throw DateTimeException(s"Precision unit too large: $precision")
 
     /** Gets time truncated to microsecond. */
     def atStartOfMicros: LocalTime =
@@ -479,11 +469,10 @@ object Implicits {
      *
      * @param precision time precision
      */
-    def atEndOfMicros(implicit precision: TimePrecision): LocalTime =
-      precision > Microseconds match {
+    def atEndOfMicros(using precision: TimePrecision): LocalTime =
+      precision > Microseconds match
         case true  => LocalTime.of(time.getHour, time.getMinute, time.getSecond, precision.limit.getNano)
-        case false => throw new DateTimeException(s"Precision unit too large: $precision")
-      }
+        case false => throw DateTimeException(s"Precision unit too large: $precision")
 
     /**
      * Creates iterator to end time (inclusive).
@@ -504,10 +493,9 @@ object Implicits {
      */
     def iterateUntil(end: LocalTime, step: Duration = Duration.ofSeconds(1)): Iterator[LocalTime] =
       exclusive(time, end, step)
-  }
 
   /** Provides extension methods to `java.time.LocalDateTime` */
-  implicit class LocalDateTimeType(private val dateTime: LocalDateTime) extends AnyVal {
+  implicit class LocalDateTimeType(dateTime: LocalDateTime) extends AnyVal:
     /** Gets `YearMonth` part of date-time. */
     def toYearMonth: YearMonth =
       YearMonth.of(dateTime.getYear, dateTime.getMonth)
@@ -553,7 +541,7 @@ object Implicits {
      *
      * @param precision time precision
      */
-    def atEndOfYear(implicit precision: TimePrecision): LocalDateTime =
+    def atEndOfYear(using precision: TimePrecision): LocalDateTime =
       LocalDateTime.of(dateTime.toLocalDate.atEndOfYear, precision.limit)
 
     /** Gets date-time adjusted to first day of month. */
@@ -565,7 +553,7 @@ object Implicits {
      *
      * @param precision time precision
      */
-    def atEndOfMonth(implicit precision: TimePrecision): LocalDateTime =
+    def atEndOfMonth(using precision: TimePrecision): LocalDateTime =
       LocalDateTime.of(dateTime.toLocalDate.atEndOfMonth, precision.limit)
 
     /**
@@ -588,7 +576,7 @@ object Implicits {
      *
      * @note Saturday is last day of week.
      */
-    def atEndOfWeek(implicit precision: TimePrecision): LocalDateTime =
+    def atEndOfWeek(using precision: TimePrecision): LocalDateTime =
       atEndOfWeek(SATURDAY)
 
     /**
@@ -597,7 +585,7 @@ object Implicits {
      * @param lastDay last day of week
      * @param precision time precision
      */
-    def atEndOfWeek(lastDay: DayOfWeek)(implicit precision: TimePrecision): LocalDateTime =
+    def atEndOfWeek(lastDay: DayOfWeek)(using precision: TimePrecision): LocalDateTime =
       LocalDateTime.of(dateTime.toLocalDate.atEndOfWeek(lastDay), precision.limit)
 
     /** Gets date-time truncated to day. */
@@ -609,7 +597,7 @@ object Implicits {
      *
      * @param precision time precision
      */
-    def atEndOfDay(implicit precision: TimePrecision): LocalDateTime =
+    def atEndOfDay(using precision: TimePrecision): LocalDateTime =
       LocalDateTime.of(dateTime.toLocalDate, dateTime.toLocalTime.atEndOfDay)
 
     /** Gets date-time truncated to hour. */
@@ -621,7 +609,7 @@ object Implicits {
      *
      * @param precision time precision
      */
-    def atEndOfHour(implicit precision: TimePrecision): LocalDateTime =
+    def atEndOfHour(using precision: TimePrecision): LocalDateTime =
       LocalDateTime.of(dateTime.toLocalDate, dateTime.toLocalTime.atEndOfHour)
 
     /** Gets date-time truncated to minute. */
@@ -633,7 +621,7 @@ object Implicits {
      *
      * @param precision time precision
      */
-    def atEndOfMinute(implicit precision: TimePrecision): LocalDateTime =
+    def atEndOfMinute(using precision: TimePrecision): LocalDateTime =
       LocalDateTime.of(dateTime.toLocalDate, dateTime.toLocalTime.atEndOfMinute)
 
     /** Gets date-time truncated to second. */
@@ -645,7 +633,7 @@ object Implicits {
      *
      * @param precision time precision
      */
-    def atEndOfSecond(implicit precision: TimePrecision): LocalDateTime =
+    def atEndOfSecond(using precision: TimePrecision): LocalDateTime =
       LocalDateTime.of(dateTime.toLocalDate, dateTime.toLocalTime.atEndOfSecond)
 
     /** Gets date-time truncated to millisecond. */
@@ -657,7 +645,7 @@ object Implicits {
      *
      * @param precision time precision
      */
-    def atEndOfMillis(implicit precision: TimePrecision): LocalDateTime =
+    def atEndOfMillis(using precision: TimePrecision): LocalDateTime =
       LocalDateTime.of(dateTime.toLocalDate, dateTime.toLocalTime.atEndOfMillis)
 
     /** Gets date-time truncated to microsecond. */
@@ -669,7 +657,7 @@ object Implicits {
      *
      * @param precision time precision
      */
-    def atEndOfMicros(implicit precision: TimePrecision): LocalDateTime =
+    def atEndOfMicros(using precision: TimePrecision): LocalDateTime =
       LocalDateTime.of(dateTime.toLocalDate, dateTime.toLocalTime.atEndOfMicros)
 
     /**
@@ -691,10 +679,9 @@ object Implicits {
      */
     def iterateUntil(end: LocalDateTime, step: TemporalAmount = Duration.ofSeconds(1)): Iterator[LocalDateTime] =
       exclusive(dateTime, end, step)
-  }
 
   /** Provides time-related extension methods to `java.lang.String`. */
-  implicit class TimeStringType(private val string: String) extends AnyVal {
+  implicit class TimeStringType(string: String) extends AnyVal:
     /** Converts formatted string to `Period`. */
     def toPeriod: Period =
       Period.parse(string)
@@ -718,5 +705,3 @@ object Implicits {
     /** Converts formatted string to `LocalDateTime`. */
     def toLocalDateTime: LocalDateTime =
       LocalDateTime.parse(string)
-  }
-}

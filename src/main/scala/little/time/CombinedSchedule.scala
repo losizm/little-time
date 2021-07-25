@@ -1,6 +1,5 @@
-
 /*
- * Copyright 2020 Carlos Conyers
+ * Copyright 2021 Carlos Conyers
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +19,6 @@ import java.time.LocalDateTime
 
 import Implicits.localDateTimeOrdering
 
-private class CombinedSchedule(left: Schedule, right: Schedule) extends Schedule {
+private class CombinedSchedule(left: Schedule, right: Schedule) extends Schedule:
   def between(start: LocalDateTime, end: LocalDateTime): Iterator[LocalDateTime] =
-    new CombinedIterator[LocalDateTime](left.between(start, end), right.between(start, end))
-}
+    CombinedIterator[LocalDateTime](left.between(start, end), right.between(start, end))

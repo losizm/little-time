@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Carlos Conyers
+ * Copyright 2021 Carlos Conyers
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package little.time
 import java.time.LocalTime
 
 /** Specifies precision of time. */
-sealed trait TimePrecision extends Ordered[TimePrecision] {
+sealed trait TimePrecision extends Ordered[TimePrecision]:
   /** Gets maximum time with applied precision. */
   def limit: LocalTime
 
@@ -29,35 +29,30 @@ sealed trait TimePrecision extends Ordered[TimePrecision] {
    */
   def compare(that: TimePrecision): Int =
     limit.compareTo(that.limit)
-}
 
 /** Provides available `TimePrecision`s .*/
-object TimePrecision {
+object TimePrecision:
   /** Specifies time precision of hours. */
-  case object Hours extends TimePrecision {
+  case object Hours extends TimePrecision:
     val limit: LocalTime = LocalTime.of(23, 0, 0)
-  }
 
   /** Specifies time precision of minutes. */
-  case object Minutes extends TimePrecision {
+  case object Minutes extends TimePrecision:
     val limit: LocalTime = LocalTime.of(23, 59, 0)
-  }
 
   /** Specifies time precision of seconds. */
-  case object Seconds extends TimePrecision {
+  case object Seconds extends TimePrecision:
     val limit: LocalTime = LocalTime.of(23, 59, 59)
-  }
 
   /** Specifies time precision of fractional seconds. */
-  trait FractionalSeconds extends TimePrecision {
+  trait FractionalSeconds extends TimePrecision:
     /** Number of digits in fractional seconds. */
     def scale: Int
 
     lazy val limit: LocalTime = LocalTime.parse(s"23:59:59.${"9" * scale}")
-  }
 
   /** Factory for time precision of fractional seconds. */ 
-  object FractionalSeconds {
+  object FractionalSeconds:
     /**
      * Gets time precision with applied scale of fractional seconds.
      *
@@ -66,7 +61,7 @@ object TimePrecision {
      * @throws IllegalArgumentException if `scale < 1` or `scale > 9`
      */
     def apply(scale: Int): FractionalSeconds =
-      scale match {
+      scale match
         case 1 => FractionalSeconds1
         case 2 => FractionalSeconds2
         case 3 => Milliseconds
@@ -76,8 +71,7 @@ object TimePrecision {
         case 7 => FractionalSeconds7
         case 8 => FractionalSeconds8
         case 9 => Nanoseconds
-        case _ => throw new IllegalArgumentException(s"Invalid scale: $scale")
-      }
+        case _ => throw IllegalArgumentException(s"Invalid scale: $scale")
 
     /**
      * Destructures fractional seconds to its scale value.
@@ -85,32 +79,33 @@ object TimePrecision {
      * @param fsecs fractional seconds
      */
     def unapply(fsecs: FractionalSeconds): Option[Int] =
-      fsecs == null match {
+      fsecs == null match
         case true  => None
         case false => Some(fsecs.scale)
-      }
-  }
 
   /**
    * Specifies time precision of milliseconds.
    *
    * @note Scale is 3.
    */
-  case object Milliseconds extends FractionalSeconds { val scale: Int = 3 }
+  case object Milliseconds extends FractionalSeconds:
+    val scale: Int = 3
 
   /**
    * Specifies time precision of microseconds.
    *
    * @note Scale is 6.
    */
-  case object Microseconds extends FractionalSeconds { val scale: Int = 6 }
+  case object Microseconds extends FractionalSeconds:
+    val scale: Int = 6
 
   /**
    * Specifies time precision of nanoseconds.
    *
    * @note Scale is 9.
    */
-  case object Nanoseconds extends FractionalSeconds { val scale: Int = 9 }
+  case object Nanoseconds extends FractionalSeconds:
+    val scale: Int = 9
 
   private case object FractionalSeconds1 extends FractionalSeconds { val scale: Int = 1 }
   private case object FractionalSeconds2 extends FractionalSeconds { val scale: Int = 2 }
@@ -118,4 +113,3 @@ object TimePrecision {
   private case object FractionalSeconds5 extends FractionalSeconds { val scale: Int = 5 }
   private case object FractionalSeconds7 extends FractionalSeconds { val scale: Int = 7 }
   private case object FractionalSeconds8 extends FractionalSeconds { val scale: Int = 8 }
-}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Carlos Conyers
+ * Copyright 2021 Carlos Conyers
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 package little.time
 
 import java.time.LocalDate
-import java.time.DayOfWeek._
-import java.time.Month._
+import java.time.DayOfWeek.*
+import java.time.Month.*
 
-class CronDateIteratorSpec extends org.scalatest.flatspec.AnyFlatSpec {
+class CronDateIteratorSpec extends org.scalatest.flatspec.AnyFlatSpec:
   it should "create monthly iterator" in {
     val iter = CronDateIterator(
       startDate   = LocalDate.parse("2020-10-01"),
@@ -108,4 +108,3 @@ class CronDateIteratorSpec extends org.scalatest.flatspec.AnyFlatSpec {
     assert(iter.isEmpty)
     assertThrows[NoSuchElementException](iter.next())
   }
-}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Carlos Conyers
+ * Copyright 2021 Carlos Conyers
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,11 @@ package little.time
 
 import java.time.{ DayOfWeek, Duration, LocalDateTime, Period, YearMonth }
 
-import DayOfWeek._
-import Implicits._
-import TimePrecision._
+import DayOfWeek.*
+import Implicits.*
+import TimePrecision.*
 
-class LocalDateTimeTypeSpec extends org.scalatest.flatspec.AnyFlatSpec {
+class LocalDateTimeTypeSpec extends org.scalatest.flatspec.AnyFlatSpec:
   private val dateTime = LocalDateTime.parse("2019-07-11T12:38:45.123456789")
 
   "LocalDateTime" should "have duration added" in {
@@ -170,133 +170,133 @@ class LocalDateTimeTypeSpec extends org.scalatest.flatspec.AnyFlatSpec {
   }
 
   it should "be adjusted to end microsecond" in {
-    assert(dateTime.atEndOfMicros(FractionalSeconds(9)) == LocalDateTime.parse("2019-07-11T12:38:45.999999999"))
-    assert(dateTime.atEndOfMicros(FractionalSeconds(8)) == LocalDateTime.parse("2019-07-11T12:38:45.99999999"))
-    assert(dateTime.atEndOfMicros(FractionalSeconds(7)) == LocalDateTime.parse("2019-07-11T12:38:45.9999999"))
+    assert(dateTime.atEndOfMicros(using FractionalSeconds(9)) == LocalDateTime.parse("2019-07-11T12:38:45.999999999"))
+    assert(dateTime.atEndOfMicros(using FractionalSeconds(8)) == LocalDateTime.parse("2019-07-11T12:38:45.99999999"))
+    assert(dateTime.atEndOfMicros(using FractionalSeconds(7)) == LocalDateTime.parse("2019-07-11T12:38:45.9999999"))
   }
 
   it should "be adjusted to end millisecond" in {
-    assert(dateTime.atEndOfMillis(FractionalSeconds(9)) == LocalDateTime.parse("2019-07-11T12:38:45.999999999"))
-    assert(dateTime.atEndOfMillis(FractionalSeconds(8)) == LocalDateTime.parse("2019-07-11T12:38:45.99999999"))
-    assert(dateTime.atEndOfMillis(FractionalSeconds(7)) == LocalDateTime.parse("2019-07-11T12:38:45.9999999"))
-    assert(dateTime.atEndOfMillis(FractionalSeconds(6)) == LocalDateTime.parse("2019-07-11T12:38:45.999999"))
-    assert(dateTime.atEndOfMillis(FractionalSeconds(5)) == LocalDateTime.parse("2019-07-11T12:38:45.99999"))
-    assert(dateTime.atEndOfMillis(FractionalSeconds(4)) == LocalDateTime.parse("2019-07-11T12:38:45.9999"))
+    assert(dateTime.atEndOfMillis(using FractionalSeconds(9)) == LocalDateTime.parse("2019-07-11T12:38:45.999999999"))
+    assert(dateTime.atEndOfMillis(using FractionalSeconds(8)) == LocalDateTime.parse("2019-07-11T12:38:45.99999999"))
+    assert(dateTime.atEndOfMillis(using FractionalSeconds(7)) == LocalDateTime.parse("2019-07-11T12:38:45.9999999"))
+    assert(dateTime.atEndOfMillis(using FractionalSeconds(6)) == LocalDateTime.parse("2019-07-11T12:38:45.999999"))
+    assert(dateTime.atEndOfMillis(using FractionalSeconds(5)) == LocalDateTime.parse("2019-07-11T12:38:45.99999"))
+    assert(dateTime.atEndOfMillis(using FractionalSeconds(4)) == LocalDateTime.parse("2019-07-11T12:38:45.9999"))
   }
 
   it should "be adjusted to end second" in {
-    assert(dateTime.atEndOfSecond(FractionalSeconds(9)) == LocalDateTime.parse("2019-07-11T12:38:45.999999999"))
-    assert(dateTime.atEndOfSecond(FractionalSeconds(8)) == LocalDateTime.parse("2019-07-11T12:38:45.99999999"))
-    assert(dateTime.atEndOfSecond(FractionalSeconds(7)) == LocalDateTime.parse("2019-07-11T12:38:45.9999999"))
-    assert(dateTime.atEndOfSecond(FractionalSeconds(6)) == LocalDateTime.parse("2019-07-11T12:38:45.999999"))
-    assert(dateTime.atEndOfSecond(FractionalSeconds(5)) == LocalDateTime.parse("2019-07-11T12:38:45.99999"))
-    assert(dateTime.atEndOfSecond(FractionalSeconds(4)) == LocalDateTime.parse("2019-07-11T12:38:45.9999"))
-    assert(dateTime.atEndOfSecond(FractionalSeconds(3)) == LocalDateTime.parse("2019-07-11T12:38:45.999"))
-    assert(dateTime.atEndOfSecond(FractionalSeconds(2)) == LocalDateTime.parse("2019-07-11T12:38:45.99"))
-    assert(dateTime.atEndOfSecond(FractionalSeconds(1)) == LocalDateTime.parse("2019-07-11T12:38:45.9"))
+    assert(dateTime.atEndOfSecond(using FractionalSeconds(9)) == LocalDateTime.parse("2019-07-11T12:38:45.999999999"))
+    assert(dateTime.atEndOfSecond(using FractionalSeconds(8)) == LocalDateTime.parse("2019-07-11T12:38:45.99999999"))
+    assert(dateTime.atEndOfSecond(using FractionalSeconds(7)) == LocalDateTime.parse("2019-07-11T12:38:45.9999999"))
+    assert(dateTime.atEndOfSecond(using FractionalSeconds(6)) == LocalDateTime.parse("2019-07-11T12:38:45.999999"))
+    assert(dateTime.atEndOfSecond(using FractionalSeconds(5)) == LocalDateTime.parse("2019-07-11T12:38:45.99999"))
+    assert(dateTime.atEndOfSecond(using FractionalSeconds(4)) == LocalDateTime.parse("2019-07-11T12:38:45.9999"))
+    assert(dateTime.atEndOfSecond(using FractionalSeconds(3)) == LocalDateTime.parse("2019-07-11T12:38:45.999"))
+    assert(dateTime.atEndOfSecond(using FractionalSeconds(2)) == LocalDateTime.parse("2019-07-11T12:38:45.99"))
+    assert(dateTime.atEndOfSecond(using FractionalSeconds(1)) == LocalDateTime.parse("2019-07-11T12:38:45.9"))
   }
 
   it should "be adjusted to end minute" in {
-    assert(dateTime.atEndOfMinute(FractionalSeconds(9)) == LocalDateTime.parse("2019-07-11T12:38:59.999999999"))
-    assert(dateTime.atEndOfMinute(FractionalSeconds(8)) == LocalDateTime.parse("2019-07-11T12:38:59.99999999"))
-    assert(dateTime.atEndOfMinute(FractionalSeconds(7)) == LocalDateTime.parse("2019-07-11T12:38:59.9999999"))
-    assert(dateTime.atEndOfMinute(FractionalSeconds(6)) == LocalDateTime.parse("2019-07-11T12:38:59.999999"))
-    assert(dateTime.atEndOfMinute(FractionalSeconds(5)) == LocalDateTime.parse("2019-07-11T12:38:59.99999"))
-    assert(dateTime.atEndOfMinute(FractionalSeconds(4)) == LocalDateTime.parse("2019-07-11T12:38:59.9999"))
-    assert(dateTime.atEndOfMinute(FractionalSeconds(3)) == LocalDateTime.parse("2019-07-11T12:38:59.999"))
-    assert(dateTime.atEndOfMinute(FractionalSeconds(2)) == LocalDateTime.parse("2019-07-11T12:38:59.99"))
-    assert(dateTime.atEndOfMinute(FractionalSeconds(1)) == LocalDateTime.parse("2019-07-11T12:38:59.9"))
-    assert(dateTime.atEndOfMinute(Seconds)              == LocalDateTime.parse("2019-07-11T12:38:59"))
+    assert(dateTime.atEndOfMinute(using FractionalSeconds(9)) == LocalDateTime.parse("2019-07-11T12:38:59.999999999"))
+    assert(dateTime.atEndOfMinute(using FractionalSeconds(8)) == LocalDateTime.parse("2019-07-11T12:38:59.99999999"))
+    assert(dateTime.atEndOfMinute(using FractionalSeconds(7)) == LocalDateTime.parse("2019-07-11T12:38:59.9999999"))
+    assert(dateTime.atEndOfMinute(using FractionalSeconds(6)) == LocalDateTime.parse("2019-07-11T12:38:59.999999"))
+    assert(dateTime.atEndOfMinute(using FractionalSeconds(5)) == LocalDateTime.parse("2019-07-11T12:38:59.99999"))
+    assert(dateTime.atEndOfMinute(using FractionalSeconds(4)) == LocalDateTime.parse("2019-07-11T12:38:59.9999"))
+    assert(dateTime.atEndOfMinute(using FractionalSeconds(3)) == LocalDateTime.parse("2019-07-11T12:38:59.999"))
+    assert(dateTime.atEndOfMinute(using FractionalSeconds(2)) == LocalDateTime.parse("2019-07-11T12:38:59.99"))
+    assert(dateTime.atEndOfMinute(using FractionalSeconds(1)) == LocalDateTime.parse("2019-07-11T12:38:59.9"))
+    assert(dateTime.atEndOfMinute(using Seconds)              == LocalDateTime.parse("2019-07-11T12:38:59"))
   }
 
   it should "be adjusted to end hour" in {
-    assert(dateTime.atEndOfHour(FractionalSeconds(9)) == LocalDateTime.parse("2019-07-11T12:59:59.999999999"))
-    assert(dateTime.atEndOfHour(FractionalSeconds(8)) == LocalDateTime.parse("2019-07-11T12:59:59.99999999"))
-    assert(dateTime.atEndOfHour(FractionalSeconds(7)) == LocalDateTime.parse("2019-07-11T12:59:59.9999999"))
-    assert(dateTime.atEndOfHour(FractionalSeconds(6)) == LocalDateTime.parse("2019-07-11T12:59:59.999999"))
-    assert(dateTime.atEndOfHour(FractionalSeconds(5)) == LocalDateTime.parse("2019-07-11T12:59:59.99999"))
-    assert(dateTime.atEndOfHour(FractionalSeconds(4)) == LocalDateTime.parse("2019-07-11T12:59:59.9999"))
-    assert(dateTime.atEndOfHour(FractionalSeconds(3)) == LocalDateTime.parse("2019-07-11T12:59:59.999"))
-    assert(dateTime.atEndOfHour(FractionalSeconds(2)) == LocalDateTime.parse("2019-07-11T12:59:59.99"))
-    assert(dateTime.atEndOfHour(FractionalSeconds(1)) == LocalDateTime.parse("2019-07-11T12:59:59.9"))
-    assert(dateTime.atEndOfHour(Seconds)              == LocalDateTime.parse("2019-07-11T12:59:59"))
-    assert(dateTime.atEndOfHour(Minutes)              == LocalDateTime.parse("2019-07-11T12:59"))
+    assert(dateTime.atEndOfHour(using FractionalSeconds(9)) == LocalDateTime.parse("2019-07-11T12:59:59.999999999"))
+    assert(dateTime.atEndOfHour(using FractionalSeconds(8)) == LocalDateTime.parse("2019-07-11T12:59:59.99999999"))
+    assert(dateTime.atEndOfHour(using FractionalSeconds(7)) == LocalDateTime.parse("2019-07-11T12:59:59.9999999"))
+    assert(dateTime.atEndOfHour(using FractionalSeconds(6)) == LocalDateTime.parse("2019-07-11T12:59:59.999999"))
+    assert(dateTime.atEndOfHour(using FractionalSeconds(5)) == LocalDateTime.parse("2019-07-11T12:59:59.99999"))
+    assert(dateTime.atEndOfHour(using FractionalSeconds(4)) == LocalDateTime.parse("2019-07-11T12:59:59.9999"))
+    assert(dateTime.atEndOfHour(using FractionalSeconds(3)) == LocalDateTime.parse("2019-07-11T12:59:59.999"))
+    assert(dateTime.atEndOfHour(using FractionalSeconds(2)) == LocalDateTime.parse("2019-07-11T12:59:59.99"))
+    assert(dateTime.atEndOfHour(using FractionalSeconds(1)) == LocalDateTime.parse("2019-07-11T12:59:59.9"))
+    assert(dateTime.atEndOfHour(using Seconds)              == LocalDateTime.parse("2019-07-11T12:59:59"))
+    assert(dateTime.atEndOfHour(using Minutes)              == LocalDateTime.parse("2019-07-11T12:59"))
   }
 
   it should "be adjusted to end day" in {
-    assert(dateTime.atEndOfDay(FractionalSeconds(9)) == LocalDateTime.parse("2019-07-11T23:59:59.999999999"))
-    assert(dateTime.atEndOfDay(FractionalSeconds(8)) == LocalDateTime.parse("2019-07-11T23:59:59.99999999"))
-    assert(dateTime.atEndOfDay(FractionalSeconds(7)) == LocalDateTime.parse("2019-07-11T23:59:59.9999999"))
-    assert(dateTime.atEndOfDay(FractionalSeconds(6)) == LocalDateTime.parse("2019-07-11T23:59:59.999999"))
-    assert(dateTime.atEndOfDay(FractionalSeconds(5)) == LocalDateTime.parse("2019-07-11T23:59:59.99999"))
-    assert(dateTime.atEndOfDay(FractionalSeconds(4)) == LocalDateTime.parse("2019-07-11T23:59:59.9999"))
-    assert(dateTime.atEndOfDay(FractionalSeconds(3)) == LocalDateTime.parse("2019-07-11T23:59:59.999"))
-    assert(dateTime.atEndOfDay(FractionalSeconds(2)) == LocalDateTime.parse("2019-07-11T23:59:59.99"))
-    assert(dateTime.atEndOfDay(FractionalSeconds(1)) == LocalDateTime.parse("2019-07-11T23:59:59.9"))
-    assert(dateTime.atEndOfDay(Seconds)              == LocalDateTime.parse("2019-07-11T23:59:59"))
-    assert(dateTime.atEndOfDay(Minutes)              == LocalDateTime.parse("2019-07-11T23:59"))
-    assert(dateTime.atEndOfDay(Hours)                == LocalDateTime.parse("2019-07-11T23:00"))
+    assert(dateTime.atEndOfDay(using FractionalSeconds(9)) == LocalDateTime.parse("2019-07-11T23:59:59.999999999"))
+    assert(dateTime.atEndOfDay(using FractionalSeconds(8)) == LocalDateTime.parse("2019-07-11T23:59:59.99999999"))
+    assert(dateTime.atEndOfDay(using FractionalSeconds(7)) == LocalDateTime.parse("2019-07-11T23:59:59.9999999"))
+    assert(dateTime.atEndOfDay(using FractionalSeconds(6)) == LocalDateTime.parse("2019-07-11T23:59:59.999999"))
+    assert(dateTime.atEndOfDay(using FractionalSeconds(5)) == LocalDateTime.parse("2019-07-11T23:59:59.99999"))
+    assert(dateTime.atEndOfDay(using FractionalSeconds(4)) == LocalDateTime.parse("2019-07-11T23:59:59.9999"))
+    assert(dateTime.atEndOfDay(using FractionalSeconds(3)) == LocalDateTime.parse("2019-07-11T23:59:59.999"))
+    assert(dateTime.atEndOfDay(using FractionalSeconds(2)) == LocalDateTime.parse("2019-07-11T23:59:59.99"))
+    assert(dateTime.atEndOfDay(using FractionalSeconds(1)) == LocalDateTime.parse("2019-07-11T23:59:59.9"))
+    assert(dateTime.atEndOfDay(using Seconds)              == LocalDateTime.parse("2019-07-11T23:59:59"))
+    assert(dateTime.atEndOfDay(using Minutes)              == LocalDateTime.parse("2019-07-11T23:59"))
+    assert(dateTime.atEndOfDay(using Hours)                == LocalDateTime.parse("2019-07-11T23:00"))
   }
 
   it should "be adjusted to end week" in {
-    assert(dateTime.atEndOfWeek(FractionalSeconds(9)) == LocalDateTime.parse("2019-07-13T23:59:59.999999999"))
-    assert(dateTime.atEndOfWeek(FractionalSeconds(8)) == LocalDateTime.parse("2019-07-13T23:59:59.99999999"))
-    assert(dateTime.atEndOfWeek(FractionalSeconds(7)) == LocalDateTime.parse("2019-07-13T23:59:59.9999999"))
-    assert(dateTime.atEndOfWeek(FractionalSeconds(6)) == LocalDateTime.parse("2019-07-13T23:59:59.999999"))
-    assert(dateTime.atEndOfWeek(FractionalSeconds(5)) == LocalDateTime.parse("2019-07-13T23:59:59.99999"))
-    assert(dateTime.atEndOfWeek(FractionalSeconds(4)) == LocalDateTime.parse("2019-07-13T23:59:59.9999"))
-    assert(dateTime.atEndOfWeek(FractionalSeconds(3)) == LocalDateTime.parse("2019-07-13T23:59:59.999"))
-    assert(dateTime.atEndOfWeek(FractionalSeconds(2)) == LocalDateTime.parse("2019-07-13T23:59:59.99"))
-    assert(dateTime.atEndOfWeek(FractionalSeconds(1)) == LocalDateTime.parse("2019-07-13T23:59:59.9"))
-    assert(dateTime.atEndOfWeek(Seconds)              == LocalDateTime.parse("2019-07-13T23:59:59"))
-    assert(dateTime.atEndOfWeek(Minutes)              == LocalDateTime.parse("2019-07-13T23:59"))
-    assert(dateTime.atEndOfWeek(Hours)                == LocalDateTime.parse("2019-07-13T23:00"))
+    assert(dateTime.atEndOfWeek(using FractionalSeconds(9)) == LocalDateTime.parse("2019-07-13T23:59:59.999999999"))
+    assert(dateTime.atEndOfWeek(using FractionalSeconds(8)) == LocalDateTime.parse("2019-07-13T23:59:59.99999999"))
+    assert(dateTime.atEndOfWeek(using FractionalSeconds(7)) == LocalDateTime.parse("2019-07-13T23:59:59.9999999"))
+    assert(dateTime.atEndOfWeek(using FractionalSeconds(6)) == LocalDateTime.parse("2019-07-13T23:59:59.999999"))
+    assert(dateTime.atEndOfWeek(using FractionalSeconds(5)) == LocalDateTime.parse("2019-07-13T23:59:59.99999"))
+    assert(dateTime.atEndOfWeek(using FractionalSeconds(4)) == LocalDateTime.parse("2019-07-13T23:59:59.9999"))
+    assert(dateTime.atEndOfWeek(using FractionalSeconds(3)) == LocalDateTime.parse("2019-07-13T23:59:59.999"))
+    assert(dateTime.atEndOfWeek(using FractionalSeconds(2)) == LocalDateTime.parse("2019-07-13T23:59:59.99"))
+    assert(dateTime.atEndOfWeek(using FractionalSeconds(1)) == LocalDateTime.parse("2019-07-13T23:59:59.9"))
+    assert(dateTime.atEndOfWeek(using Seconds)              == LocalDateTime.parse("2019-07-13T23:59:59"))
+    assert(dateTime.atEndOfWeek(using Minutes)              == LocalDateTime.parse("2019-07-13T23:59"))
+    assert(dateTime.atEndOfWeek(using Hours)                == LocalDateTime.parse("2019-07-13T23:00"))
 
     Seq(SUNDAY -> 14, MONDAY -> 15, TUESDAY -> 16, WEDNESDAY -> 17, THURSDAY -> 11, FRIDAY -> 12, SATURDAY -> 13).foreach {
       case (dayOfWeek, dayOfMonth) =>
-        assert(dateTime.atEndOfWeek(dayOfWeek)(FractionalSeconds(9)) == LocalDateTime.parse(s"2019-07-${dayOfMonth}T23:59:59.999999999"))
-        assert(dateTime.atEndOfWeek(dayOfWeek)(FractionalSeconds(8)) == LocalDateTime.parse(s"2019-07-${dayOfMonth}T23:59:59.99999999"))
-        assert(dateTime.atEndOfWeek(dayOfWeek)(FractionalSeconds(7)) == LocalDateTime.parse(s"2019-07-${dayOfMonth}T23:59:59.9999999"))
-        assert(dateTime.atEndOfWeek(dayOfWeek)(FractionalSeconds(6)) == LocalDateTime.parse(s"2019-07-${dayOfMonth}T23:59:59.999999"))
-        assert(dateTime.atEndOfWeek(dayOfWeek)(FractionalSeconds(5)) == LocalDateTime.parse(s"2019-07-${dayOfMonth}T23:59:59.99999"))
-        assert(dateTime.atEndOfWeek(dayOfWeek)(FractionalSeconds(4)) == LocalDateTime.parse(s"2019-07-${dayOfMonth}T23:59:59.9999"))
-        assert(dateTime.atEndOfWeek(dayOfWeek)(FractionalSeconds(3)) == LocalDateTime.parse(s"2019-07-${dayOfMonth}T23:59:59.999"))
-        assert(dateTime.atEndOfWeek(dayOfWeek)(FractionalSeconds(2)) == LocalDateTime.parse(s"2019-07-${dayOfMonth}T23:59:59.99"))
-        assert(dateTime.atEndOfWeek(dayOfWeek)(FractionalSeconds(1)) == LocalDateTime.parse(s"2019-07-${dayOfMonth}T23:59:59.9"))
-        assert(dateTime.atEndOfWeek(dayOfWeek)(Seconds)              == LocalDateTime.parse(s"2019-07-${dayOfMonth}T23:59:59"))
-        assert(dateTime.atEndOfWeek(dayOfWeek)(Minutes)              == LocalDateTime.parse(s"2019-07-${dayOfMonth}T23:59"))
-        assert(dateTime.atEndOfWeek(dayOfWeek)(Hours)                == LocalDateTime.parse(s"2019-07-${dayOfMonth}T23:00"))
+        assert(dateTime.atEndOfWeek(dayOfWeek)(using FractionalSeconds(9)) == LocalDateTime.parse(s"2019-07-${dayOfMonth}T23:59:59.999999999"))
+        assert(dateTime.atEndOfWeek(dayOfWeek)(using FractionalSeconds(8)) == LocalDateTime.parse(s"2019-07-${dayOfMonth}T23:59:59.99999999"))
+        assert(dateTime.atEndOfWeek(dayOfWeek)(using FractionalSeconds(7)) == LocalDateTime.parse(s"2019-07-${dayOfMonth}T23:59:59.9999999"))
+        assert(dateTime.atEndOfWeek(dayOfWeek)(using FractionalSeconds(6)) == LocalDateTime.parse(s"2019-07-${dayOfMonth}T23:59:59.999999"))
+        assert(dateTime.atEndOfWeek(dayOfWeek)(using FractionalSeconds(5)) == LocalDateTime.parse(s"2019-07-${dayOfMonth}T23:59:59.99999"))
+        assert(dateTime.atEndOfWeek(dayOfWeek)(using FractionalSeconds(4)) == LocalDateTime.parse(s"2019-07-${dayOfMonth}T23:59:59.9999"))
+        assert(dateTime.atEndOfWeek(dayOfWeek)(using FractionalSeconds(3)) == LocalDateTime.parse(s"2019-07-${dayOfMonth}T23:59:59.999"))
+        assert(dateTime.atEndOfWeek(dayOfWeek)(using FractionalSeconds(2)) == LocalDateTime.parse(s"2019-07-${dayOfMonth}T23:59:59.99"))
+        assert(dateTime.atEndOfWeek(dayOfWeek)(using FractionalSeconds(1)) == LocalDateTime.parse(s"2019-07-${dayOfMonth}T23:59:59.9"))
+        assert(dateTime.atEndOfWeek(dayOfWeek)(using Seconds)              == LocalDateTime.parse(s"2019-07-${dayOfMonth}T23:59:59"))
+        assert(dateTime.atEndOfWeek(dayOfWeek)(using Minutes)              == LocalDateTime.parse(s"2019-07-${dayOfMonth}T23:59"))
+        assert(dateTime.atEndOfWeek(dayOfWeek)(using Hours)                == LocalDateTime.parse(s"2019-07-${dayOfMonth}T23:00"))
     }
   }
 
   it should "be adjusted to end month" in {
-    assert(dateTime.atEndOfMonth(FractionalSeconds(9)) == LocalDateTime.parse("2019-07-31T23:59:59.999999999"))
-    assert(dateTime.atEndOfMonth(FractionalSeconds(8)) == LocalDateTime.parse("2019-07-31T23:59:59.99999999"))
-    assert(dateTime.atEndOfMonth(FractionalSeconds(7)) == LocalDateTime.parse("2019-07-31T23:59:59.9999999"))
-    assert(dateTime.atEndOfMonth(FractionalSeconds(6)) == LocalDateTime.parse("2019-07-31T23:59:59.999999"))
-    assert(dateTime.atEndOfMonth(FractionalSeconds(5)) == LocalDateTime.parse("2019-07-31T23:59:59.99999"))
-    assert(dateTime.atEndOfMonth(FractionalSeconds(4)) == LocalDateTime.parse("2019-07-31T23:59:59.9999"))
-    assert(dateTime.atEndOfMonth(FractionalSeconds(3)) == LocalDateTime.parse("2019-07-31T23:59:59.999"))
-    assert(dateTime.atEndOfMonth(FractionalSeconds(2)) == LocalDateTime.parse("2019-07-31T23:59:59.99"))
-    assert(dateTime.atEndOfMonth(FractionalSeconds(1)) == LocalDateTime.parse("2019-07-31T23:59:59.9"))
-    assert(dateTime.atEndOfMonth(Seconds)              == LocalDateTime.parse("2019-07-31T23:59:59"))
-    assert(dateTime.atEndOfMonth(Minutes)              == LocalDateTime.parse("2019-07-31T23:59"))
-    assert(dateTime.atEndOfMonth(Hours)                == LocalDateTime.parse("2019-07-31T23:00"))
+    assert(dateTime.atEndOfMonth(using FractionalSeconds(9)) == LocalDateTime.parse("2019-07-31T23:59:59.999999999"))
+    assert(dateTime.atEndOfMonth(using FractionalSeconds(8)) == LocalDateTime.parse("2019-07-31T23:59:59.99999999"))
+    assert(dateTime.atEndOfMonth(using FractionalSeconds(7)) == LocalDateTime.parse("2019-07-31T23:59:59.9999999"))
+    assert(dateTime.atEndOfMonth(using FractionalSeconds(6)) == LocalDateTime.parse("2019-07-31T23:59:59.999999"))
+    assert(dateTime.atEndOfMonth(using FractionalSeconds(5)) == LocalDateTime.parse("2019-07-31T23:59:59.99999"))
+    assert(dateTime.atEndOfMonth(using FractionalSeconds(4)) == LocalDateTime.parse("2019-07-31T23:59:59.9999"))
+    assert(dateTime.atEndOfMonth(using FractionalSeconds(3)) == LocalDateTime.parse("2019-07-31T23:59:59.999"))
+    assert(dateTime.atEndOfMonth(using FractionalSeconds(2)) == LocalDateTime.parse("2019-07-31T23:59:59.99"))
+    assert(dateTime.atEndOfMonth(using FractionalSeconds(1)) == LocalDateTime.parse("2019-07-31T23:59:59.9"))
+    assert(dateTime.atEndOfMonth(using Seconds)              == LocalDateTime.parse("2019-07-31T23:59:59"))
+    assert(dateTime.atEndOfMonth(using Minutes)              == LocalDateTime.parse("2019-07-31T23:59"))
+    assert(dateTime.atEndOfMonth(using Hours)                == LocalDateTime.parse("2019-07-31T23:00"))
   }
 
   it should "be adjusted to end year" in {
-    assert(dateTime.atEndOfYear(FractionalSeconds(9)) == LocalDateTime.parse("2019-12-31T23:59:59.999999999"))
-    assert(dateTime.atEndOfYear(FractionalSeconds(8)) == LocalDateTime.parse("2019-12-31T23:59:59.99999999"))
-    assert(dateTime.atEndOfYear(FractionalSeconds(7)) == LocalDateTime.parse("2019-12-31T23:59:59.9999999"))
-    assert(dateTime.atEndOfYear(FractionalSeconds(6)) == LocalDateTime.parse("2019-12-31T23:59:59.999999"))
-    assert(dateTime.atEndOfYear(FractionalSeconds(5)) == LocalDateTime.parse("2019-12-31T23:59:59.99999"))
-    assert(dateTime.atEndOfYear(FractionalSeconds(4)) == LocalDateTime.parse("2019-12-31T23:59:59.9999"))
-    assert(dateTime.atEndOfYear(FractionalSeconds(3)) == LocalDateTime.parse("2019-12-31T23:59:59.999"))
-    assert(dateTime.atEndOfYear(FractionalSeconds(2)) == LocalDateTime.parse("2019-12-31T23:59:59.99"))
-    assert(dateTime.atEndOfYear(FractionalSeconds(1)) == LocalDateTime.parse("2019-12-31T23:59:59.9"))
-    assert(dateTime.atEndOfYear(Seconds)              == LocalDateTime.parse("2019-12-31T23:59:59"))
-    assert(dateTime.atEndOfYear(Minutes)              == LocalDateTime.parse("2019-12-31T23:59"))
-    assert(dateTime.atEndOfYear(Hours)                == LocalDateTime.parse("2019-12-31T23:00"))
+    assert(dateTime.atEndOfYear(using FractionalSeconds(9)) == LocalDateTime.parse("2019-12-31T23:59:59.999999999"))
+    assert(dateTime.atEndOfYear(using FractionalSeconds(8)) == LocalDateTime.parse("2019-12-31T23:59:59.99999999"))
+    assert(dateTime.atEndOfYear(using FractionalSeconds(7)) == LocalDateTime.parse("2019-12-31T23:59:59.9999999"))
+    assert(dateTime.atEndOfYear(using FractionalSeconds(6)) == LocalDateTime.parse("2019-12-31T23:59:59.999999"))
+    assert(dateTime.atEndOfYear(using FractionalSeconds(5)) == LocalDateTime.parse("2019-12-31T23:59:59.99999"))
+    assert(dateTime.atEndOfYear(using FractionalSeconds(4)) == LocalDateTime.parse("2019-12-31T23:59:59.9999"))
+    assert(dateTime.atEndOfYear(using FractionalSeconds(3)) == LocalDateTime.parse("2019-12-31T23:59:59.999"))
+    assert(dateTime.atEndOfYear(using FractionalSeconds(2)) == LocalDateTime.parse("2019-12-31T23:59:59.99"))
+    assert(dateTime.atEndOfYear(using FractionalSeconds(1)) == LocalDateTime.parse("2019-12-31T23:59:59.9"))
+    assert(dateTime.atEndOfYear(using Seconds)              == LocalDateTime.parse("2019-12-31T23:59:59"))
+    assert(dateTime.atEndOfYear(using Minutes)              == LocalDateTime.parse("2019-12-31T23:59"))
+    assert(dateTime.atEndOfYear(using Hours)                == LocalDateTime.parse("2019-12-31T23:00"))
   }
 
   it should "create iterator to other date-time (inclusive)(by period)" in {
@@ -450,4 +450,3 @@ class LocalDateTimeTypeSpec extends org.scalatest.flatspec.AnyFlatSpec {
     assert(!iter.hasNext)
     assertThrows[NoSuchElementException](iter.next())
   }
-}

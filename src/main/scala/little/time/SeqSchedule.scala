@@ -1,6 +1,6 @@
 
 /*
- * Copyright 2020 Carlos Conyers
+ * Copyright 2021 Carlos Conyers
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,9 @@ package little.time
 
 import java.time.LocalDateTime
 
-private class SeqSchedule(times: Seq[LocalDateTime]) extends Schedule {
-  def between(start: LocalDateTime, end: LocalDateTime): Iterator[LocalDateTime] =
-    times.dropWhile(start.isAfter).takeWhile(!end.isBefore(_)).iterator
-}
+private class SeqSchedule(times: Seq[LocalDateTime]) extends Schedule:
+  def between(startTime: LocalDateTime, endTime: LocalDateTime): Iterator[LocalDateTime] =
+    times
+      .dropWhile(startTime.isAfter(_))
+      .takeWhile(!endTime.isBefore(_))
+      .iterator

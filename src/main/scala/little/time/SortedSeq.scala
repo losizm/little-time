@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Carlos Conyers
+ * Copyright 2021 Carlos Conyers
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  */
 package little.time
 
-private object SortedSeq {
+private object SortedSeq:
   def apply[T : Ordering](values: Seq[T]): Seq[T] =
     values.distinct.sorted
-}

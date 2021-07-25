@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Carlos Conyers
+ * Copyright 2021 Carlos Conyers
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,10 @@ package little.time
 
 import java.time.{ Duration, LocalTime }
 
-import Implicits._
-import TimePrecision._
+import Implicits.*
+import TimePrecision.*
 
-class LocalTimeTypeSpec extends org.scalatest.flatspec.AnyFlatSpec {
+class LocalTimeTypeSpec extends org.scalatest.flatspec.AnyFlatSpec:
   private val time = LocalTime.parse("12:38:45.123456789")
 
   "LocalTime" should "have duration added" in {
@@ -114,71 +114,71 @@ class LocalTimeTypeSpec extends org.scalatest.flatspec.AnyFlatSpec {
   }
 
   it should "be adjusted to end microsecond" in {
-    assert(time.atEndOfMicros(FractionalSeconds(9)) == LocalTime.parse("12:38:45.999999999"))
-    assert(time.atEndOfMicros(FractionalSeconds(8)) == LocalTime.parse("12:38:45.99999999"))
-    assert(time.atEndOfMicros(FractionalSeconds(7)) == LocalTime.parse("12:38:45.9999999"))
+    assert(time.atEndOfMicros(using FractionalSeconds(9)) == LocalTime.parse("12:38:45.999999999"))
+    assert(time.atEndOfMicros(using FractionalSeconds(8)) == LocalTime.parse("12:38:45.99999999"))
+    assert(time.atEndOfMicros(using FractionalSeconds(7)) == LocalTime.parse("12:38:45.9999999"))
   }
 
   it should "be adjusted to end millisecond" in {
-    assert(time.atEndOfMillis(FractionalSeconds(9)) == LocalTime.parse("12:38:45.999999999"))
-    assert(time.atEndOfMillis(FractionalSeconds(8)) == LocalTime.parse("12:38:45.99999999"))
-    assert(time.atEndOfMillis(FractionalSeconds(7)) == LocalTime.parse("12:38:45.9999999"))
-    assert(time.atEndOfMillis(FractionalSeconds(6)) == LocalTime.parse("12:38:45.999999"))
-    assert(time.atEndOfMillis(FractionalSeconds(5)) == LocalTime.parse("12:38:45.99999"))
-    assert(time.atEndOfMillis(FractionalSeconds(4)) == LocalTime.parse("12:38:45.9999"))
+    assert(time.atEndOfMillis(using FractionalSeconds(9)) == LocalTime.parse("12:38:45.999999999"))
+    assert(time.atEndOfMillis(using FractionalSeconds(8)) == LocalTime.parse("12:38:45.99999999"))
+    assert(time.atEndOfMillis(using FractionalSeconds(7)) == LocalTime.parse("12:38:45.9999999"))
+    assert(time.atEndOfMillis(using FractionalSeconds(6)) == LocalTime.parse("12:38:45.999999"))
+    assert(time.atEndOfMillis(using FractionalSeconds(5)) == LocalTime.parse("12:38:45.99999"))
+    assert(time.atEndOfMillis(using FractionalSeconds(4)) == LocalTime.parse("12:38:45.9999"))
   }
 
   it should "be adjusted to end second" in {
-    assert(time.atEndOfSecond(FractionalSeconds(9)) == LocalTime.parse("12:38:45.999999999"))
-    assert(time.atEndOfSecond(FractionalSeconds(8)) == LocalTime.parse("12:38:45.99999999"))
-    assert(time.atEndOfSecond(FractionalSeconds(7)) == LocalTime.parse("12:38:45.9999999"))
-    assert(time.atEndOfSecond(FractionalSeconds(6)) == LocalTime.parse("12:38:45.999999"))
-    assert(time.atEndOfSecond(FractionalSeconds(5)) == LocalTime.parse("12:38:45.99999"))
-    assert(time.atEndOfSecond(FractionalSeconds(4)) == LocalTime.parse("12:38:45.9999"))
-    assert(time.atEndOfSecond(FractionalSeconds(3)) == LocalTime.parse("12:38:45.999"))
-    assert(time.atEndOfSecond(FractionalSeconds(2)) == LocalTime.parse("12:38:45.99"))
-    assert(time.atEndOfSecond(FractionalSeconds(1)) == LocalTime.parse("12:38:45.9"))
+    assert(time.atEndOfSecond(using FractionalSeconds(9)) == LocalTime.parse("12:38:45.999999999"))
+    assert(time.atEndOfSecond(using FractionalSeconds(8)) == LocalTime.parse("12:38:45.99999999"))
+    assert(time.atEndOfSecond(using FractionalSeconds(7)) == LocalTime.parse("12:38:45.9999999"))
+    assert(time.atEndOfSecond(using FractionalSeconds(6)) == LocalTime.parse("12:38:45.999999"))
+    assert(time.atEndOfSecond(using FractionalSeconds(5)) == LocalTime.parse("12:38:45.99999"))
+    assert(time.atEndOfSecond(using FractionalSeconds(4)) == LocalTime.parse("12:38:45.9999"))
+    assert(time.atEndOfSecond(using FractionalSeconds(3)) == LocalTime.parse("12:38:45.999"))
+    assert(time.atEndOfSecond(using FractionalSeconds(2)) == LocalTime.parse("12:38:45.99"))
+    assert(time.atEndOfSecond(using FractionalSeconds(1)) == LocalTime.parse("12:38:45.9"))
   }
 
   it should "be adjusted to end minute" in {
-    assert(time.atEndOfMinute(FractionalSeconds(9)) == LocalTime.parse("12:38:59.999999999"))
-    assert(time.atEndOfMinute(FractionalSeconds(8)) == LocalTime.parse("12:38:59.99999999"))
-    assert(time.atEndOfMinute(FractionalSeconds(7)) == LocalTime.parse("12:38:59.9999999"))
-    assert(time.atEndOfMinute(FractionalSeconds(6)) == LocalTime.parse("12:38:59.999999"))
-    assert(time.atEndOfMinute(FractionalSeconds(5)) == LocalTime.parse("12:38:59.99999"))
-    assert(time.atEndOfMinute(FractionalSeconds(4)) == LocalTime.parse("12:38:59.9999"))
-    assert(time.atEndOfMinute(FractionalSeconds(3)) == LocalTime.parse("12:38:59.999"))
-    assert(time.atEndOfMinute(FractionalSeconds(2)) == LocalTime.parse("12:38:59.99"))
-    assert(time.atEndOfMinute(FractionalSeconds(1)) == LocalTime.parse("12:38:59.9"))
-    assert(time.atEndOfMinute(Seconds)              == LocalTime.parse("12:38:59"))
+    assert(time.atEndOfMinute(using FractionalSeconds(9)) == LocalTime.parse("12:38:59.999999999"))
+    assert(time.atEndOfMinute(using FractionalSeconds(8)) == LocalTime.parse("12:38:59.99999999"))
+    assert(time.atEndOfMinute(using FractionalSeconds(7)) == LocalTime.parse("12:38:59.9999999"))
+    assert(time.atEndOfMinute(using FractionalSeconds(6)) == LocalTime.parse("12:38:59.999999"))
+    assert(time.atEndOfMinute(using FractionalSeconds(5)) == LocalTime.parse("12:38:59.99999"))
+    assert(time.atEndOfMinute(using FractionalSeconds(4)) == LocalTime.parse("12:38:59.9999"))
+    assert(time.atEndOfMinute(using FractionalSeconds(3)) == LocalTime.parse("12:38:59.999"))
+    assert(time.atEndOfMinute(using FractionalSeconds(2)) == LocalTime.parse("12:38:59.99"))
+    assert(time.atEndOfMinute(using FractionalSeconds(1)) == LocalTime.parse("12:38:59.9"))
+    assert(time.atEndOfMinute(using Seconds)              == LocalTime.parse("12:38:59"))
   }
 
   it should "be adjusted to end hour" in {
-    assert(time.atEndOfHour(FractionalSeconds(9)) == LocalTime.parse("12:59:59.999999999"))
-    assert(time.atEndOfHour(FractionalSeconds(8)) == LocalTime.parse("12:59:59.99999999"))
-    assert(time.atEndOfHour(FractionalSeconds(7)) == LocalTime.parse("12:59:59.9999999"))
-    assert(time.atEndOfHour(FractionalSeconds(6)) == LocalTime.parse("12:59:59.999999"))
-    assert(time.atEndOfHour(FractionalSeconds(5)) == LocalTime.parse("12:59:59.99999"))
-    assert(time.atEndOfHour(FractionalSeconds(4)) == LocalTime.parse("12:59:59.9999"))
-    assert(time.atEndOfHour(FractionalSeconds(3)) == LocalTime.parse("12:59:59.999"))
-    assert(time.atEndOfHour(FractionalSeconds(2)) == LocalTime.parse("12:59:59.99"))
-    assert(time.atEndOfHour(FractionalSeconds(1)) == LocalTime.parse("12:59:59.9"))
-    assert(time.atEndOfHour(Seconds)              == LocalTime.parse("12:59:59"))
-    assert(time.atEndOfHour(Minutes)              == LocalTime.parse("12:59"))
+    assert(time.atEndOfHour(using FractionalSeconds(9)) == LocalTime.parse("12:59:59.999999999"))
+    assert(time.atEndOfHour(using FractionalSeconds(8)) == LocalTime.parse("12:59:59.99999999"))
+    assert(time.atEndOfHour(using FractionalSeconds(7)) == LocalTime.parse("12:59:59.9999999"))
+    assert(time.atEndOfHour(using FractionalSeconds(6)) == LocalTime.parse("12:59:59.999999"))
+    assert(time.atEndOfHour(using FractionalSeconds(5)) == LocalTime.parse("12:59:59.99999"))
+    assert(time.atEndOfHour(using FractionalSeconds(4)) == LocalTime.parse("12:59:59.9999"))
+    assert(time.atEndOfHour(using FractionalSeconds(3)) == LocalTime.parse("12:59:59.999"))
+    assert(time.atEndOfHour(using FractionalSeconds(2)) == LocalTime.parse("12:59:59.99"))
+    assert(time.atEndOfHour(using FractionalSeconds(1)) == LocalTime.parse("12:59:59.9"))
+    assert(time.atEndOfHour(using Seconds)              == LocalTime.parse("12:59:59"))
+    assert(time.atEndOfHour(using Minutes)              == LocalTime.parse("12:59"))
   }
 
   it should "be adjusted to end day" in {
-    assert(time.atEndOfDay(FractionalSeconds(8)) == LocalTime.parse("23:59:59.99999999"))
-    assert(time.atEndOfDay(FractionalSeconds(7)) == LocalTime.parse("23:59:59.9999999"))
-    assert(time.atEndOfDay(FractionalSeconds(6)) == LocalTime.parse("23:59:59.999999"))
-    assert(time.atEndOfDay(FractionalSeconds(5)) == LocalTime.parse("23:59:59.99999"))
-    assert(time.atEndOfDay(FractionalSeconds(4)) == LocalTime.parse("23:59:59.9999"))
-    assert(time.atEndOfDay(FractionalSeconds(3)) == LocalTime.parse("23:59:59.999"))
-    assert(time.atEndOfDay(FractionalSeconds(2)) == LocalTime.parse("23:59:59.99"))
-    assert(time.atEndOfDay(FractionalSeconds(1)) == LocalTime.parse("23:59:59.9"))
-    assert(time.atEndOfDay(Seconds)              == LocalTime.parse("23:59:59"))
-    assert(time.atEndOfDay(Minutes)              == LocalTime.parse("23:59"))
-    assert(time.atEndOfDay(Hours)                == LocalTime.parse("23:00"))
+    assert(time.atEndOfDay(using FractionalSeconds(8)) == LocalTime.parse("23:59:59.99999999"))
+    assert(time.atEndOfDay(using FractionalSeconds(7)) == LocalTime.parse("23:59:59.9999999"))
+    assert(time.atEndOfDay(using FractionalSeconds(6)) == LocalTime.parse("23:59:59.999999"))
+    assert(time.atEndOfDay(using FractionalSeconds(5)) == LocalTime.parse("23:59:59.99999"))
+    assert(time.atEndOfDay(using FractionalSeconds(4)) == LocalTime.parse("23:59:59.9999"))
+    assert(time.atEndOfDay(using FractionalSeconds(3)) == LocalTime.parse("23:59:59.999"))
+    assert(time.atEndOfDay(using FractionalSeconds(2)) == LocalTime.parse("23:59:59.99"))
+    assert(time.atEndOfDay(using FractionalSeconds(1)) == LocalTime.parse("23:59:59.9"))
+    assert(time.atEndOfDay(using Seconds)              == LocalTime.parse("23:59:59"))
+    assert(time.atEndOfDay(using Minutes)              == LocalTime.parse("23:59"))
+    assert(time.atEndOfDay(using Hours)                == LocalTime.parse("23:00"))
   }
 
   it should "create iterator to other time (inclusive)" in {
@@ -256,4 +256,3 @@ class LocalTimeTypeSpec extends org.scalatest.flatspec.AnyFlatSpec {
     assert(!iter.hasNext)
     assertThrows[NoSuchElementException](iter.next())
   }
-}

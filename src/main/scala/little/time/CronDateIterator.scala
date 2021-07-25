@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Carlos Conyers
+ * Copyright 2021 Carlos Conyers
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,8 @@ private case class CronDateIterator(
   endDate:     LocalDate,
   months:      Seq[Month],
   daysOfMonth: Seq[Int],
-  daysOfWeek:  Seq[DayOfWeek]) extends Iterator[LocalDate] {
+  daysOfWeek:  Seq[DayOfWeek]
+) extends Iterator[LocalDate]:
 
   private var currDay  = startDate.toEpochDay
   private val lastDay  = endDate.toEpochDay
@@ -30,25 +31,22 @@ private case class CronDateIterator(
 
   def hasNext = nextDate.isDefined
 
-  def next() = {
+  def next() =
     val date = nextDate.get
     nextDate = getNextDate()
     date
-  }
 
   @annotation.tailrec
   private def getNextDate(): Option[LocalDate] =
-    currDay > lastDay match {
+    (currDay > lastDay) match
       case true  => None
       case false =>
         val date = LocalDate.ofEpochDay(currDay)
         currDay = currDay + 1
 
-        isScheduled(date) match {
+        isScheduled(date) match
           case true  => Some(date)
           case false => getNextDate()
-        }
-    }
 
   private def isScheduled(date: LocalDate): Boolean =
     isScheduled(date.getMonth) &&
@@ -61,4 +59,3 @@ private case class CronDateIterator(
     (daysOfMonth.isEmpty && daysOfWeek.isEmpty) ||
       daysOfMonth.contains(dayOfMonth) ||
       daysOfWeek.contains(dayOfWeek)
-}

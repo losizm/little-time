@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Carlos Conyers
+ * Copyright 2021 Carlos Conyers
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,42 +16,39 @@
 package little.time
 
 private class CombinedIterator[T](left: Iterator[T], right: Iterator[T])
-    (implicit ord: Ordering[T]) extends Iterator[T] {
+    (using ord: Ordering[T]) extends Iterator[T]:
 
   private var nextLeft  = getNext(left)
   private var nextRight = getNext(right)
 
   def hasNext = nextLeft.isDefined || nextRight.isDefined
 
-  def next() = (nextLeft, nextRight) match {
-    case (Some(l), Some(r)) =>
-      if (ord.lt(l, r)) {
-        nextLeft  = getNext(left)
+  def next() =
+    (nextLeft, nextRight) match
+      case (Some(l), Some(r)) =>
+        if ord.lt(l, r) then
+          nextLeft  = getNext(left)
+          l
+        else if ord.gt(l, r) then
+          nextRight = getNext(right)
+          r
+        else
+          nextLeft  = getNext(left)
+          nextRight = getNext(right)
+          l
+
+      case (Some(l), None) =>
+        nextLeft = getNext(left)
         l
-      } else if (ord.gt(l, r)) {
+
+      case (None, Some(r)) =>
         nextRight = getNext(right)
         r
-      } else {
-        nextLeft  = getNext(left)
-        nextRight = getNext(right)
-        l
-      }
 
-    case (Some(l), None) =>
-      nextLeft = getNext(left)
-      l
-
-    case (None, Some(r)) =>
-      nextRight = getNext(right)
-      r
-
-    case (None, None) =>
-      throw new NoSuchElementException()
-  }
+      case (None, None) =>
+        throw new NoSuchElementException()
 
   private def getNext(iter: Iterator[T]): Option[T] =
-    iter.hasNext match {
+    iter.hasNext match
       case true  => Some(iter.next())
       case false => None
-    }
-}

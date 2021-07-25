@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Carlos Conyers
+ * Copyright 2021 Carlos Conyers
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 package little.time
 
 import java.time.{ DayOfWeek, LocalTime, Month }
-import DayOfWeek._
-import Month._
+import DayOfWeek.*
+import Month.*
 
 import Implicits.TimeStringType
 
-class CronScheduleSpec extends org.scalatest.flatspec.AnyFlatSpec {
+class CronScheduleSpec extends org.scalatest.flatspec.AnyFlatSpec:
   it should "create monthly schedule" in {
     val schedule = CronSchedule(
       times       = Seq("12:00".toLocalTime, "18:00".toLocalTime),
@@ -154,4 +154,3 @@ class CronScheduleSpec extends org.scalatest.flatspec.AnyFlatSpec {
     assert(schedule.months      == Seq(JANUARY, FEBRUARY, MARCH, APRIL))
     assert(schedule.daysOfWeek  == Seq(SATURDAY, SUNDAY))
   }
-}

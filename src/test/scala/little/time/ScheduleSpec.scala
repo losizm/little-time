@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Carlos Conyers
+ * Copyright 2021 Carlos Conyers
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ package little.time
 
 import Implicits.TimeStringType
 
-class ScheduleSpec extends org.scalatest.flatspec.AnyFlatSpec {
+class ScheduleSpec extends org.scalatest.flatspec.AnyFlatSpec:
   it should "create schedule" in {
     val schedule = Schedule(
       "2020-10-31T12:00".toLocalDateTime,
@@ -80,4 +80,3 @@ class ScheduleSpec extends org.scalatest.flatspec.AnyFlatSpec {
     assert(between.next() == "2020-12-15T12:00".toLocalDateTime)
     assertThrows[NoSuchElementException](between.next())
   }
-}

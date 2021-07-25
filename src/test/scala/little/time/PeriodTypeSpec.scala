@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Carlos Conyers
+ * Copyright 2021 Carlos Conyers
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@ package little.time
 
 import java.time.Period
 
-import Implicits._
+import Implicits.*
 
-class PeriodTypeSpec extends org.scalatest.flatspec.AnyFlatSpec {
+class PeriodTypeSpec extends org.scalatest.flatspec.AnyFlatSpec:
   private val period = Period.of(1, 3, 7)
 
   "Period" should "be negated" in {
@@ -60,4 +60,3 @@ class PeriodTypeSpec extends org.scalatest.flatspec.AnyFlatSpec {
     assert(period *  3 == period.multipliedBy(3))
     assert(period * -6 == period.multipliedBy(-6))
   }
-}
