@@ -44,6 +44,10 @@ object Implicits:
   given localDateTimeOrdering: Ordering[LocalDateTime] =
     (a, b) => a.compareTo(b)
 
+  /** Provides ordering for `java.time.Instant`. */
+  given instantOrdering: Ordering[Instant] =
+    (a, b) => a.compareTo(b)
+
   /** Provides extension methods to `java.time.Duration` */
   implicit class DurationType(duration: Duration) extends AnyVal:
     /** Gets negated duration. */
@@ -494,6 +498,40 @@ object Implicits:
     def iterateUntil(end: LocalTime, step: Duration = Duration.ofSeconds(1)): Iterator[LocalTime] =
       exclusive(time, end, step)
 
+  /** Provides extension methods to `java.time.Instant` */
+  implicit class InstantType(instant: Instant) extends AnyVal:
+    /**
+     * Gets instant with specified amount added.
+     *
+     * @param amount temporal amount
+     */
+    def +(amount: TemporalAmount): Instant =
+      instant.plus(amount)
+
+    /**
+     * Gets instant with specified amount subtracted.
+     *
+     * @param amount temporal amount
+     */
+    def -(amount: TemporalAmount): Instant =
+      instant.minus(amount)
+
+    /**
+     * Compares to other instant and returns the lesser value.
+     *
+     * @param other other instant
+     */
+    def min(other: Instant): Instant =
+      instantOrdering.min(instant, other)
+
+    /**
+     * Compares to other instant and returns the greater value.
+     *
+     * @param other other instant
+     */
+    def max(other: Instant): Instant =
+      instantOrdering.max(instant, other)
+
   /** Provides extension methods to `java.time.LocalDateTime` */
   implicit class LocalDateTimeType(dateTime: LocalDateTime) extends AnyVal:
     /** Gets `YearMonth` part of date-time. */
@@ -705,3 +743,7 @@ object Implicits:
     /** Converts formatted string to `LocalDateTime`. */
     def toLocalDateTime: LocalDateTime =
       LocalDateTime.parse(string)
+
+    /** Converts formatted string to `Instant`. */
+    def toInstant: Instant =
+      Instant.parse(string)

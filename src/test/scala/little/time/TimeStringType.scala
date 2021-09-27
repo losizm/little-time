@@ -46,6 +46,14 @@ class TimeStringTypeSpec extends org.scalatest.flatspec.AnyFlatSpec:
     assert("2019-07-11T12:38:45.123456789".toLocalDateTime == LocalDateTime.parse("2019-07-11T12:38:45.123456789"))
   }
 
+  it should "be converted to Instant" in {
+    assert("2019-07-11T12:38:45Z".toInstant           == Instant.parse("2019-07-11T12:38:45Z"))
+    assert("2019-07-11T12:38:45.1Z".toInstant         == Instant.parse("2019-07-11T12:38:45.1Z"))
+    assert("2019-07-11T12:38:45.123Z".toInstant       == Instant.parse("2019-07-11T12:38:45.123Z"))
+    assert("2019-07-11T12:38:45.123456Z".toInstant    == Instant.parse("2019-07-11T12:38:45.123456Z"))
+    assert("2019-07-11T12:38:45.123456789Z".toInstant == Instant.parse("2019-07-11T12:38:45.123456789Z"))
+  }
+
   it should "be converted to Period" in {
     assert("P12Y6M5D".toPeriod == Period.parse("P12Y6M5D"))
   }
