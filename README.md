@@ -1,16 +1,19 @@
 # little-time
 
-The Scala library that provides extension methods to _java.time_.
-
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.losizm/little-time_3.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.losizm%22%20AND%20a:%22little-time_3%22)
+
+The Scala library that provides extension methods to _java.time_.
 
 ## Getting Started
 
 To get started, add **little-time** as a dependency to your project:
 
 ```scala
-libraryDependencies += "com.github.losizm" %% "little-time" % "1.0.0"
+libraryDependencies += "com.github.losizm" %% "little-time" % "1.1.0"
 ```
+
+_**NOTE:** Starting with version 1.0, **little-time** is written for Scala 3. See
+previous releases for compatibility with Scala 2.12 and Scala 2.13._
 
 ## A Taste of little-time
 
