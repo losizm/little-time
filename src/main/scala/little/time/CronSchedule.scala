@@ -19,8 +19,6 @@ import java.time.*
 
 import scala.math.Ordered.orderingToOrdered
 
-import Implicits.*
-
 /**
  * Defines _cron_-like utility for scheduled times.
  *
@@ -48,8 +46,7 @@ import Implicits.*
  * import java.time.LocalTime.NOON
  * import java.time.Month.{ OCTOBER, NOVEMBER, DECEMBER }
  *
- * import little.time.CronSchedule
- * import little.time.Implicits.TimeStringType
+ * import little.time.{ CronSchedule, StringExt }
  *
  * // Create schedule
  * val schedule = CronSchedule(
@@ -181,8 +178,7 @@ object CronSchedule:
    * import java.time.DayOfWeek.SUNDAY
    * import java.time.Month.{ OCTOBER, NOVEMBER, DECEMBER }
    *
-   * import little.time.CronSchedule
-   * import little.time.Implicits.TimeStringType
+   * import little.time.{ CronSchedule, StringExt }
    *
    * // At noon on 1st and 15th in October thru December
    * val monthly = CronSchedule(

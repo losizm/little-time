@@ -17,8 +17,6 @@ package little.time
 
 import java.time.{ LocalDate, LocalDateTime, LocalTime }
 
-import Implicits.localDateTimeOrdering
-
 /** Defines utility for scheduled times. */
 trait Schedule:
   /**

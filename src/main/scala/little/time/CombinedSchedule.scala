@@ -17,8 +17,6 @@ package little.time
 
 import java.time.LocalDateTime
 
-import Implicits.localDateTimeOrdering
-
 private class CombinedSchedule(left: Schedule, right: Schedule) extends Schedule:
   def between(start: LocalDateTime, end: LocalDateTime): Iterator[LocalDateTime] =
     CombinedIterator[LocalDateTime](left.between(start, end), right.between(start, end))

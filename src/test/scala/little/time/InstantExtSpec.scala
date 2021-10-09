@@ -17,9 +17,7 @@ package little.time
 
 import java.time.{ Duration, Instant, Period }
 
-import Implicits.{ *, given }
-
-class InstantTypeSpec extends org.scalatest.flatspec.AnyFlatSpec:
+class InstantExtSpec extends org.scalatest.flatspec.AnyFlatSpec:
   private val instant = Instant.parse("2019-07-11T12:38:45.123456789Z")
 
   it should "add duration to instant" in {

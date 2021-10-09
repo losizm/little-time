@@ -17,9 +17,7 @@ package little.time
 
 import java.time.Period
 
-import Implicits.*
-
-class PeriodTypeSpec extends org.scalatest.flatspec.AnyFlatSpec:
+class PeriodExtSpec extends org.scalatest.flatspec.AnyFlatSpec:
   private val period = Period.of(1, 3, 7)
 
   "Period" should "be negated" in {

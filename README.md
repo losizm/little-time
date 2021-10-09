@@ -26,7 +26,7 @@ date between the two.
 
 ```scala
 import java.time.*
-import little.time.Implicits.{ *, given }
+import little.time.{ *, given }
 
 // Convert String to LocalDate
 val start = "2018-04-01".toLocalDate
@@ -208,8 +208,7 @@ import java.time.{ LocalDateTime, Period }
 import java.time.LocalTime.NOON
 import java.time.Month.{ OCTOBER, NOVEMBER, DECEMBER }
 
-import little.time.CronSchedule
-import little.time.Implicits.{ *, given }
+import little.time.{ *, given }
 
 // Create schedule
 val schedule = CronSchedule(

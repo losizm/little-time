@@ -17,9 +17,7 @@ package little.time
 
 import java.time.{ Period, YearMonth }
 
-import Implicits.*
-
-class YearMonthTypeSpec extends org.scalatest.flatspec.AnyFlatSpec:
+class YearMonthExtSpec extends org.scalatest.flatspec.AnyFlatSpec:
   private val month = YearMonth.parse("2019-07")
 
   "YearMonth" should "be compared to other" in {

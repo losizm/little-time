@@ -17,10 +17,9 @@ package little.time
 
 import java.time.{ Duration, LocalTime }
 
-import Implicits.*
 import TimePrecision.*
 
-class LocalTimeTypeSpec extends org.scalatest.flatspec.AnyFlatSpec:
+class LocalTimeExtSpec extends org.scalatest.flatspec.AnyFlatSpec:
   private val time = LocalTime.parse("12:38:45.123456789")
 
   "LocalTime" should "have duration added" in {

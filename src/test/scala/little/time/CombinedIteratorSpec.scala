@@ -17,8 +17,6 @@ package little.time
 
 import java.time.LocalDateTime
 
-import Implicits.{ LocalDateTimeType, TimeStringType, localDateTimeOrdering }
-
 class CombinedIteratorSpec extends org.scalatest.flatspec.AnyFlatSpec:
   it should "iterate over two Int iterators" in {
     val a = 10 to 50 by 10

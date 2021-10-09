@@ -15,8 +15,6 @@
  */
 package little.time
 
-import Implicits.TimeStringType
-
 class ScheduleSpec extends org.scalatest.flatspec.AnyFlatSpec:
   it should "create schedule" in {
     val schedule = Schedule(

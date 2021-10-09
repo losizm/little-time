@@ -19,8 +19,6 @@ import java.time.{ DayOfWeek, LocalTime, Month }
 import DayOfWeek.*
 import Month.*
 
-import Implicits.TimeStringType
-
 class CronScheduleSpec extends org.scalatest.flatspec.AnyFlatSpec:
   it should "create monthly schedule" in {
     val schedule = CronSchedule(
