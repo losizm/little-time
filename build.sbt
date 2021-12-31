@@ -1,24 +1,23 @@
 organization := "com.github.losizm"
 name         := "little-time"
 version      := "2.0.0"
-description  := "The Scala library that provides extension methods to java.time"
+description  := "The Scala library that provides extension methods from java.time"
 homepage     := Some(url("https://github.com/losizm/little-time"))
 licenses     := List("Apache License, Version 2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt"))
 
-scalaVersion := "3.0.2"
+versionScheme := Some("early-semver")
 
-scalacOptions ++= Seq("-deprecation", "-feature", "-new-syntax", "-Yno-experimental")
+scalaVersion := "3.1.0"
 
-Compile / doc / scalacOptions ++= Seq(
+scalacOptions := Seq("-deprecation", "-feature", "-new-syntax", "-Yno-experimental")
+
+Compile / doc / scalacOptions := Seq(
   "-project", name.value,
-  "-project-version", {
-    val ver = version.value
-    ver.substring(0, ver.lastIndexOf(".")) ++ ".x"
-  }
+  "-project-version", version.value
 )
 
 
-libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.9" % "test"
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.10" % "test"
 
 developers := List(
   Developer(
