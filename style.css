@@ -1,0 +1,87 @@
+:root {
+  font-size: 14px;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Avenir Next", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 1em;
+  background-color: #000;
+  color: #024;
+  text-align: center;
+}
+
+header {
+  margin-top: 5%;
+}
+
+h1 {
+  margin: 0 0 .5rem 0;
+  color: #834;
+  font-size: 4.5em;
+  font-weight: normal;
+  letter-spacing: -.05em;
+}
+
+h2 {
+  margin: 0 0 1.5rem 0;
+  color: #bbb;
+  font-size: 2em;
+  font-weight: 300;
+  letter-spacing: .025em;
+}
+
+main {
+  margin-top: .75rem;
+  border-top: 1px solid #412;
+  border-bottom: 1px solid #412;
+  padding: 2.5em;
+  background-color: #040404;
+  color: #888;
+  letter-spacing: .075em;
+}
+
+main > .quote {
+  color: #488;
+}
+
+main > .op {
+  color: #834;
+}
+
+nav {
+  margin-top: 2.25rem;
+}
+
+nav > a, nav > a:visited  {
+  display: inline-block;
+  border: 1px solid #834;
+  border-radius: 4px;
+  padding: .75em 1.25em;
+  background-color: #000;
+  color: #834;
+  font-size: .9em;
+  font-weight: normal;
+  text-decoration: none;
+  min-width: 11em;
+}
+
+nav > a:hover  {
+  background-color: #1a0a0a;
+  cursor: pointer;
+}
+
+nav > a:active  {
+  background-color: #250a0a;
+}
+
+nav > a + a {
+  margin-left: 1em;
+}
+
+footer {
+  margin-top: 6rem;
+  color: #834;
+  font-size: .75em;
+}
