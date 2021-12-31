@@ -2,7 +2,7 @@
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.losizm/little-time_3.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.losizm%22%20AND%20a:%22little-time_3%22)
 
-The Scala library that provides extension methods to _java.time_.
+The Scala library that provides extension methods for _java.time_.
 
 ## Getting Started
 

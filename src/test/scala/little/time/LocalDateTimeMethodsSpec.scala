@@ -20,7 +20,7 @@ import java.time.{ DayOfWeek, Duration, LocalDateTime, Period, YearMonth }
 import DayOfWeek.*
 import TimePrecision.*
 
-class LocalDateTimeExtSpec extends org.scalatest.flatspec.AnyFlatSpec:
+class LocalDateTimeMethodsSpec extends org.scalatest.flatspec.AnyFlatSpec:
   private val dateTime = LocalDateTime.parse("2019-07-11T12:38:45.123456789")
 
   "LocalDateTime" should "have duration added" in {

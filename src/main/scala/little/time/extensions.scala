@@ -22,8 +22,8 @@ import DayOfWeek.*
 import Stepping.*
 import TimePrecision.*
 
-/** Provides extension methods to `java.time.Duration` */
-implicit class DurationExt(duration: Duration) extends AnyVal:
+/** Provides extension methods for `java.time.Duration` */
+implicit class DurationMethods(duration: Duration) extends AnyVal:
   /** Gets negated duration. */
   def unary_- : Duration =
     duration.negated()
@@ -94,8 +94,8 @@ implicit class DurationExt(duration: Duration) extends AnyVal:
   def iterateUntil(end: Duration, step: Duration = Duration.ofSeconds(1)): Iterator[Duration] =
     exclusive(duration, end, step)
 
-/** Provides extension methods to `java.time.Period` */
-implicit class PeriodExt(period: Period) extends AnyVal:
+/** Provides extension methods for `java.time.Period` */
+implicit class PeriodMethods(period: Period) extends AnyVal:
   /** Gets negated period. */
   def unary_- : Period =
     period.negated()
@@ -124,8 +124,8 @@ implicit class PeriodExt(period: Period) extends AnyVal:
   def *(n: Int): Period =
     period.multipliedBy(n)
 
-/** Provides extension methods to `java.time.YearMonth` */
-implicit class YearMonthExt(month: YearMonth) extends AnyVal:
+/** Provides extension methods for `java.time.YearMonth` */
+implicit class YearMonthMethods(month: YearMonth) extends AnyVal:
   /**
    * Gets month with specified number of months added.
    *
@@ -202,8 +202,8 @@ implicit class YearMonthExt(month: YearMonth) extends AnyVal:
   def iterateUntil(end: YearMonth, step: Period = Period.ofMonths(1)): Iterator[YearMonth] =
     exclusive(month, end, step)
 
-/** Provides extension methods to `java.time.LocalDate` */
-implicit class LocalDateExt(date: LocalDate) extends AnyVal:
+/** Provides extension methods for `java.time.LocalDate` */
+implicit class LocalDateMethods(date: LocalDate) extends AnyVal:
   /** Gets `YearMonth` part of date. */
   def toYearMonth: YearMonth =
     YearMonth.of(date.getYear, date.getMonth)
@@ -334,8 +334,8 @@ implicit class LocalDateExt(date: LocalDate) extends AnyVal:
   def iterateUntil(end: LocalDate, step: Period = Period.ofDays(1)): Iterator[LocalDate] =
     exclusive(date, end, step)
 
-/** Provides extension methods to `java.time.LocalTime` */
-implicit class LocalTimeExt(time: LocalTime) extends AnyVal:
+/** Provides extension methods for `java.time.LocalTime` */
+implicit class LocalTimeMethods(time: LocalTime) extends AnyVal:
   /**
    * Gets time with specified amount added.
    *
@@ -472,8 +472,8 @@ implicit class LocalTimeExt(time: LocalTime) extends AnyVal:
   def iterateUntil(end: LocalTime, step: Duration = Duration.ofSeconds(1)): Iterator[LocalTime] =
     exclusive(time, end, step)
 
-/** Provides extension methods to `java.time.LocalDateTime` */
-implicit class LocalDateTimeExt(dateTime: LocalDateTime) extends AnyVal:
+/** Provides extension methods for `java.time.LocalDateTime` */
+implicit class LocalDateTimeMethods(dateTime: LocalDateTime) extends AnyVal:
   /** Gets `YearMonth` part of date-time. */
   def toYearMonth: YearMonth =
     YearMonth.of(dateTime.getYear, dateTime.getMonth)
@@ -658,8 +658,8 @@ implicit class LocalDateTimeExt(dateTime: LocalDateTime) extends AnyVal:
   def iterateUntil(end: LocalDateTime, step: TemporalAmount = Duration.ofSeconds(1)): Iterator[LocalDateTime] =
     exclusive(dateTime, end, step)
 
-/** Provides extension methods to `java.time.Instant` */
-implicit class InstantExt(instant: Instant) extends AnyVal:
+/** Provides extension methods for `java.time.Instant` */
+implicit class InstantMethods(instant: Instant) extends AnyVal:
   /**
    * Gets instant with specified amount added.
    *
@@ -693,7 +693,7 @@ implicit class InstantExt(instant: Instant) extends AnyVal:
     instantOrdering.max(instant, other)
 
 /** Provides time-related extension methods to `java.lang.String`. */
-implicit class StringExt(string: String) extends AnyVal:
+implicit class StringMethods(string: String) extends AnyVal:
   /** Converts formatted string to `Period`. */
   def toPeriod: Period =
     Period.parse(string)
