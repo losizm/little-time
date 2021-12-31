@@ -17,7 +17,7 @@ package little.time
 
 import java.time.*
 
-class StringMethodsSpec extends org.scalatest.flatspec.AnyFlatSpec:
+class TimeStringMethodsSpec extends org.scalatest.flatspec.AnyFlatSpec:
   "String" should "be converted to YearMonth" in {
     assert("2019-07".toYearMonth == YearMonth.parse("2019-07"))
   }
