@@ -284,14 +284,24 @@ object CronSchedule:
     fields.trim.split("\\s+") match
       case Array(second, minute, hour, dayOfMonth, month, dayOfWeek) =>
         CronScheduleImpl(
-          SortedSeq(parseTime(second, minute, hour)),
+          LazyList.from(
+            CronTimeIterator(
+              SortedSeq(parseHour(hour)),
+              SortedSeq(parseMinute(minute)),
+              SortedSeq(parseSecond(second)))
+          ),
           SortedSeq(parseDayOfMonth(dayOfMonth)),
           SortedSeq(parseMonth(month)),
           SortedSeq(parseDayOfWeek(dayOfWeek)))
 
       case Array(minute, hour, dayOfMonth, month, dayOfWeek) =>
         CronScheduleImpl(
-          SortedSeq(parseTime("0", minute, hour)),
+          LazyList.from(
+            CronTimeIterator(
+              SortedSeq(parseHour(hour)),
+              SortedSeq(parseMinute(minute)),
+              Seq(0))
+          ),
           SortedSeq(parseDayOfMonth(dayOfMonth)),
           SortedSeq(parseMonth(month)),
           SortedSeq(parseDayOfWeek(dayOfWeek)))
@@ -299,17 +309,10 @@ object CronSchedule:
       case _ =>
         throw IllegalArgumentException("Invalid cron syntax")
 
-  private def parseTime(second: String, minute: String, hour: String): Seq[LocalTime] =
-    parseSecond(second).flatMap { s =>
-      parseMinute(minute).flatMap { m =>
-        parseHour(hour).map(h => LocalTime.of(h, m, s))
-      }
-    }
-
   private def parseSecond(s: String): Seq[Int] =
     try
       s.split(",", -1).flatMap(parseField(_, 0, 59)).toSeq match
-        case Nil    => Seq(0)
+        case Nil    => Nil
         case second => second
     catch case _: Exception =>
       throw IllegalArgumentException("Invalid cron second")
@@ -317,7 +320,7 @@ object CronSchedule:
   private def parseMinute(m: String): Seq[Int] =
     try
       m.split(",", -1).flatMap(parseField(_, 0, 59)).toSeq match
-        case Nil    => Seq(0)
+        case Nil    => Nil
         case minute => minute
     catch case _: Exception =>
       throw IllegalArgumentException("Invalid cron minute")
@@ -325,7 +328,7 @@ object CronSchedule:
   private def parseHour(h: String): Seq[Int] =
     try
       h.split(",", -1).flatMap(parseField(_, 0, 23)).toSeq match
-        case Nil  => Seq(0)
+        case Nil  => Nil
         case hour => hour
     catch case _: Exception =>
       throw IllegalArgumentException("Invalid cron hour")

@@ -132,6 +132,30 @@ class CronScheduleSpec extends org.scalatest.flatspec.AnyFlatSpec:
     assert(cron3.daysOfMonth == Seq(1, 4, 7, 10, 13))
     assert(cron3.months      == Seq(JANUARY, MAY, SEPTEMBER))
     assert(cron3.daysOfWeek  == Nil)
+
+    val cron4 = CronSchedule("15 * * * *")
+    assert(cron4.times       == (0 to 23).map(LocalTime.of(_, 15)))
+    assert(cron4.daysOfMonth == Nil)
+    assert(cron4.months      == Nil)
+    assert(cron4.daysOfWeek  == Nil)
+
+    val cron5 = CronSchedule("* 12 * * *")
+    assert(cron5.times       == (0 to 59).map(LocalTime.of(12, _)))
+    assert(cron5.daysOfMonth == Nil)
+    assert(cron5.months      == Nil)
+    assert(cron5.daysOfWeek  == Nil)
+
+    val cron6 = CronSchedule("* 45 12 * * *")
+    assert(cron6.times       == (0 to 59).map(LocalTime.of(12, 45, _)))
+    assert(cron6.daysOfMonth == Nil)
+    assert(cron6.months      == Nil)
+    assert(cron6.daysOfWeek  == Nil)
+
+    val cron7 = CronSchedule("*/15 45 12 * * *")
+    assert(cron7.times       == (0 to 59 by 15).map(LocalTime.of(12, 45, _)))
+    assert(cron7.daysOfMonth == Nil)
+    assert(cron7.months      == Nil)
+    assert(cron7.daysOfWeek  == Nil)
   }
 
   it should "build schedule" in {
