@@ -16,5 +16,5 @@
 package little.time
 
 private object SortedSeq:
-  def apply[T : Ordering](values: Seq[T]): Seq[T] =
+  def apply[T](values: Seq[T])(using Ordering[T]): Seq[T] =
     values.distinct.sorted

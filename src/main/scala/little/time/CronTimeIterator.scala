@@ -27,9 +27,9 @@ private case class CronTimeIterator(
   private val effectiveMinutes = if minutes.isEmpty then 0 to 59 else minutes
   private val effectiveSeconds = if seconds.isEmpty then 0 to 59 else seconds
 
-  private val hourCount   = effectiveHours.size
-  private val minuteCount = effectiveMinutes.size
-  private val secondCount = effectiveSeconds.size
+  private val hourMax   = effectiveHours.size - 1
+  private val minuteMax = effectiveMinutes.size - 1
+  private val secondMax = effectiveSeconds.size - 1
 
   var hourIndex   = 0
   var minuteIndex = 0
@@ -45,22 +45,22 @@ private case class CronTimeIterator(
     time
 
   private def getNextTime(): Option[LocalTime] =
-    if secondIndex < secondCount then
+    if secondIndex <= secondMax then
       val time = getCurrentTime()
       secondIndex += 1
       Some(time)
-    else if minuteIndex < minuteCount - 1 then
+    else if minuteIndex < minuteMax then
       minuteIndex += 1
       secondIndex = 0
       val time = getCurrentTime()
-      secondIndex += 1
+      secondIndex = 1
       Some(time)
-    else if hourIndex < hourCount - 1 then
+    else if hourIndex < hourMax then
       hourIndex += 1
       minuteIndex = 0
       secondIndex = 0
       val time = getCurrentTime()
-      secondIndex += 1
+      secondIndex = 1
       Some(time)
     else
       None
