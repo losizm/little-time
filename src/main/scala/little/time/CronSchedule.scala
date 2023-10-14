@@ -63,7 +63,7 @@ import scala.math.Ordered.orderingToOrdered
  * }
  *
  * // Create schedule using cron-like syntax
- * val altSchedule = CronSchedule("0 12 1,15 Oct-Dec *")
+ * val altSchedule = CronSchedule("0 12 1,15 10-12 *")
  * }}}
  */
 sealed trait CronSchedule extends Schedule:
@@ -165,9 +165,9 @@ sealed trait CronSchedule extends Schedule:
  * @define asterisk *
  */
 object CronSchedule:
-  private val any    = "\\*(?:/(\\w+))?".r
+  private val any    = "\\*(?:/(\\d+))?".r
   private val single = "(\\w+)".r
-  private val range  = "(\\w+)-(\\w+)(?:/(\\w+))?".r
+  private val range  = "(\\d+)-(\\d+)(?:/(\\d+))?".r
 
   /**
    * Creates cron schedule with supplied fields.
@@ -230,32 +230,35 @@ object CronSchedule:
    * separated by space. If only 5 fields are supplied, then `second` defaults
    * to `0`.
    *
-   * | Field        | Required | Allowed Values |
-   * | -----        | -------- | -------------- |
-   * | `second`     | No       | `0-59` |
-   * | `minute`     | Yes      | `0-59` |
-   * | `hour`       | Yes      | `0-23` |
-   * | `dayOfMonth` | Yes      | `1-31` |
-   * | `month`      | Yes      | `1-12` or `Jan-Dec` |
-   * | `dayOfWeek`  | Yes      | `0-7` or `Sun-Sat` _(Note: Sun is `0` or `7`)_ |
+   * | Field        | Allowed Values |
+   * | -----        | -------------- |
+   * | `second`     | `0-59` |
+   * | `minute`     | `0-59` |
+   * | `hour`       | `0-23` |
+   * | `dayOfMonth` | `1-31` |
+   * | `month`      | `1-12` |
+   * | `dayOfWeek`  | `0-7` _(`0` or `7` is Sunday)_ |
    *
    * A field may be specified as an asterisk (`*`), which denotes `first-last`
    * based on field's allowed values.
    *
    * A field may be specified as a list, where each value is separated by comma
-   * (`,`). For example, `10,11,12` or `Oct,Nov,Dec` in `month`.
+   * (`,`). For example, `10,11,12` in `month`.
    *
    * A field may be specified as an inclusive range, where the range endpoints
-   * are separated by hyphen (`-`). For example, `5-7` or `Fri-Sun` in
-   * `dayOfWeek`.
+   * are separated by hyphen (`-`). For example, `5-7` in `dayOfWeek`.
    *
-   * A step may be appended to a range to include only incremental values in
-   * range, where range and step are supplied as `<range>/<step>`. For example,
-   * `0-30/5` in `minute` indicates _every 5 minutes from 0 to 30_, which
-   * alternatively could be specified as `0,5,10,15,20,25,30`.
+   * A step may be appended to a range to include only incremental values, where
+   * range and step are supplied as `range/step`. For example, `0-30/5` in
+   * `minute` indicates _every 5 minutes from 0 to 30_, which alternatively
+   * could be specified as `0,5,10,15,20,25,30`.
    *
    * A step may also be appended to an asterisk to apply similar semantics. For
-   * example, `*``/15` in `minute` indicates _every 15 minutes_.
+   * example, `$asterisk/15` in `minute` indicates _every 15 minutes_.
+   *
+   * Names may be supplied for `month` and `dayOfWeek` either as full names
+   * (e.g., `Sunday` and `January`) or their first 3 letters (e.g., `Sun` and
+   * `Jan`). Names are case-insensitive and are not permitted in ranges.
    *
    * ### Examples
    *
@@ -264,7 +267,7 @@ object CronSchedule:
    * val weekly = CronSchedule("0 8 * * Sun")
    *
    * // At noon every day in October thru December
-   * val daily = CronSchedule("0 12 * Oct-Dec *")
+   * val daily = CronSchedule("0 12 * 10-12 *")
    *
    * // Every hour on 1st and 15th of every month
    * val hourly = CronSchedule("0 * 1,15 * *")
@@ -354,7 +357,7 @@ object CronSchedule:
     try
       d.split(",", -1)
         .flatMap(parseField(_, 0, 7, toDayOfWeek))
-        .map(_.max(1))
+        .map(day => if day == 0 then 7 else day)
         .map(DayOfWeek.of)
         .toSeq
     catch case _: Exception =>

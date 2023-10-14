@@ -121,7 +121,7 @@ class CronScheduleSpec extends org.scalatest.flatspec.AnyFlatSpec:
     assert(cron1.months      == Nil)
     assert(cron1.daysOfWeek  == Nil)
 
-    val cron2 = CronSchedule("*/20 8 * Jan,7,DECEMBER Mon-Fri")
+    val cron2 = CronSchedule("*/20 8 * Jan,7,DECEMBER 1-5")
     assert(cron2.times       == Seq("08:00".toLocalTime, "08:20".toLocalTime, "08:40".toLocalTime))
     assert(cron2.daysOfMonth == Nil)
     assert(cron2.months      == Seq(JANUARY, JULY,DECEMBER))
@@ -156,6 +156,39 @@ class CronScheduleSpec extends org.scalatest.flatspec.AnyFlatSpec:
     assert(cron7.daysOfMonth == Nil)
     assert(cron7.months      == Nil)
     assert(cron7.daysOfWeek  == Nil)
+
+  }
+
+  it should "create schedule from formatted fields when Sunday is start of range" in {
+
+    val cron1 = CronSchedule("0 0 1 1 0-2")
+    assert(cron1.times       == Seq(LocalTime.of(0, 0, 0)))
+    assert(cron1.daysOfMonth == Seq(1))
+    assert(cron1.months      == Seq(JANUARY))
+    assert(cron1.daysOfWeek  == Seq(MONDAY, TUESDAY, SUNDAY))
+
+    val cron2 = CronSchedule("0 0 1 1 0-1")
+    assert(cron2.times       == Seq(LocalTime.of(0, 0, 0)))
+    assert(cron2.daysOfMonth == Seq(1))
+    assert(cron2.months      == Seq(JANUARY))
+    assert(cron2.daysOfWeek  == Seq(MONDAY, SUNDAY))
+
+    val cron3 = CronSchedule("0 0 1 1 0-7")
+    assert(cron3.times       == Seq(LocalTime.of(0, 0, 0)))
+    assert(cron3.daysOfMonth == Seq(1))
+    assert(cron3.months      == Seq(JANUARY))
+    assert(cron3.daysOfWeek  == Seq(MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY))
+
+
+    val cron4 = CronSchedule("0 0 1 1 0-3/2")
+    assert(cron4.times       == Seq(LocalTime.of(0, 0, 0)))
+    assert(cron4.daysOfMonth == Seq(1))
+    assert(cron4.months      == Seq(JANUARY))
+    assert(cron4.daysOfWeek  == Seq(TUESDAY, SUNDAY))
+
+    assertThrows[IllegalArgumentException](CronSchedule("0 0 1 1 Sun-Tue"))
+    assertThrows[IllegalArgumentException](CronSchedule("0 0 1 1 Sun-Mon"))
+    assertThrows[IllegalArgumentException](CronSchedule("0 0 1 1 Sun-Wednesday/2"))
   }
 
   it should "build schedule" in {
