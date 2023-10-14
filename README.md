@@ -9,7 +9,7 @@ The Scala library that provides extension methods for _java.time_.
 To get started, add **little-time** as a dependency to your project:
 
 ```scala
-libraryDependencies += "com.github.losizm" %% "little-time" % "4.0.1"
+libraryDependencies += "com.github.losizm" %% "little-time" % "4.0.2"
 ```
 
 _**NOTE:** Starting with version 1.0, **little-time** is written for Scala 3. See
@@ -226,7 +226,7 @@ schedule.between(start, end).foreach { time =>
 }
 
 // Create schedule using cron-like syntax
-val altSchedule = CronSchedule("0 12 1,15 Oct-Dec *")
+val altSchedule = CronSchedule("0 12 1,15 10-12 *")
 assert(altSchedule.next(start) == schedule.next(start))
 ```
 
