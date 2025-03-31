@@ -15,7 +15,7 @@
  */
 package little.time
 
-import java.time.{ DayOfWeek, Duration, LocalDateTime, Period, YearMonth }
+import java.time.*
 
 import DayOfWeek.*
 import TimePrecision.*
@@ -87,8 +87,18 @@ class LocalDateTimeMethodsSpec extends org.scalatest.flatspec.AnyFlatSpec:
     assert(dateTime - Period.of(-6, -3, -7) == LocalDateTime.parse("2025-10-18T12:38:45.123456789"))
   }
 
-  it should "be converted to YearMonth" in {
+  it should "get YearMonth" in {
     assert(dateTime.toYearMonth == YearMonth.parse("2019-07"))
+  }
+
+  it should "get Instant" in {
+    assert(dateTime.toInstant("America/New_York") == Instant.parse("2019-07-11T16:38:45.123456789Z"))
+    assert(dateTime.toInstant("Asia/Kolkata") == Instant.parse("2019-07-11T07:08:45.123456789Z"))
+    assert(dateTime.toInstant("Z") == Instant.parse("2019-07-11T12:38:45.123456789Z"))
+    assert(dateTime.toInstant("-00:00") == Instant.parse("2019-07-11T12:38:45.123456789Z"))
+    assert(dateTime.toInstant("+00:00") == Instant.parse("2019-07-11T12:38:45.123456789Z"))
+    assert(dateTime.toInstant("+05:00") == Instant.parse("2019-07-11T07:38:45.123456789Z"))
+    assert(dateTime.toInstant("-05:00") == Instant.parse("2019-07-11T17:38:45.123456789Z"))
   }
 
   it should "be compared to other" in {

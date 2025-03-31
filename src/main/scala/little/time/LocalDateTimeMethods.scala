@@ -28,6 +28,24 @@ implicit class LocalDateTimeMethods(dateTime: LocalDateTime) extends AnyVal:
     YearMonth.of(dateTime.getYear, dateTime.getMonth)
 
   /**
+   * Gets `Instant` by applying time zone.
+   *
+   * @param zone time zone
+   */
+  def toInstant(zone: ZoneId = ZoneId.systemDefault): Instant =
+    dateTime.atZone(zone)
+      .toOffsetDateTime
+      .toInstant
+
+  /**
+   * Gets `Instant` by applying time zone.
+   *
+   * @param zone time zone
+   */
+  def toInstant(zone: String): Instant =
+    toInstant(ZoneId.of(zone))
+
+  /**
    * Gets date-time with specified amount added.
    *
    * @param amount temporal amount
