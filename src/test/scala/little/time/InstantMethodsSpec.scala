@@ -15,7 +15,7 @@
  */
 package little.time
 
-import java.time.{ Duration, Instant, Period }
+import java.time.{ Duration, Instant, LocalDateTime, Period }
 
 class InstantMethodsSpec extends org.scalatest.flatspec.AnyFlatSpec:
   private val instant = Instant.parse("2019-07-11T12:38:45.123456789Z")
@@ -74,6 +74,16 @@ class InstantMethodsSpec extends org.scalatest.flatspec.AnyFlatSpec:
     assert(instant - Period.ofDays(-2)     == Instant.parse("2019-07-13T12:38:45.123456789Z"))
     assert(instant - Period.ofDays(-31)    == Instant.parse("2019-08-11T12:38:45.123456789Z"))
     assert(instant - Period.ofWeeks(-2)    == Instant.parse("2019-07-25T12:38:45.123456789Z"))
+  }
+
+  it should "get LocalDateTime" in {
+    assert(instant.toLocalDateTime("America/New_York") == LocalDateTime.parse("2019-07-11T08:38:45.123456789"))
+    assert(instant.toLocalDateTime("Asia/Kolkata") == LocalDateTime.parse("2019-07-11T18:08:45.123456789"))
+    assert(instant.toLocalDateTime("Z") == LocalDateTime.parse("2019-07-11T12:38:45.123456789"))
+    assert(instant.toLocalDateTime("-00:00") == LocalDateTime.parse("2019-07-11T12:38:45.123456789"))
+    assert(instant.toLocalDateTime("+00:00") == LocalDateTime.parse("2019-07-11T12:38:45.123456789"))
+    assert(instant.toLocalDateTime("+05:00") == LocalDateTime.parse("2019-07-11T17:38:45.123456789"))
+    assert(instant.toLocalDateTime("-05:00") == LocalDateTime.parse("2019-07-11T07:38:45.123456789"))
   }
 
   it should "compare instants" in {

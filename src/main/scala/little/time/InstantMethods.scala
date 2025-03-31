@@ -15,11 +15,27 @@
  */
 package little.time
 
-import java.time.Instant
+import java.time.{ Instant, LocalDateTime, ZoneId }
 import java.time.temporal.TemporalAmount
 
 /** Provides extension methods for `java.time.Instant` */
 implicit class InstantMethods(instant: Instant) extends AnyVal:
+  /**
+   * Gets `LocalDateTime` by applying time zone.
+   *
+   * @param zone time zone
+   */
+  def toLocalDateTime(zone: ZoneId = ZoneId.systemDefault): LocalDateTime =
+    instant.atZone(zone).toLocalDateTime
+
+  /**
+   * Gets `LocalDateTime` by applying time zone.
+   *
+   * @param zone time zone
+   */
+  def toLocalDateTime(zone: String): LocalDateTime =
+    toLocalDateTime(ZoneId.of(zone))
+
   /**
    * Gets instant with specified amount added.
    *
