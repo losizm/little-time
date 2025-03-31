@@ -17,7 +17,7 @@ package little.time
 
 import java.time.LocalTime
 
-/** Specifies precision of time. */
+/** Specifies time precision. */
 sealed trait TimePrecision extends Ordered[TimePrecision]:
   /** Gets maximum time with applied precision. */
   def limit: LocalTime
@@ -30,28 +30,32 @@ sealed trait TimePrecision extends Ordered[TimePrecision]:
   def compare(that: TimePrecision): Int =
     limit.compareTo(that.limit)
 
-/** Provides available `TimePrecision`s .*/
+/** Enumerates `TimePrecision` instances. */
 object TimePrecision:
   /** Specifies time precision of hours. */
   case object Hours extends TimePrecision:
+    /** @inheritdoc */
     val limit: LocalTime = LocalTime.of(23, 0, 0)
 
   /** Specifies time precision of minutes. */
   case object Minutes extends TimePrecision:
+    /** @inheritdoc */
     val limit: LocalTime = LocalTime.of(23, 59, 0)
 
   /** Specifies time precision of seconds. */
   case object Seconds extends TimePrecision:
+    /** @inheritdoc */
     val limit: LocalTime = LocalTime.of(23, 59, 59)
 
   /** Specifies time precision of fractional seconds. */
   trait FractionalSeconds extends TimePrecision:
-    /** Number of digits in fractional seconds. */
+    /** Gets number of digits in fractional seconds. */
     def scale: Int
 
+    /** @inheritdoc */
     lazy val limit: LocalTime = LocalTime.parse(s"23:59:59.${"9" * scale}")
 
-  /** Factory for time precision of fractional seconds. */ 
+  /** Provides `FractionalSeconds` factory. */
   object FractionalSeconds:
     /**
      * Gets time precision with applied scale of fractional seconds.
@@ -89,6 +93,7 @@ object TimePrecision:
    * @note Scale is 3.
    */
   case object Milliseconds extends FractionalSeconds:
+    /** @inheritdoc */
     val scale: Int = 3
 
   /**
@@ -97,6 +102,7 @@ object TimePrecision:
    * @note Scale is 6.
    */
   case object Microseconds extends FractionalSeconds:
+    /** @inheritdoc */
     val scale: Int = 6
 
   /**
@@ -105,6 +111,7 @@ object TimePrecision:
    * @note Scale is 9.
    */
   case object Nanoseconds extends FractionalSeconds:
+    /** @inheritdoc */
     val scale: Int = 9
 
   private case object FractionalSeconds1 extends FractionalSeconds { val scale: Int = 1 }

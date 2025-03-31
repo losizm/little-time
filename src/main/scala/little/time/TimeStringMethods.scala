@@ -17,7 +17,7 @@ package little.time
 
 import java.time.*
 
-/** Provides time-related extension methods to `java.lang.String`. */
+/** Provides time-related extension methods for `java.lang.String`. */
 implicit class TimeStringMethods(string: String) extends AnyVal:
   /** Converts formatted string to `Period`. */
   def toPeriod: Period =
